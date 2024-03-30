@@ -1,9 +1,12 @@
+
 public class newUser implements User {
     private String name;
     private String username;
     private int age;
     private String password;
     private String email;
+
+    private Database data = new Database(,); // string as both arguments
 
     public newUser(String name, String username, int age, String password, String email) {
         this.name = name;
@@ -75,5 +78,38 @@ public class newUser implements User {
         }
         return email.contains("@");
     }
+
+
+    public boolean isValidPassword(String password) {
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+
+        for (int i = 0; i < password.length(); i++) {
+            char ch = password.charAt(i);
+
+            if (!Character.isLetterOrDigit(ch) && ch != '@') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public boolean checkUsernameExists(String username) {
+//        for (String dbUsername : usernameDatabase) {
+//            if (dbUsername.equals(username)) {
+//                System.out.println("Username is valid and exists in the database.");
+//                return true;
+//            }
+//        }
+//        System.out.println("Invalid username.");
+//        return false;
+        if (data.searchUsers(username) != NULL) {
+            return false;
+        }
+        return true;
+    }
+
+
 
 }
