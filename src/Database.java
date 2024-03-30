@@ -69,7 +69,7 @@ public class Database {
 
     public void viewUsers() {
         for (user : users) {
-            System.out.println(user.toString()); //replace with GUI alternative later
+            System.out.println(user.toString()); //replace with GUI alternative late
         }
     }
 }
