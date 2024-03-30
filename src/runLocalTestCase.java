@@ -2,12 +2,13 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import java.util.Scanner;
 
-public class runLocalTestCases {
+public class runLocalTestCase {
     private final String nameInput = "What name would you like to use?";
     private final String usernameInput = "What username would you like to use?";
     private final String ageInput = "What age would you like to use?";
     private final String ageError = "Please enter a valid age.";
     private final String passwordInput = "What password would you like to use?";
+
     @Test(timeout = 1000)
     public void testExpectedOne() {
         Scanner s = new Scanner(System.in);
