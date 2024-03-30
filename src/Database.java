@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Database {
-    private ArrayList<User> users;
+    private ArrayList<newUser> users;
     private String databaseOutput;
     private String messages;
     public Database(String messages, String databaseOutput) {
-        users = new ArrayList<User>();
+        users = new ArrayList<newUser>();
         this.databaseOutput = databaseOutput;
         this.messages = messages;
     }
 
+    //Jeeaan: temporary changed the data string to the actual inputs directly, less work rn, removes errors
     public boolean createUser(String name, String username, int age, String password, String email) {
         newUser user = new newUser(name, username, age, password, email);
         for (existingUser : users) {
@@ -23,8 +24,8 @@ public class Database {
         users.add(user); //add user
         return true;
     }
-    public boolean deleteUser(String data) { //to delete the account/user
-        User user  = new User(data);
+    public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
+        newUser user  = new newUser(name, username, age, password, email);
         for (existingUser : users) {
             if (existingUser.equals(user)) {
                 users.remove(user);
@@ -37,7 +38,7 @@ public class Database {
     public boolean outputDatabase() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutput))) {
             String line = "";
-            for (User userData : users) {
+            for (userData : users) {
                 line = userData.toString();
                 bw.write(line);
                 line = "";
@@ -54,9 +55,9 @@ public class Database {
         return true;
     }
 
-    public User searchUsers(String data) {
+    public newUser searchUsers(String name, String username, int age, String password, String email) {
         boolean found = false;
-        User searchingUser = new User(data);
+        newUser searchingUser = new newUser(name, username, age, password, email);
         for (lookingUser : users) {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;
