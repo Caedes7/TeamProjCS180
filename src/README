@@ -6,7 +6,7 @@ TEAM MEMBERS:
 Jeeaan Ahmmed
 Ishaan
 Pranav
-Michael
+Joey Vetter
 
 1. How to compile and run project
 
@@ -21,9 +21,43 @@ Main:
 
 Database:
 
-User:
-
+User interface:
+    Getters:
+        String getName: returns the name of the user
+        String getUsername: returns the username of the user
+        int getAge: returns the age of the user
+        String getPassword: returns the password of the user
+        String getEmail: returns the email of the user
+    Setters:
+        setName: sets the name of the user
+        setUsername: sets the username of the user
+        setAge: sets the age of the user
+        setPassword: sets the password of the user
+        setEmail: sets the email of the user
 newUser:
+    Variables:
+        String name: name of the user
+        String username: username of the user
+        int age: age of the user
+        String password: password for the user
+        String email: email of the user
+    Constructor:
+        public newUser(String name, String username, int age, String password, String email): sets the values for the newUser
+    Getters:
+        String getName: returns the name of the user
+        String getUsername: returns the username of the user
+        int getAge: returns the age of the user
+        String getPassword: returns the password of the user
+        String getEmail: returns the email of the user
+    Setters:
+        setName: sets the name of the user
+        setUsername: sets the username of the user
+        setAge: sets the age of the user
+        setPassword: sets the password of the user
+        setEmail: sets the email of the user
+    Other methods:
+        isValidUsername: checks to see if the username is valid (only contains letters and digits and '_')
+        isValidEmail: checks if the email is valid (contains '@')
 
 runLocalTestCase:
 

@@ -5,11 +5,12 @@ public class newUser implements User {
     private String password;
     private String email;
 
-    public User(String name, String username, int age, String password) {
+    public newUser(String name, String username, int age, String password, String email) {
         this.name = name;
         this.username = username;
         this.age = age;
         this.password = password;
+        this.email = email;
     }
 
     public String getName() {
@@ -74,5 +75,5 @@ public class newUser implements User {
         }
         return email.contains("@");
     }
-    
+
 }

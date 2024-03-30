@@ -4,7 +4,6 @@ public interface User {
     void setUsername(String username);
     void setAge(int age);
     void setPassword(String password);
-
     void setEmail(String email);
 
     // Getters
@@ -12,6 +11,5 @@ public interface User {
     String getUsername();
     int getAge();
     String getPassword();
-
     String getEmail();
 }
