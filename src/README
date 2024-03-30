@@ -34,6 +34,7 @@ User interface:
         setAge: sets the age of the user
         setPassword: sets the password of the user
         setEmail: sets the email of the user
+
 newUser:
     Variables:
         String name: name of the user

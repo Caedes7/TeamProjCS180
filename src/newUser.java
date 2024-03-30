@@ -104,7 +104,7 @@ public class newUser implements User {
 //        }
 //        System.out.println("Invalid username.");
 //        return false;
-        if (data.searchUsers(username) != NULL) {
+        if (data.searchUsers(username) != null) {
             return false;
         }
         return true;

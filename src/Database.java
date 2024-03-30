@@ -13,8 +13,8 @@ public class Database {
         this.messages = messages;
     }
 
-    public boolean createUser(String data) {
-        User user = new User(data);
+    public boolean createUser(String name, String username, int age, String password, String email) {
+        newUser user = new newUser(name, username, age, password, email);
         for (existingUser : users) {
             if(existingUser.equals(user)) {
                 return false; //user already exists, so return false

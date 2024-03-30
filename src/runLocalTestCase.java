@@ -8,6 +8,8 @@ public class runLocalTestCase {
     private final String ageInput = "What age would you like to use?";
     private final String ageError = "Please enter a valid age.";
     private final String passwordInput = "What password would you like to use?";
+    private final String emailInput = "What email would you like to use?";
+    private final String emailError = "Please enter a valid email (use @ symbol).";
 
     @Test(timeout = 1000)
     public void testExpectedOne() {
@@ -21,6 +23,7 @@ public class runLocalTestCase {
 
         System.out.println(ageInput);
         int ageInput = 0;
+
         do {
             try {
                 ageInput = Integer.parseInt(s.nextLine());
@@ -35,7 +38,18 @@ public class runLocalTestCase {
         System.out.println(passwordInput);
         String password = s.nextLine();
 
-        User newUser = new User(name, username, ageInput, password);
+        String email = "";
+        do {
+            System.out.println(emailInput);
+            email = s.nextLine();
+
+            if (!email.contains("@")) {
+                email = "";
+                System.out.println(emailError);
+            }
+        } while (email.isEmpty());
+
+        newUser user = new newUser(name, username, ageInput, password, email);
         System.out.println("After storing this information inside of our user class, this is the result: ");
         System.out.println(newUser.getName() + "\n" + newUser.getUsername() + "\n" +
                 newUser.getAge() + "\n" + newUser.getPassword());
