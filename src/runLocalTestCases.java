@@ -2,7 +2,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import java.util.Scanner;
 
-public class RunLocalTestCases {
+public class runLocalTestCases {
     private final String nameInput = "What name would you like to use?";
     private final String usernameInput = "What username would you like to use?";
     private final String ageInput = "What age would you like to use?";
@@ -37,7 +37,12 @@ public class RunLocalTestCases {
         User newUser = new User(name, username, ageInput, password);
         System.out.println("After storing this information inside of our user class, this is the result: ");
         System.out.println(newUser.getName() + "\n" + newUser.getUsername() + "\n" +
-                newUser.getInput() + "\n" + newUser.getPassword());
+                newUser.getAge() + "\n" + newUser.getPassword());
+
+        if (newUser.getName().equals(name) && newUser.getUsername().equals(username) &&
+                newUser.getAge() == age && newUser.getPassword().equals(password)) {
+            System.out.println("Test passed!");
+        }
 
         /*
         String input = "Line One\nLine Two\n";
