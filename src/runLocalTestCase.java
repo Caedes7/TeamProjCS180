@@ -22,23 +22,24 @@ public class runLocalTestCase {
         String username = s.nextLine();
 
         System.out.println(ageInput);
-        int ageInput = 0;
+        int age = 0;
 
         do {
             try {
-                ageInput = Integer.parseInt(s.nextLine());
-                if (ageInput > 0) {
+                age = Integer.parseInt(s.nextLine());
+
+                if (age <= 0) {
                     System.out.println(ageError);
                 }
             } catch (NumberFormatException e) {
                 System.out.println(ageError);
             }
-        } while (ageInput <= 0);
+        } while (age <= 0);
 
         System.out.println(passwordInput);
         String password = s.nextLine();
-
         String email = "";
+
         do {
             System.out.println(emailInput);
             email = s.nextLine();
@@ -49,14 +50,16 @@ public class runLocalTestCase {
             }
         } while (email.isEmpty());
 
-        newUser user = new newUser(name, username, ageInput, password, email);
+        newUser user = new newUser(name, username, age, password, email);
         System.out.println("After storing this information inside of our user class, this is the result: ");
-        System.out.println(newUser.getName() + "\n" + newUser.getUsername() + "\n" +
-                newUser.getAge() + "\n" + newUser.getPassword());
+        System.out.println(user.getName() + "\n" + user.getUsername() + "\n" +
+                user.getAge() + "\n" + user.getPassword() + "\n" + user.getEmail());
 
-        if (newUser.getName().equals(name) && newUser.getUsername().equals(username) &&
-                newUser.getAge() == age && newUser.getPassword().equals(password)) {
+        if (user.getName().equals(name) && user.getUsername().equals(username) &&
+                user.getAge() == age && user.getPassword().equals(password)) {
             System.out.println("Test passed!");
+        } else {
+            System.out.println("Test Failed! Improper Storage of Data");
         }
 
         /*
