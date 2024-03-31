@@ -9,7 +9,6 @@ public class newUser implements User {
     private ArrayList<newUser> blocked;
     private ArrayList<newUser> friends;
 
-
     //private Database data = new Database(,"data_Output.txt"); // string as both arguments
 
     public newUser(String name, String username, int age, String password, String email,

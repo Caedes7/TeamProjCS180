@@ -7,6 +7,7 @@ public class Database {
     private ArrayList<newUser> users;
     private String databaseOutputFile = "data_Output.txt";
 
+
     public Database(String databaseOutput) {
         this.databaseOutputFile = databaseOutput;
         this.users = new ArrayList<>(0);

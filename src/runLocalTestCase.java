@@ -25,7 +25,6 @@ public class runLocalTestCase {
         if (Database.outputDatabase()) {
 
         }
-
         // Retrieves the output from the program
         String stuOut = getOutput();
 
