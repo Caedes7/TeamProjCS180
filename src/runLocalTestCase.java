@@ -22,7 +22,7 @@ public class runLocalTestCase {
         // Runs the program with the input values
         // Replace TestProgram with the name of the class with the main method
         receiveInput(input);
-        if (Database.outputDatabase()) {
+        if (Database.main()) {
 
         }
 
@@ -35,10 +35,11 @@ public class runLocalTestCase {
                 expected.trim(), stuOut.trim());
 
 
-}
+    }
 
     private String getOutput() {
     }
 
     private void receiveInput(String input) {
     }
+}
