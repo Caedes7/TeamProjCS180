@@ -110,6 +110,16 @@ public class newUser implements User {
         return true;
     }
 
+    public boolean isEqual(newUser otherUser) {
+        if (otherUser == null) {
+            return false;
+        }
 
+        return this.name.equals(otherUser.name) &&
+                this.username.equals(otherUser.username) &&
+                this.age == otherUser.age &&
+                this.password.equals(otherUser.password) &&
+                this.email.equals(otherUser.email);
+    }
 
 }

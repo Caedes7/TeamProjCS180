@@ -59,6 +59,7 @@ newUser:
     Other methods:
         isValidUsername: checks to see if the username is valid (only contains letters and digits and '_')
         isValidEmail: checks if the email is valid (contains '@')
+        isEqual: checks if two users have the same values in all fields
 
 runLocalTestCase:
 
