@@ -62,4 +62,12 @@ newUser:
         isEqual: checks if two users have the same values in all fields
 
 runLocalTestCase:
-
+    Private Final Variable Strings:
+        String nameInput: Asks tester to input a name
+        String usernameInput: Asks tester to input a username
+        String ageInput: Asks tester to input an age
+        String ageError: Tells tester to input a valid age and loops previous string
+        String passwordInput: Asks tester to input a password
+        String emailInput: Asks tester to input an email
+        String emailError: Tells tester to input a valid email
+    

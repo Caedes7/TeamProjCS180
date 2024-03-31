@@ -16,7 +16,7 @@ public class Database {
     //Jeeaan: temporary changed the data string to the actual inputs directly, less work rn, removes errors
     public boolean createUser(String name, String username, int age, String password, String email) {
         newUser user = new newUser(name, username, age, password, email);
-        for (existingUser : users) {
+        for (newUser existingUser : users) {
             if(existingUser.equals(user)) {
                 return false; //user already exists, so return false
             }
@@ -26,7 +26,7 @@ public class Database {
     }
     public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
         newUser user  = new newUser(name, username, age, password, email);
-        for (existingUser : users) {
+        for (newUser existingUser : users) {
             if (existingUser.equals(user)) {
                 users.remove(user);
                 return true; //user was deleted, successfully
@@ -38,7 +38,7 @@ public class Database {
     public boolean outputDatabase() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutput))) {
             String line = "";
-            for (userData : users) {
+            for (newUser userData : users) {
                 line = userData.toString();
                 bw.write(line);
                 line = "";
@@ -58,7 +58,7 @@ public class Database {
     public newUser searchUsers(String name, String username, int age, String password, String email) {
         boolean found = false;
         newUser searchingUser = new newUser(name, username, age, password, email);
-        for (lookingUser : users) {
+        for (newUser lookingUser : users) {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;
                 return lookingUser; //return the user if the username was found
@@ -69,7 +69,7 @@ public class Database {
     }
 
     public void viewUsers() {
-        for (user : users) {
+        for (newUser user : users) {
             System.out.println(user.toString()); //replace with GUI alternative late
         }
     }
