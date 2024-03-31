@@ -19,6 +19,7 @@ Joey Vetter
 
 Database:
 
+
 User interface:
     Getters:
         String getName: returns the name of the user
