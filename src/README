@@ -18,6 +18,12 @@ Joey Vetter
 3. Detailed Description of Each Class
 
 Database:
+createUser: Adds a new user to the database if the user does not already exist.
+deleteUser: Removes a user from the database based on matching criteria.
+outputDatabase: Writes the current state of the database, including user details and messages, to a specified output file.
+validateCredentials: Verifies if the provided user credentials match any user in the database.
+searchUsers: Searches for a user in the database using a combination of user details.
+viewUsers: Displays a list of all users in the database.
 
 
 User interface:
