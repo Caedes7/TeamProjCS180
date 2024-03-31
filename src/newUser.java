@@ -6,7 +6,7 @@ public class newUser implements User {
     private String password;
     private String email;
 
-    private Database data = new Database(,); // string as both arguments
+    //private Database data = new Database(,"data_Output.txt"); // string as both arguments
 
     public newUser(String name, String username, int age, String password, String email) {
         this.name = name;
@@ -95,20 +95,6 @@ public class newUser implements User {
 
         return true;
     }
-    public boolean checkUsernameExists(String username) {
-//        for (String dbUsername : usernameDatabase) {
-//            if (dbUsername.equals(username)) {
-//                System.out.println("Username is valid and exists in the database.");
-//                return true;
-//            }
-//        }
-//        System.out.println("Invalid username.");
-//        return false;
-        if (data.searchUsers(username) != null) {
-            return false;
-        }
-        return true;
-    }
 
     public boolean isEqual(newUser otherUser) {
         if (otherUser == null) {
@@ -120,6 +106,10 @@ public class newUser implements User {
                 this.age == otherUser.age &&
                 this.password.equals(otherUser.password) &&
                 this.email.equals(otherUser.email);
+    }
+
+    public String getMessages (newUser user1, newUser user2) {
+        return "Implementation for getMessages will be completed in future phases";
     }
 
 }

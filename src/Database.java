@@ -5,15 +5,13 @@ import java.util.ArrayList;
 
 public class Database {
     private ArrayList<newUser> users;
-    private String databaseOutput;
-    private String messages;
-    public Database(String messages, String databaseOutput) {
-        users = new ArrayList<newUser>();
+    private String databaseOutput = "data_Output.txt";
+
+    public Database(String databaseOutput) {
         this.databaseOutput = databaseOutput;
-        this.messages = messages;
+        this.users = new ArrayList<>(0);
     }
 
-    //Jeeaan: temporary changed the data string to the actual inputs directly, less work rn, removes errors
     public boolean createUser(String name, String username, int age, String password, String email) {
         newUser user = new newUser(name, username, age, password, email);
         for (newUser existingUser : users) {
@@ -42,10 +40,12 @@ public class Database {
                 line = userData.toString();
                 bw.write(line);
                 line = "";
-                if (userData.getMessages() == null) {
-                    line = "No Messages";
-                } else {
-                    line += userData.getMessages();
+                for (newUser recipient :  users) {
+                    if (!userData.equals(recipient)) {
+                        if (userData.getMessages(userData, recipient) != null) {
+                            line += userData.getMessages(userData, recipient) + "\n";
+                        }
+                    }
                 }
                 bw.write(line);
             }
@@ -53,6 +53,18 @@ public class Database {
             return false;
         }
         return true;
+    }
+
+    public boolean validateCredentials(newUser user) {
+
+        newUser user1 = searchUsers(user.getName(), user.getUsername(),
+                user.getAge(), user.getPassword(), user.getEmail());
+
+        if (user1 == null) {
+            return true;
+        }
+
+        return false;
     }
 
     public newUser searchUsers(String name, String username, int age, String password, String email) {
