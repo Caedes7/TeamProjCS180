@@ -5,15 +5,16 @@ import java.util.ArrayList;
 
 public class Database {
     private ArrayList<newUser> users;
-    private String databaseOutput = "data_Output.txt";
+    private String databaseOutputFile = "data_Output.txt";
 
     public Database(String databaseOutput) {
-        this.databaseOutput = databaseOutput;
+        this.databaseOutputFile = databaseOutput;
         this.users = new ArrayList<>(0);
     }
 
-    public boolean createUser(String name, String username, int age, String password, String email) {
-        newUser user = new newUser(name, username, age, password, email);
+    public boolean createUser(String name, String username, int age, String password, String email,
+                              ArrayList<newUser> blocked,  ArrayList<newUser> friends) {
+        newUser user = new newUser(name, username, age, password, email, blocked, friends);
         for (newUser existingUser : users) {
             if(existingUser.equals(user)) {
                 return false; //user already exists, so return false
@@ -22,8 +23,9 @@ public class Database {
         users.add(user); //add user
         return true;
     }
-    public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
-        newUser user  = new newUser(name, username, age, password, email);
+    public boolean deleteUser(String name, String username, int age, String password, String email,
+                              ArrayList<newUser> blocked,  ArrayList<newUser> friends) { //to delete the account/user
+        newUser user  = new newUser(name, username, age, password, email, blocked, friends);
         for (newUser existingUser : users) {
             if (existingUser.equals(user)) {
                 users.remove(user);
@@ -34,7 +36,7 @@ public class Database {
     }
 
     public boolean outputDatabase() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutput))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutputFile))) {
             String line = "";
             for (newUser userData : users) {
                 line = userData.toString();
@@ -58,7 +60,7 @@ public class Database {
     public boolean validateCredentials(newUser user) {
 
         newUser user1 = searchUsers(user.getName(), user.getUsername(),
-                user.getAge(), user.getPassword(), user.getEmail());
+                user.getAge(), user.getPassword(), user.getEmail(), user.getBlocked(), user.getFriends());
 
         if (user1 == null) {
             return true;
@@ -67,9 +69,10 @@ public class Database {
         return false;
     }
 
-    public newUser searchUsers(String name, String username, int age, String password, String email) {
+    public newUser searchUsers(String name, String username, int age, String password, String email,
+                               ArrayList<newUser> blocked,  ArrayList<newUser> friends) {
         boolean found = false;
-        newUser searchingUser = new newUser(name, username, age, password, email);
+        newUser searchingUser = new newUser(name, username, age, password, email, blocked, friends);
         for (newUser lookingUser : users) {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class newUser implements User {
     private String name;
@@ -5,15 +6,21 @@ public class newUser implements User {
     private int age;
     private String password;
     private String email;
+    private ArrayList<newUser> blocked;
+    private ArrayList<newUser> friends;
+
 
     //private Database data = new Database(,"data_Output.txt"); // string as both arguments
 
-    public newUser(String name, String username, int age, String password, String email) {
+    public newUser(String name, String username, int age, String password, String email,
+                   ArrayList<newUser> blocked, ArrayList<newUser> friends) {
         this.name = name;
         this.username = username;
         this.age = age;
         this.password = password;
         this.email = email;
+        this.blocked = blocked;
+        this.friends = friends;
     }
 
     public String getName() {
@@ -35,7 +42,12 @@ public class newUser implements User {
     public String getEmail() {
         return email;
     }
-
+    public ArrayList<newUser> getBlocked() {
+        return blocked;
+    }
+    public ArrayList<newUser> getFriends() {
+        return friends;
+    }
     public void setName(String name) {
         this.name = name;
     }
