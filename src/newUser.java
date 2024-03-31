@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class newUser implements User {
     private String name;
@@ -6,21 +5,15 @@ public class newUser implements User {
     private int age;
     private String password;
     private String email;
-    private ArrayList<newUser> blocked;
-    private ArrayList<newUser> friends;
 
+    private Database data = new Database(,); // string as both arguments
 
-    //private Database data = new Database(,"data_Output.txt"); // string as both arguments
-
-    public newUser(String name, String username, int age, String password, String email,
-                   ArrayList<newUser> blocked, ArrayList<newUser> friends) {
+    public newUser(String name, String username, int age, String password, String email) {
         this.name = name;
         this.username = username;
         this.age = age;
         this.password = password;
         this.email = email;
-        this.blocked = blocked;
-        this.friends = friends;
     }
 
     public String getName() {
@@ -42,12 +35,7 @@ public class newUser implements User {
     public String getEmail() {
         return email;
     }
-    public ArrayList<newUser> getBlocked() {
-        return blocked;
-    }
-    public ArrayList<newUser> getFriends() {
-        return friends;
-    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -107,6 +95,20 @@ public class newUser implements User {
 
         return true;
     }
+    public boolean checkUsernameExists(String username) {
+//        for (String dbUsername : usernameDatabase) {
+//            if (dbUsername.equals(username)) {
+//                System.out.println("Username is valid and exists in the database.");
+//                return true;
+//            }
+//        }
+//        System.out.println("Invalid username.");
+//        return false;
+        if (data.searchUsers(username) != null) {
+            return false;
+        }
+        return true;
+    }
 
     public boolean isEqual(newUser otherUser) {
         if (otherUser == null) {
@@ -118,10 +120,6 @@ public class newUser implements User {
                 this.age == otherUser.age &&
                 this.password.equals(otherUser.password) &&
                 this.email.equals(otherUser.email);
-    }
-
-    public String getMessages (newUser user1, newUser user2) {
-        return "Implementation for getMessages will be completed in future phases";
     }
 
 }
