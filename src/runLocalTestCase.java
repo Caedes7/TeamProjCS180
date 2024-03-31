@@ -22,14 +22,13 @@ public class runLocalTestCase {
         // Runs the program with the input values
         // Replace TestProgram with the name of the class with the main method
         receiveInput(input);
-        if (Database.main()) {
+        if (Database.outputDatabase()) {
 
         }
-
         // Retrieves the output from the program
         String stuOut = getOutput();
 
-        // Trims the output and verifies it is correct. 
+        // Trims the output and verifies it is correct.
         stuOut = stuOut.replace("\r\n", "\n");
         assertEquals("Error message if output is incorrect, customize as needed",
                 expected.trim(), stuOut.trim());
@@ -42,4 +41,3 @@ public class runLocalTestCase {
 
     private void receiveInput(String input) {
     }
-}
