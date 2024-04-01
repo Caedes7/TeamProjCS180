@@ -20,7 +20,7 @@ public class runLocalTestCase {
         ArrayList<newUser> friends = new ArrayList<newUser>(0);
 
 
-        try (BufferedReader bfr = new BufferedReader(new FileReader("C:\\Users\\jeeaa\\Desktop\\ece\\TeamProjCS180\\src\\input"))) {
+        try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
             String line;
             while ((line = bfr.readLine()) != null) {
                 switch (line.charAt(0)) {
