@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Database {
-    private ArrayList<newUser> users;
+    private ArrayList<NewUser> users;
     private String databaseOutputFile = "data_Output.txt";
 
 
@@ -14,10 +14,10 @@ public class Database {
     }
 
     public boolean createUser(String name, String username, int age, String password, String email,
-                              ArrayList<newUser> blocked,  ArrayList<newUser> friends) {
-        newUser user = new newUser(name, username, age, password, email, blocked, friends);
-        for (newUser existingUser : users) {
-            if(existingUser.equals(user)) {
+                              ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) {
+        NewUser user = new NewUser(name, username, age, password, email, blocked, friends);
+        for (NewUser existingUser : users) {
+            if (existingUser.equals(user)) {
                 return false; //user already exists, so return false
             }
         }
@@ -25,9 +25,9 @@ public class Database {
         return true;
     }
     public boolean deleteUser(String name, String username, int age, String password, String email,
-                              ArrayList<newUser> blocked,  ArrayList<newUser> friends) { //to delete the account/user
-        newUser user  = new newUser(name, username, age, password, email, blocked, friends);
-        for (newUser existingUser : users) {
+                              ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) { //to delete the account/user
+        NewUser user  = new NewUser(name, username, age, password, email, blocked, friends);
+        for (NewUser existingUser : users) {
             if (existingUser.equals(user)) {
                 users.remove(user);
                 return true; //user was deleted, successfully
@@ -39,11 +39,11 @@ public class Database {
     public boolean outputDatabase() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutputFile))) {
             String line = "";
-            for (newUser userData : users) {
+            for (NewUser userData : users) {
                 line = userData.toString();
                 bw.write(line);
                 line = "";
-                for (newUser recipient :  users) {
+                for (NewUser recipient :  users) {
                     if (!userData.equals(recipient)) {
                         if (userData.getMessages(userData, recipient) != null) {
                             line += userData.getMessages(userData, recipient) + "\n";
@@ -58,23 +58,19 @@ public class Database {
         return true;
     }
 
-    public boolean validateCredentials(newUser user) {
+    public boolean validateCredentials(NewUser user) {
 
-        newUser user1 = searchUsers(user.getName(), user.getUsername(),
+        NewUser user1 = searchUsers(user.getName(), user.getUsername(),
                 user.getAge(), user.getPassword(), user.getEmail(), user.getBlocked(), user.getFriends());
 
-        if (user1 == null) {
-            return true;
-        }
-
-        return false;
+        return user1 == null;
     }
 
-    public newUser searchUsers(String name, String username, int age, String password, String email,
-                               ArrayList<newUser> blocked,  ArrayList<newUser> friends) {
+    public NewUser searchUsers(String name, String username, int age, String password, String email,
+                               ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) {
         boolean found = false;
-        newUser searchingUser = new newUser(name, username, age, password, email, blocked, friends);
-        for (newUser lookingUser : users) {
+        NewUser searchingUser = new NewUser(name, username, age, password, email, blocked, friends);
+        for (NewUser lookingUser : users) {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;
                 return lookingUser; //return the user if the username was found
@@ -85,7 +81,7 @@ public class Database {
     }
 
     public void viewUsers() {
-        for (newUser user : users) {
+        for (NewUser user : users) {
             System.out.println(user.toString()); //replace with GUI alternative late
         }
     }

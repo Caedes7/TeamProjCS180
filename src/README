@@ -44,7 +44,7 @@ User interface:
       setEmail: sets the email of the user
 
 
-newUser:
+NewUser:
    Variables:
    String name: name of the user
    String username: username of the user
@@ -53,7 +53,7 @@ newUser:
    String email: email of the user
 
    Constructor:
-   public newUser(String name, String username, int age, String password, String email): sets the values for the newUser
+   public NewUser(String name, String username, int age, String password, String email): sets the values for the NewUser
 
    Getters:
    String getName: returns the name of the user
@@ -76,8 +76,8 @@ newUser:
 
 runLocalTestCase:
    Using the input.txt file, you are able to submit test user information. This class will take the input and create 
-a newUser object. It will take the newUser object and convert it into a string. It will compare this to a 
-string created from the information read from the input.txt file. If the strings match, then the newUser was 
+a NewUser object. It will take the NewUser object and convert it into a string. It will compare this to a 
+string created from the information read from the input.txt file. If the strings match, then the NewUser was 
 successfully and correctly created.
    This class contains a test that uses a file called input.txt to perform tests. To use, edit input.txt but ensure to 
 have a number just before the test value you would like to employ. Do not add a space before beginning to input the 

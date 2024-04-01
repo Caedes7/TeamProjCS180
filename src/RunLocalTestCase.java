@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
 
-public class runLocalTestCase {
+public class RunLocalTestCase {
     @Test(timeout = 1000)
     public void testExpectedOne() {
         String name = "";
@@ -13,8 +13,8 @@ public class runLocalTestCase {
         int age = 0;
         String password = "";
         String email = "";
-        ArrayList<newUser> blocked = new ArrayList<newUser>(0);
-        ArrayList<newUser> friends = new ArrayList<newUser>(0);
+        ArrayList<NewUser> blocked = new ArrayList<NewUser>(0);
+        ArrayList<NewUser> friends = new ArrayList<NewUser>(0);
 
         try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
             String line;
@@ -48,7 +48,7 @@ public class runLocalTestCase {
             throw new AssertionError("Failed to read input file", e);
         }
 
-        newUser test = new newUser(name, username, age, password, email, blocked, friends);
+        NewUser test = new NewUser(name, username, age, password, email, blocked, friends);
         String expected = receiveInput(name, username, age, password, email, blocked, friends);
         String stuOut = getOutput(test);
 
@@ -64,20 +64,20 @@ public class runLocalTestCase {
             System.out.println("Test Failed!");
     }
 
-    private String getOutput(newUser test) {
+    private String getOutput(NewUser test) {
         String name = test.getName();
         String username = test.getUsername();
         int age = test.getAge();
         String password = test.getPassword();
         String email = test.getEmail();
-        ArrayList<newUser> blocked = test.getBlocked();
-        ArrayList<newUser> friends = test.getFriends();
+        ArrayList<NewUser> blocked = test.getBlocked();
+        ArrayList<NewUser> friends = test.getFriends();
 
         return name + "\n" + username + "\n" + age + "\n" + password + "\n" + email + "\n" + blocked + "\n" + friends;
     }
 
     private String receiveInput(String name, String username, int age, String password, String email,
-                                ArrayList<newUser> blocked, ArrayList<newUser> friends) {
+                                ArrayList<NewUser> blocked, ArrayList<NewUser> friends) {
         String expected = name + "\n" + username + "\n" + age + "\n" + password
                 + "\n" + email + "\n" + blocked + "\n" + friends;
 

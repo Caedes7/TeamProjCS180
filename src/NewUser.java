@@ -1,18 +1,18 @@
 import java.util.ArrayList;
 
-public class newUser implements User {
+public class NewUser implements User {
     private String name;
     private String username;
     private int age;
     private String password;
     private String email;
-    private ArrayList<newUser> blocked;
-    private ArrayList<newUser> friends;
+    private ArrayList<NewUser> blocked;
+    private ArrayList<NewUser> friends;
 
     //private Database data = new Database(,"data_Output.txt"); // string as both arguments
 
-    public newUser(String name, String username, int age, String password, String email,
-                   ArrayList<newUser> blocked, ArrayList<newUser> friends) {
+    public NewUser(String name, String username, int age, String password, String email,
+                   ArrayList<NewUser> blocked, ArrayList<NewUser> friends) {
         this.name = name;
         this.username = username;
         this.age = age;
@@ -41,10 +41,10 @@ public class newUser implements User {
     public String getEmail() {
         return email;
     }
-    public ArrayList<newUser> getBlocked() {
+    public ArrayList<NewUser> getBlocked() {
         return blocked;
     }
-    public ArrayList<newUser> getFriends() {
+    public ArrayList<NewUser> getFriends() {
         return friends;
     }
     public void setName(String name) {
@@ -66,20 +66,20 @@ public class newUser implements User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setBlocked(ArrayList<newUser> blocked) {
+    public void setBlocked(ArrayList<NewUser> blocked) {
         this.blocked = blocked;
     }
-    public void setFriends(ArrayList<newUser> friends) {
+    public void setFriends(ArrayList<NewUser> friends) {
         this.friends = friends;
     }
 
-    public boolean isValidUsername(String username) {
-        if (username == null || username.isEmpty()) {
+    public boolean isValidUsername(String Username) {
+        if (Username == null || Username.isEmpty()) {
             return false;
         }
 
-        for (int i = 0; i < username.length(); i++) {
-            char ch = username.charAt(i);
+        for (int i = 0; i < Username.length(); i++) {
+            char ch = Username.charAt(i);
 
             if (!Character.isLetterOrDigit(ch) && ch != '_') {
                 return false;
@@ -89,21 +89,21 @@ public class newUser implements User {
         return true;
     }
 
-    public boolean isValidEmail(String email) {
-        if (email == null) {
+    public boolean isValidEmail(String Email) {
+        if (Email == null) {
             return false;
         }
-        return email.contains("@");
+        return Email.contains("@");
     }
 
 
-    public boolean isValidPassword(String password) {
-        if (password == null || password.isEmpty()) {
+    public boolean isValidPassword(String Password) {
+        if (Password == null || Password.isEmpty()) {
             return false;
         }
 
-        for (int i = 0; i < password.length(); i++) {
-            char ch = password.charAt(i);
+        for (int i = 0; i < Password.length(); i++) {
+            char ch = Password.charAt(i);
 
             if (!Character.isLetterOrDigit(ch) && ch != '@') {
                 return false;
@@ -113,7 +113,7 @@ public class newUser implements User {
         return true;
     }
 
-    public boolean isEqual(newUser otherUser) {
+    public boolean isEqual(NewUser otherUser) {
         if (otherUser == null) {
             return false;
         }
@@ -125,7 +125,7 @@ public class newUser implements User {
                 this.email.equals(otherUser.email);
     }
 
-    public String getMessages (newUser user1, newUser user2) {
+    public String getMessages(NewUser user1, NewUser user2) {
         return "Implementation for getMessages will be completed in future phases";
     }
 
