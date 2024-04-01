@@ -2,41 +2,65 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
 public class runLocalTestCase {
     @Test(timeout = 1000)
     public void testExpectedOne() {
-        // Set the input
-        // Separate each input with a newline (\n).
-        String name;
-        String username;
-        int age;
-        String password;
-        String email;
+        String name = "";
+        String username = "";
+        int age = 0;
+        String password = "";
+        String email = "";
+        ArrayList<newUser> blocked = new ArrayList<newUser>(0);
+        ArrayList<newUser> friends = new ArrayList<newUser>(0);
+
+
         try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                switch(line.charAt(0)) {
-                    case 1 ->
+            String line;
+            while ((line = bfr.readLine()) != null) {
+                switch (line.charAt(0)) {
+                    case 1 -> name = line.substring(1);
+                    case 2 -> username = line.substring(1);
+                    case 3 -> {
+                        try {
+                            if (Integer.parseInt(line.substring(1)) > 0) {
+                                age = Integer.parseInt(line.substring(1));
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid Age - Ensure age is an Int > 0 and rerun");
+                            return;
+                        }
+                    }
+                    case 4 -> password = line.substring(1);
+                    case 5 -> {
+                        if (line.contains("@")) {
+                            email = line.substring(1);
+                        } else {
+                            System.out.println("Invalid Email - Ensure email contains '@' and rerun");
+                            return;
+                        }
+                    }
+                    default -> System.out.println("Input file read.");
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+        newUser test = new newUser(name, username, age, password, email, blocked, friends);
+
         // Pair the input with the expected result
-        String expected = "Insert the expected output here";
+        String expected = receiveInput(name, username, age, password, email, blocked, friends);
 
         // Runs the program with the input values
         // Replace TestProgram with the name of the class with the main method
-        receiveInput(input);
-        if (Database.outputDatabase()) {
 
-        }
+
         // Retrieves the output from the program
-        String stuOut = getOutput();
+        String stuOut = getOutput(test);
 
         // Trims the output and verifies it is correct.
         stuOut = stuOut.replace("\r\n", "\n");
@@ -46,8 +70,23 @@ public class runLocalTestCase {
 
     }
 
-    private String getOutput() {
+    private String getOutput(newUser test) {
+        String name = test.getName();
+        String username = test.getUsername();
+        int age = test.getAge();
+        String password = test.getPassword();
+        String email = test.getEmail();
+        ArrayList<newUser> blocked = test.getBlocked();
+        ArrayList<newUser> friends = test.getFriends();
+
+        return name + "\n" + username + "\n" + age + "\n" + password + "\n" + email + "\n" + blocked + "\n" + friends;
     }
 
-    private void receiveInput(String input) {
+    private String receiveInput(String name, String username, int age, String password, String email,
+                                ArrayList<newUser> blocked, ArrayList<newUser> friends) {
+        String expected = name + "\n" + username + "\n" + age + "\n" + password
+                + "\n" + email + "\n" + blocked + "\n" + friends;
+
+        return expected;
     }
+}
