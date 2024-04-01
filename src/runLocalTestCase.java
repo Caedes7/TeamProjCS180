@@ -1,4 +1,6 @@
 import org.junit.Test;
+
+import javax.swing.text.Style;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,13 +20,13 @@ public class runLocalTestCase {
         ArrayList<newUser> friends = new ArrayList<newUser>(0);
 
 
-        try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
+        try (BufferedReader bfr = new BufferedReader(new FileReader("C:\\Users\\jeeaa\\Desktop\\ece\\TeamProjCS180\\src\\input"))) {
             String line;
             while ((line = bfr.readLine()) != null) {
                 switch (line.charAt(0)) {
-                    case 1 -> name = line.substring(1);
-                    case 2 -> username = line.substring(1);
-                    case 3 -> {
+                    case '1' -> name = line.substring(1);
+                    case '2' -> username = line.substring(1);
+                    case '3' -> {
                         try {
                             if (Integer.parseInt(line.substring(1)) > 0) {
                                 age = Integer.parseInt(line.substring(1));
@@ -34,8 +36,8 @@ public class runLocalTestCase {
                             return;
                         }
                     }
-                    case 4 -> password = line.substring(1);
-                    case 5 -> {
+                    case '4' -> password = line.substring(1);
+                    case '5' -> {
                         if (line.contains("@")) {
                             email = line.substring(1);
                         } else {
@@ -47,7 +49,7 @@ public class runLocalTestCase {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AssertionError("Failed to read input file", e);
         }
 
         newUser test = new newUser(name, username, age, password, email, blocked, friends);
@@ -65,9 +67,14 @@ public class runLocalTestCase {
         // Trims the output and verifies it is correct.
         stuOut = stuOut.replace("\r\n", "\n");
         assertEquals("Error message if output is incorrect, customize as needed",
-                expected.trim(), stuOut.trim());
+                expected, stuOut);
 
-
+        if (stuOut.equals(expected)) {
+            System.out.println("Output Matched Exactly. Test Case Passed");
+            System.out.println("Expected based on input.txt: \n" + expected + "\n");
+            System.out.println("Output from creating user object: \n" + stuOut);
+        } else
+            System.out.println("Test Failed!");
     }
 
     private String getOutput(newUser test) {
