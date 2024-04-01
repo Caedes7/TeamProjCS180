@@ -4,11 +4,13 @@ TEAM PROJECT - Direct Messaging
 
 TEAM MEMBERS:
 Jeeaan Ahmmed
-Ishaan
-Pranav
-Joey Vetter
+Ishaan Krishna Agrawal
+Pranav Yerram
+Michael Joseph Vetter
 
 1. How to compile and run project
+      This program currently can only compile through the runLocalTestCase.java class. Further instructions are 
+      located below in the detailed description of the runLocalTestCase.java class.
 
 2. Submissions List
     - Phase 1: Jeeaan Ahmmed
@@ -27,18 +29,20 @@ Database:
 
 
 User interface:
-Getters:
-   String getName: returns the name of the user
-   String getUsername: returns the username of the user
-   int getAge: returns the age of the user
-   String getPassword: returns the password of the user
-   String getEmail: returns the email of the user
+   Getters:
+      String getName: returns the name of the user
+      String getUsername: returns the username of the user
+      int getAge: returns the age of the user
+      String getPassword: returns the password of the user
+      String getEmail: returns the email of the user
+
    Setters:
-   setName: sets the name of the user
-   setUsername: sets the username of the user
-   setAge: sets the age of the user
-   setPassword: sets the password of the user
-   setEmail: sets the email of the user
+      setName: sets the name of the user
+      setUsername: sets the username of the user
+      setAge: sets the age of the user
+      setPassword: sets the password of the user
+      setEmail: sets the email of the user
+
 
 newUser:
    Variables:
@@ -47,32 +51,36 @@ newUser:
    int age: age of the user
    String password: password for the user
    String email: email of the user
+
    Constructor:
    public newUser(String name, String username, int age, String password, String email): sets the values for the newUser
+
    Getters:
    String getName: returns the name of the user
    String getUsername: returns the username of the user
    int getAge: returns the age of the user
    String getPassword: returns the password of the user
    String getEmail: returns the email of the user
+
    Setters:
    setName: sets the name of the user
    setUsername: sets the username of the user
    setAge: sets the age of the user
    setPassword: sets the password of the user
    setEmail: sets the email of the user
+
    Other methods:
    isValidUsername: checks to see if the username is valid (only contains letters and digits and '_')
    isValidEmail: checks if the email is valid (contains '@')
    isEqual: checks if two users have the same values in all fields
 
 runLocalTestCase:
-   Private Final Variable Strings:
-   String nameInput: Asks tester to input a name
-   String usernameInput: Asks tester to input a username
-   String ageInput: Asks tester to input an age
-   String ageError: Tells tester to input a valid age and loops previous string
-   String passwordInput: Asks tester to input a password
-   String emailInput: Asks tester to input an email
-   String emailError: Tells tester to input a valid email
+   Using the input.txt file, you are able to submit test user information. This class will take the input and create 
+a newUser object. It will take the newUser object and convert it into a string. It will compare this to a 
+string created from the information read from the input.txt file. If the strings match, then the newUser was 
+successfully and correctly created.
+   This class contains a test that uses a file called input.txt to perform tests. To use, edit input.txt but ensure to 
+have a number just before the test value you would like to employ. Do not add a space before beginning to input the 
+values. 
+   
     

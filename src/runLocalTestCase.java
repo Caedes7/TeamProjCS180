@@ -1,11 +1,8 @@
 import org.junit.Test;
-
-import javax.swing.text.Style;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import static junit.framework.TestCase.assertEquals;
 
 public class runLocalTestCase {
@@ -18,7 +15,6 @@ public class runLocalTestCase {
         String email = "";
         ArrayList<newUser> blocked = new ArrayList<newUser>(0);
         ArrayList<newUser> friends = new ArrayList<newUser>(0);
-
 
         try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
             String line;
@@ -53,18 +49,9 @@ public class runLocalTestCase {
         }
 
         newUser test = new newUser(name, username, age, password, email, blocked, friends);
-
-        // Pair the input with the expected result
         String expected = receiveInput(name, username, age, password, email, blocked, friends);
-
-        // Runs the program with the input values
-        // Replace TestProgram with the name of the class with the main method
-
-
-        // Retrieves the output from the program
         String stuOut = getOutput(test);
 
-        // Trims the output and verifies it is correct.
         stuOut = stuOut.replace("\r\n", "\n");
         assertEquals("Error message if output is incorrect, customize as needed",
                 expected, stuOut);
