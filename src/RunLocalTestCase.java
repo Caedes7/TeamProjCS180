@@ -4,7 +4,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
-
+/** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * This is a program that will allow direct messaging, simultaneously, between several users.
+ * This class is test cases class that will test if different functionalities of the program have valid outputs.
+ *
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 1, 2024
+ *
+ */
 public class RunLocalTestCase {
     @Test(timeout = 1000)
     public void testExpectedOne() {

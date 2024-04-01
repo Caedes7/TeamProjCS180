@@ -1,5 +1,12 @@
 import java.util.ArrayList;
-
+/** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * This is a program that will allow direct messaging, simultaneously, between several users.
+ * This class creates NewUser objects and contains methods for acquiring information about the user.
+ *
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 1, 2024
+ *
+ */
 public class NewUser implements User {
     private String name;
     private String username;

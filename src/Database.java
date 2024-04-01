@@ -3,6 +3,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * This is a program that will allow direct messaging, simultaneously, between several users.
+ * This class is the database that will store information about all the NewUser objects created.
+ *
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 1, 2024
+ *
+ */
 public class Database {
     private ArrayList<NewUser> users;
     private String databaseOutputFile = "data_Output.txt";
