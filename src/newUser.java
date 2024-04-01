@@ -66,6 +66,12 @@ public class newUser implements User {
     public void setEmail(String email) {
         this.email = email;
     }
+    public void setBlocked(ArrayList<newUser> blocked) {
+        this.blocked = blocked;
+    }
+    public void setFriends(ArrayList<newUser> friends) {
+        this.friends = friends;
+    }
 
     public boolean isValidUsername(String username) {
         if (username == null || username.isEmpty()) {

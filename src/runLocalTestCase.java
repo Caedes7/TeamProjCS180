@@ -1,20 +1,30 @@
 import org.junit.Test;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import static junit.framework.TestCase.assertEquals;
 
 public class runLocalTestCase {
-    private final String nameInput = "What name would you like to use?";
-    private final String usernameInput = "What username would you like to use?";
-    private final String ageInput = "What age would you like to use?";
-    private final String ageError = "Please enter a valid age.";
-    private final String passwordInput = "What password would you like to use?";
-    private final String emailInput = "What email would you like to use?";
-    private final String emailError = "Please enter a valid email (use @ symbol).";
-
     @Test(timeout = 1000)
     public void testExpectedOne() {
         // Set the input
-        // Separate each input with a newline (\n). 
-        String input = "Line One\nLine Two\n";
+        // Separate each input with a newline (\n).
+        String name;
+        String username;
+        int age;
+        String password;
+        String email;
+        try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                switch(line.charAt(0)) {
+                    case 1 ->
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Pair the input with the expected result
         String expected = "Insert the expected output here";
