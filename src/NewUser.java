@@ -80,13 +80,13 @@ public class NewUser implements User {
         this.friends = friends;
     }
 
-    public boolean isValidUsername(String Username) {
-        if (Username == null || Username.isEmpty()) {
+    public boolean isValidUsername(String userName) {
+        if (userName == null || userName.isEmpty()) {
             return false;
         }
 
-        for (int i = 0; i < Username.length(); i++) {
-            char ch = Username.charAt(i);
+        for (int i = 0; i < userName.length(); i++) {
+            char ch = userName.charAt(i);
 
             if (!Character.isLetterOrDigit(ch) && ch != '_') {
                 return false;
@@ -96,21 +96,21 @@ public class NewUser implements User {
         return true;
     }
 
-    public boolean isValidEmail(String Email) {
-        if (Email == null) {
+    public boolean isValidEmail(String eMail) {
+        if (eMail == null) {
             return false;
         }
-        return Email.contains("@");
+        return eMail.contains("@");
     }
 
 
-    public boolean isValidPassword(String Password) {
-        if (Password == null || Password.isEmpty()) {
+    public boolean isValidPassword(String passWord) {
+        if (passWord == null || passWord.isEmpty()) {
             return false;
         }
 
-        for (int i = 0; i < Password.length(); i++) {
-            char ch = Password.charAt(i);
+        for (int i = 0; i < passWord.length(); i++) {
+            char ch = passWord.charAt(i);
 
             if (!Character.isLetterOrDigit(ch) && ch != '@') {
                 return false;
