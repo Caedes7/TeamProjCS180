@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @version April 1, 2024
  *
  */
-public class Database {
+public class Database implements DbInterface{
     private ArrayList<NewUser> users;
     private String databaseOutputFile = "data_Output.txt";
 
