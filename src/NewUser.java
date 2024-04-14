@@ -147,15 +147,25 @@ public class NewUser implements User {
     }
 
     public Map<String, List<Message>> getMessages() {
-        StringBuilder allMessages = new StringBuilder("All messages for user " + username + ":\n");
+        // Create a new map to hold the processed messages
+        Map<String, List<Message>> last500MessagesMap = new HashMap<>();
+
         messages.forEach((otherUsername, messageList) -> {
-            // Sort messages by timestamp before retrieving the last 500
+            // Sort messages by timestamp
             Collections.sort(messageList, Comparator.comparingLong(Message::getTimestamp));
-            List<Message> last500Messages = messageList.size() > 500 ? messageList.subList(messageList.size() - 500, messageList.size()) : messageList;
-            allMessages.append("Conversation with " + otherUsername + ":\n");
-            last500Messages.forEach(message -> allMessages.append(message.toString()).append("\n"));
+
+            // Retrieve the last 500 messages or all messages if there are less than 500
+            List<Message> last500Messages = messageList.size() > 500 ? messageList.subList(messageList.size() - 500, messageList.size()) : new ArrayList<>(messageList);
+
+            // Put the sorted list into the map
+            last500MessagesMap.put(otherUsername, last500Messages);
         });
-        return allMessages.toString();
+
+        return last500MessagesMap;
     }
 
+    public String toString() {
+        return "Name: " + name + ", Username: " + username + ", Age: " + age + ", Password: " + password +
+                ", Email: " + email;
+    }
 }

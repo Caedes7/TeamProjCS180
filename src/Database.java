@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.
  * This class is the database that will store information about all the NewUser objects created.
@@ -13,9 +12,9 @@ import java.util.List;
  * @version April 1, 2024
  *
  */
+
 public class Database implements DbInterface, Serializable {
     private static final long serialVersionUID = 1L; // Serialization UID
-
     private ArrayList<NewUser> users;
     private String databaseOutputFile;
 
@@ -92,7 +91,6 @@ public class Database implements DbInterface, Serializable {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;
                 return lookingUser; //return the user if the username was found
-
             }
         }
         return null;
