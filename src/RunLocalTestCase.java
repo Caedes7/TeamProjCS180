@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertFalse;
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.
  * This class is test cases class that will test if different functionalities of the program have valid outputs.
@@ -12,82 +14,74 @@ import static junit.framework.TestCase.assertEquals;
  * @version April 1, 2024
  *
  */
-public class RunLocalTestCase {
-    @Test(timeout = 1000)
-    public void testExpectedOne() {
-        String name = "";
-        String username = "";
-        int age = 0;
-        String password = "";
-        String email = "";
-        ArrayList<NewUser> blocked = new ArrayList<NewUser>(0);
-        ArrayList<NewUser> friends = new ArrayList<NewUser>(0);
 
-        try (BufferedReader bfr = new BufferedReader(new FileReader("input.txt"))) {
+public class RunLocalTestCase {
+    private Database database;
+
+    public RunLocalTestCase() {
+        // Initialize the database with a test output file.
+        database = new Database("test_data_Output.txt");
+    }
+
+    @Test(timeout = 1000)
+    public void testUserCreationFromFile() throws IOException {
+        // Test user creation based on data read from a file.
+        String name = "", username = "", password = "", email = "";
+        int age = 0;
+        ArrayList<NewUser> blocked = new ArrayList<>();
+        ArrayList<NewUser> friends = new ArrayList<>();
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader("C:\\Users\\jeeaa\\Desktop\\ece\\TeamProjCS180\\src\\input"))) {
             String line;
             while ((line = bfr.readLine()) != null) {
                 switch (line.charAt(0)) {
-                    case '1' -> name = line.substring(1);
-                    case '2' -> username = line.substring(1);
-                    case '3' -> {
+                    case '1':
+                        name = line.substring(1).trim();  // Trims any leading or trailing whitespace
+                        break;
+                    case '2':
+                        username = line.substring(1).trim();
+                        break;
+                    case '3':
                         try {
-                            if (Integer.parseInt(line.substring(1)) > 0) {
-                                age = Integer.parseInt(line.substring(1));
-                            }
+                            age = Integer.parseInt(line.substring(1).trim());
                         } catch (NumberFormatException e) {
                             System.out.println("Invalid Age - Ensure age is an Int > 0 and rerun");
                             return;
                         }
-                    }
-                    case '4' -> password = line.substring(1);
-                    case '5' -> {
-                        if (line.contains("@")) {
-                            email = line.substring(1);
+                        break;
+                    case '4':
+                        password = line.substring(1).trim();
+                        break;
+                    case '5':
+                        if (line.substring(1).contains("@")) {
+                            email = line.substring(1).trim();
                         } else {
                             System.out.println("Invalid Email - Ensure email contains '@' and rerun");
                             return;
                         }
-                    }
-                    default -> System.out.println("Input file read.");
+                        break;
+                    default:
+                        System.out.println("Unrecognized input format.");
                 }
             }
         } catch (IOException e) {
             throw new AssertionError("Failed to read input file", e);
         }
 
-        NewUser test = new NewUser(name, username, age, password, email, blocked, friends);
-        String expected = receiveInput(name, username, age, password, email, blocked, friends);
-        String stuOut = getOutput(test);
+        // Create user from the read data.
+        assertTrue("User should be created successfully", database.createUser(name, username, age, password, email));
 
-        stuOut = stuOut.replace("\r\n", "\n");
-        assertEquals("Error message if output is incorrect, customize as needed",
-                expected, stuOut);
-
-        if (stuOut.equals(expected)) {
-            System.out.println("Output Matched Exactly. Test Case Passed");
-            System.out.println("Expected based on input.txt: \n" + expected + "\n");
-            System.out.println("Output from creating user object: \n" + stuOut);
-        } else
-            System.out.println("Test Failed!");
+        // Verify the output of the database with the expected result.
+        String expectedOutput = name + "\n" + username + "\n" + age + "\n" + password + "\n" + email;
+        String actualOutput = database.getUserDetailsForTesting();
+        assertEquals("Expected user details should match the actual details", expectedOutput, actualOutput);
     }
 
-    private String getOutput(NewUser test) {
-        String name = test.getName();
-        String username = test.getUsername();
-        int age = test.getAge();
-        String password = test.getPassword();
-        String email = test.getEmail();
-        ArrayList<NewUser> blocked = test.getBlocked();
-        ArrayList<NewUser> friends = test.getFriends();
-
-        return name + "\n" + username + "\n" + age + "\n" + password + "\n" + email + "\n" + blocked + "\n" + friends;
-    }
-
-    private String receiveInput(String name, String username, int age, String password, String email,
-                                ArrayList<NewUser> blocked, ArrayList<NewUser> friends) {
-        String expected = name + "\n" + username + "\n" + age + "\n" + password
-                + "\n" + email + "\n" + blocked + "\n" + friends;
-
-        return expected;
+    @Test
+    public void testDatabaseFunctions() {
+        // Additional tests for database functionality such as deletion and output.
+        assertTrue("User should be deleted successfully", database.deleteUser("John Doe", "john_doe", 30, "securePass123", "john@example.com"));
+        assertFalse("Attempting to create an already existing user should fail", database.createUser("John Doe", "john_doe", 30, "securePass123", "john@example.com"));
+        assertTrue("Outputting database to file should succeed", database.outputDatabase());
     }
 }

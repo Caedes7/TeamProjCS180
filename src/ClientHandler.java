@@ -31,7 +31,7 @@ public class ClientHandler implements Runnable {
                     String password = userDetails[4];
                     String email = userDetails[5];
 
-                    boolean success = database.createUser(name, username, age, password, email, new ArrayList<>(), new ArrayList<>());
+                    boolean success = database.createUser(name, username, age, password, email);
                     if (success) {
                         out.println("User created successfully");
                     } else {

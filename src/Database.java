@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Database implements DbInterface{
     private ArrayList<NewUser> users;
-    private String databaseOutputFile = "data_Output.txt";
+    private String databaseOutputFile;
 
 
     public Database(String databaseOutput) {
@@ -21,9 +21,8 @@ public class Database implements DbInterface{
         this.users = new ArrayList<>(0);
     }
 
-    public boolean createUser(String name, String username, int age, String password, String email,
-                              ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) {
-        NewUser user = new NewUser(name, username, age, password, email, blocked, friends);
+    public boolean createUser(String name, String username, int age, String password, String email) {
+        NewUser user = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
             if (existingUser.equals(user)) {
                 return false; //user already exists, so return false
@@ -32,9 +31,8 @@ public class Database implements DbInterface{
         users.add(user); //add user
         return true;
     }
-    public boolean deleteUser(String name, String username, int age, String password, String email,
-                              ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) { //to delete the account/user
-        NewUser user  = new NewUser(name, username, age, password, email, blocked, friends);
+    public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
+        NewUser user  = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
             if (existingUser.equals(user)) {
                 users.remove(user);
@@ -77,7 +75,7 @@ public class Database implements DbInterface{
     public NewUser searchUsers(String name, String username, int age, String password, String email,
                                ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) {
         boolean found = false;
-        NewUser searchingUser = new NewUser(name, username, age, password, email, blocked, friends);
+        NewUser searchingUser = new NewUser(name, username, age, password, email);
         for (NewUser lookingUser : users) {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;
@@ -90,7 +88,21 @@ public class Database implements DbInterface{
 
     public void viewUsers() {
         for (NewUser user : users) {
-            System.out.println(user.toString()); //replace with GUI alternative late
+            System.out.println(user.toString()); //replace with GUI alternative later
         }
+    }
+
+    public String getUserDetailsForTesting() {
+        StringBuilder userDetails = new StringBuilder();
+        for (NewUser user : users) {
+            userDetails.append(user.getName()).append("\n")
+                    .append(user.getUsername()).append("\n")
+                    .append(user.getAge()).append("\n")
+                    .append(user.getPassword()).append("\n")
+                    .append(user.getEmail()).append("\n")
+                    .append(user.getBlocked().toString()).append("\n")
+                    .append(user.getFriends().toString()).append("\n");
+        }
+        return userDetails.toString();
     }
 }

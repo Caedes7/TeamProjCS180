@@ -16,17 +16,14 @@ public class NewUser implements User {
     private ArrayList<NewUser> blocked;
     private ArrayList<NewUser> friends;
 
-    //private Database data = new Database(,"data_Output.txt"); // string as both arguments
-
-    public NewUser(String name, String username, int age, String password, String email,
-                   ArrayList<NewUser> blocked, ArrayList<NewUser> friends) {
+    public NewUser(String name, String username, int age, String password, String email) {
         this.name = name;
         this.username = username;
         this.age = age;
         this.password = password;
         this.email = email;
-        this.blocked = blocked;
-        this.friends = friends;
+        this.blocked = new ArrayList<>();
+        this.friends = new ArrayList<>();
     }
 
     public String getName() {
@@ -72,12 +69,6 @@ public class NewUser implements User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-    public void setBlocked(ArrayList<NewUser> blocked) {
-        this.blocked = blocked;
-    }
-    public void setFriends(ArrayList<NewUser> friends) {
-        this.friends = friends;
     }
 
     public boolean isValidUsername(String userName) {
@@ -136,4 +127,8 @@ public class NewUser implements User {
         return "Implementation for getMessages will be completed in future phases";
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Username: " + username + ", Age: " + age + ", Email: " + email;
+    }
 }
