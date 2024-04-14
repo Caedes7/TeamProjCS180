@@ -1,7 +1,9 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.
@@ -11,14 +13,15 @@ import java.util.ArrayList;
  * @version April 1, 2024
  *
  */
-public class Database implements DbInterface{
-    private ArrayList<NewUser> users;
-    private String databaseOutputFile = "data_Output.txt";
+public class Database implements DbInterface, Serializable {
+    private static final long serialVersionUID = 1L; // Serialization UID
 
+    private ArrayList<NewUser> users;
+    private String databaseOutputFile;
 
     public Database(String databaseOutput) {
         this.databaseOutputFile = databaseOutput;
-        this.users = new ArrayList<>(0);
+        this.users = new ArrayList<>();
     }
 
     public boolean createUser(String name, String username, int age, String password, String email,
@@ -45,24 +48,34 @@ public class Database implements DbInterface{
     }
 
     public boolean outputDatabase() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutputFile))) {
-            String line = "";
-            for (NewUser userData : users) {
-                line = userData.toString();
-                bw.write(line);
-                line = "";
-                for (NewUser recipient :  users) {
-                    if (!userData.equals(recipient)) {
-                        if (userData.getMessages(userData, recipient) != null) {
-                            line += userData.getMessages(userData, recipient) + "\n";
+        StringBuilder dataToWrite = new StringBuilder();
+
+        // Loop through each user and compile information
+        for (NewUser user : users) {
+            // Append basic user info
+            dataToWrite.append(user.toString()).append("\n");
+
+            // Loop through each user again to collect and append message data
+            for (NewUser recipient : users) {
+                if (!user.equals(recipient)) {
+                    List<Message> messages = user.getMessagesWithUser(recipient.getUsername());
+                    if (messages != null) {
+                        for (Message message : messages) {
+                            dataToWrite.append(message.toString()).append("\n");
                         }
                     }
                 }
-                bw.write(line);
             }
+        }
+
+        // Attempt to write the compiled data to the file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutputFile))) {
+            bw.write(dataToWrite.toString());
         } catch (IOException e) {
+            System.err.println("Failed to write database to file: " + e.getMessage());
             return false;
         }
+
         return true;
     }
 

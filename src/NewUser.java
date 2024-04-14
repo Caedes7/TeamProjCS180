@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.*;
+
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.
  * This class creates NewUser objects and contains methods for acquiring information about the user.
@@ -8,6 +9,8 @@ import java.util.ArrayList;
  *
  */
 public class NewUser implements User {
+    private static final long serialVersionUID = 1L; // Serialization UID
+
     private String name;
     private String username;
     private int age;
@@ -15,8 +18,8 @@ public class NewUser implements User {
     private String email;
     private ArrayList<NewUser> blocked;
     private ArrayList<NewUser> friends;
-
-    //private Database data = new Database(,"data_Output.txt"); // string as both arguments
+    private ArrayList<NewUser> following;
+    private Map<String, List<Message>> messages = new HashMap<>();
 
     public NewUser(String name, String username, int age, String password, String email,
                    ArrayList<NewUser> blocked, ArrayList<NewUser> friends) {
@@ -27,6 +30,7 @@ public class NewUser implements User {
         this.email = email;
         this.blocked = blocked;
         this.friends = friends;
+        this.following = new ArrayList<>();
     }
 
     public String getName() {
@@ -54,6 +58,12 @@ public class NewUser implements User {
     public ArrayList<NewUser> getFriends() {
         return friends;
     }
+    public ArrayList<NewUser> getFollowing() {
+        return following;
+    }
+    public List<Message> getMessagesWithUser(String otherUser) {
+        return messages.getOrDefault(otherUser, new ArrayList<>());
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -78,6 +88,11 @@ public class NewUser implements User {
     }
     public void setFriends(ArrayList<NewUser> friends) {
         this.friends = friends;
+    }
+    public void setFollowing(ArrayList<NewUser> following) { this.following = following; }
+    public void addMessage(Message message) {
+        messages.computeIfAbsent(message.getReceiver(), k -> new ArrayList<>()).add(message);
+        messages.computeIfAbsent(message.getSender(), k -> new ArrayList<>()).add(message);
     }
 
     public boolean isValidUsername(String userName) {
@@ -132,8 +147,16 @@ public class NewUser implements User {
                 this.email.equals(otherUser.email);
     }
 
-    public String getMessages(NewUser user1, NewUser user2) {
-        return "Implementation for getMessages will be completed in future phases";
+    public Map<String, List<Message>> getMessages() {
+        StringBuilder allMessages = new StringBuilder("All messages for user " + username + ":\n");
+        messages.forEach((otherUsername, messageList) -> {
+            // Sort messages by timestamp before retrieving the last 500
+            Collections.sort(messageList, Comparator.comparingLong(Message::getTimestamp));
+            List<Message> last500Messages = messageList.size() > 500 ? messageList.subList(messageList.size() - 500, messageList.size()) : messageList;
+            allMessages.append("Conversation with " + otherUsername + ":\n");
+            last500Messages.forEach(message -> allMessages.append(message.toString()).append("\n"));
+        });
+        return allMessages.toString();
     }
 
 }
