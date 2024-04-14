@@ -21,15 +21,14 @@ public class NewUser implements User {
     private ArrayList<NewUser> following;
     private Map<String, List<Message>> messages = new HashMap<>();
 
-    public NewUser(String name, String username, int age, String password, String email,
-                   ArrayList<NewUser> blocked, ArrayList<NewUser> friends) {
+    public NewUser(String name, String username, int age, String password, String email) {
         this.name = name;
         this.username = username;
         this.age = age;
         this.password = password;
         this.email = email;
-        this.blocked = blocked;
-        this.friends = friends;
+        this.blocked = new ArrayList<>();
+        this.friends = new ArrayList<>();
         this.following = new ArrayList<>();
     }
 

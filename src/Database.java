@@ -24,9 +24,8 @@ public class Database implements DbInterface, Serializable {
         this.users = new ArrayList<>();
     }
 
-    public boolean createUser(String name, String username, int age, String password, String email,
-                              ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) {
-        NewUser user = new NewUser(name, username, age, password, email, blocked, friends);
+    public boolean createUser(String name, String username, int age, String password, String email) {
+        NewUser user = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
             if (existingUser.equals(user)) {
                 return false; //user already exists, so return false
@@ -35,9 +34,8 @@ public class Database implements DbInterface, Serializable {
         users.add(user); //add user
         return true;
     }
-    public boolean deleteUser(String name, String username, int age, String password, String email,
-                              ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) { //to delete the account/user
-        NewUser user  = new NewUser(name, username, age, password, email, blocked, friends);
+    public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
+        NewUser user  = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
             if (existingUser.equals(user)) {
                 users.remove(user);
@@ -87,10 +85,9 @@ public class Database implements DbInterface, Serializable {
         return user1 == null;
     }
 
-    public NewUser searchUsers(String name, String username, int age, String password, String email,
-                               ArrayList<NewUser> blocked,  ArrayList<NewUser> friends) {
+    public NewUser searchUsers(String name, String username, int age, String password, String email) {
         boolean found = false;
-        NewUser searchingUser = new NewUser(name, username, age, password, email, blocked, friends);
+        NewUser searchingUser = new NewUser(name, username, age, password, email);
         for (NewUser lookingUser : users) {
             if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
                 found = true;

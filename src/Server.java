@@ -22,7 +22,7 @@ public class Server extends Database implements ServerInterface {
 
         // Search for the user using the username. Assuming that the password, age, email, blocked, and friends
         // are not relevant for the login search and can be passed as null or default values.
-        NewUser user = searchUsers(null, username, 0, password, null, null, null);
+        NewUser user = searchUsers(null, username, 0, password, null);
 
         // Check if a user was found and the password matches the password of the found user
         if (user != null && user.getPassword().equals(password)) {
@@ -39,7 +39,7 @@ public class Server extends Database implements ServerInterface {
         }
 
         // Search for the user by username. Assume that other details are not required for this search
-        NewUser user = searchUsers(null, username, 0, null, null, null, null);
+        NewUser user = searchUsers(null, username, 0, null, null);
 
         // If the user is found, return their friends list
         if (user != null) {
@@ -57,7 +57,7 @@ public class Server extends Database implements ServerInterface {
         }
 
         // Search for the user using the username
-        NewUser user = searchUsers(null, username, 0, null, null, null, null);
+        NewUser user = searchUsers(null, username, 0, null, null);
 
         // If the user is found, return their following list
         if (user != null) {
