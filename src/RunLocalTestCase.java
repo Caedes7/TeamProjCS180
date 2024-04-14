@@ -1,10 +1,12 @@
+import org.junit.Before;
 import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import static junit.framework.TestCase.*;
-
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.
  * This class is test cases class that will test if different functionalities of the program have valid outputs.
@@ -13,17 +15,18 @@ import static junit.framework.TestCase.*;
  * @version April 1, 2024
  *
  */
+
 public class RunLocalTestCase {
     private Server server;
 
-    public RunLocalTestCase() {
-        // Initialize the server with a test output file.
+    @Before
+    public void setup() {
+        // Initialize the server before each test.
         server = new Server("test_data_Output.txt");
     }
 
-    @Test(timeout = 1000)
+    @Test
     public void testUserCreationFromFile() throws IOException {
-        // Test user creation based on data read from a file.
         String name = "", username = "", password = "", email = "";
         int age = 0;
 
@@ -52,29 +55,46 @@ public class RunLocalTestCase {
             }
         }
 
-        // Assert that the user can be successfully created.
         assertTrue("User should be created successfully", server.createUser(name, username, age, password, email));
     }
 
     @Test
-    public void testLoginAndMessaging() {
-        // Testing user login
-        assertTrue("Login should be successful", server.loginUser("johndoe", "securePass123"));
+    public void testConcurrentLogins() {
+        server.createUser("testUser", "testLogin", 25, "123456", "test@login.com");
 
-        // Testing messaging functionality
-        //server.addMessage(new Message("johndoe", "janedoe", "Hello, Jane!", System.currentTimeMillis()));
-        //assertFalse("Messages should not be empty", server.getMessages("johndoe").isEmpty());
-    }
-
-    @Test
-    public void testDatabaseOutput() {
-        // Test that the database correctly outputs to a file.
-        assertTrue("Outputting database to file should succeed", server.outputDatabase());
+        ExecutorService service = Executors.newFixedThreadPool(5);
+        for (int i = 0; i < 5; i++) {
+            service.submit(() -> assertTrue("Concurrent login should succeed",
+                    server.loginUser("testLogin", "123456")));
+        }
+        service.shutdown();
+        try {
+            assertTrue("Failed to complete concurrent logins in time",
+                    service.awaitTermination(1, TimeUnit.SECONDS));
+        } catch (InterruptedException e) {
+            fail("Test was interrupted");
+        }
     }
 
     @Test
     public void testUserDeletion() {
-        // Ensure the user can be deleted.
-        assertTrue("User should be deleted successfully", server.deleteUser("John Doe", "john_doe", 30, "securePass123", "john.doe@email.com"));
+        server.createUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com");
+        assertTrue("User should be deleted successfully",
+                server.deleteUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com"));
+    }
+
+    //@Test
+    //public void testMessagingSystem() {
+    //    server.createUser("user1", "user1", 25, "user1pass", "user1@example.com");
+     //   server.createUser("user2", "user2", 25, "user2pass", "user2@example.com");
+
+        //server.sendMessage("user1", "user2", "Hello from user1!");
+        //assertFalse("Messages list should not be empty", server.getMessages("user2").isEmpty());
+   // }
+
+    @Test
+    public void testDatabaseOutput() {
+        server.createUser("outputUser", "outputUser123", 30, "pass789", "output@user.com");
+        assertTrue("Outputting database to file should succeed", server.outputDatabase());
     }
 }

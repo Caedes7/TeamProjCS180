@@ -88,7 +88,9 @@ public class NewUser implements User {
     public void setFriends(ArrayList<NewUser> friends) {
         this.friends = friends;
     }
-    public void setFollowing(ArrayList<NewUser> following) { this.following = following; }
+    public void setFollowing(ArrayList<NewUser> following) {
+        this.following = following;
+    }
     public void addMessage(Message message) {
         messages.computeIfAbsent(message.getReceiver(), k -> new ArrayList<>()).add(message);
         messages.computeIfAbsent(message.getSender(), k -> new ArrayList<>()).add(message);
