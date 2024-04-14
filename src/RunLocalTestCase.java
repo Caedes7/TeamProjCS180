@@ -83,7 +83,7 @@ public class RunLocalTestCase {
                 server.deleteUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com"));
     }
 
-    //@Test
+    //Test
     //public void testMessagingSystem() {
     //    server.createUser("user1", "user1", 25, "user1pass", "user1@example.com");
      //   server.createUser("user2", "user2", 25, "user2pass", "user2@example.com");
