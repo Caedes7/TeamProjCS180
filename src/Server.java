@@ -79,13 +79,13 @@ public class Server extends Database implements ServerInterface {
         }
 
         // Find the user who wants to block another user
-        NewUser userBlocker = searchUsers(null, usernameBlocker, 0, null, null, null, null);
+        NewUser userBlocker = searchUsers(null, usernameBlocker, 0, null, null);
         if (userBlocker == null) {
             return false; // User who wants to block does not exist
         }
 
         // Find the user to be blocked
-        NewUser userBlocked = searchUsers(null, usernameBlocked, 0, null, null, null, null);
+        NewUser userBlocked = searchUsers(null, usernameBlocked, 0, null, null);
         if (userBlocked == null) {
             return false; // User to be blocked does not exist
         }
@@ -101,7 +101,7 @@ public class Server extends Database implements ServerInterface {
     }
 
     public synchronized String getMessages(String username) {
-        NewUser user = searchUsers(null, username, 0, null, null, null, null);
+        NewUser user = searchUsers(null, username, 0, null, null);
         if (user == null) {
             return "User not found";
         }
