@@ -1,1 +1,3 @@
-Name: outputUser, Username: outputUser123, Age: 30, Password: pass789, Email: output@user.com
+Name: testUser, Username: testLogin, Age: 25, Password: 123456, Email: test@login.com
+Friends: 
+Blocked: 

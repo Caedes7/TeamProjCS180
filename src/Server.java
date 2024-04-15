@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class Server extends Database implements ServerInterface, Runnable {
+public class Server extends Database implements IServer, Runnable {
     private static final int MAX_MESSAGES = 100; // Store last 100 messages per user
     private ExecutorService executorService; // For handling client requests concurrently
     private final int PORT  = 1112;

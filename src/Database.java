@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  */
 
-public class Database implements DbInterface, Serializable {
+public class Database implements IDatabase, Serializable {
     private static final long serialVersionUID = 1L;
     private ArrayList<NewUser> users;
     private String databaseOutputFile;

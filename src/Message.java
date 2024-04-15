@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Message implements Serializable {
+public class Message implements Serializable, IMessage {
     private static final long serialVersionUID = 1L; // Serialization UID
 
     private String sender;
