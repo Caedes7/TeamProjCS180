@@ -75,7 +75,7 @@ public class Client {
                     repeat = true;
                 }
             } while (repeat);
-            System.out.println("this works");
+            System.out.println("User Created; Phase 2 implementation ends here without GUI");
             String response = reader.readLine();
             System.out.println(response);
 
