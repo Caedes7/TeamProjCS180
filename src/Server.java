@@ -49,7 +49,7 @@ public class Server extends Database implements ServerInterface, Runnable {
     }
 
     public static void main(String[] args) {
-        Server server = new Server("data_Output");
+        Server server = new Server("data_Output.txt");
         new Thread(server).start();
     }
     

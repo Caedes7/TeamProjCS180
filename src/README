@@ -82,5 +82,25 @@ successfully and correctly created.
    This class contains a test that uses a file called input.txt to perform tests. To use, edit input.txt but ensure to 
 have a number just before the test value you would like to employ. Do not add a space before beginning to input the 
 values. 
-   
+
+ServerInterface:
+    loginUser: verifies the username and password of a user match to log them in
+    getFriendsList: gets a list of friends of the user
+    getFollowingList: gets the following list of the user
+    blockUser: adds a user to the user's blocked list
+    getMessages: gets the last 100 messages of a user
+
+Server:
+    Variables:
+        int MAX_MESSAGES: the maximum messages stored for each user
+        ExecutorService executorService: the service that handles client requests concurrently
+        int PORT: port number of the server
+        Database database: makes a new database for the server
+        ExecutorService threadPool: makes a threadpool to run the server with multiple clients at the same time
+
+    Compiler:
+        Server: makes a new server with the last database used
+
+    run: makes the serversocket and connects to clients
+    main: makes a server that is used
     
