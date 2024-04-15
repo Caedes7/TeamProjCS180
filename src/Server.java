@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -26,15 +29,18 @@ public class Server extends Database implements ServerInterface, Runnable {
 
      public void run() {
         while (true) {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+        try (ServerSocket serverSocket = new ServerSocket(PORT);){
             System.out.println("Server is listening on port " + PORT);
-
+            Socket clientSocket = serverSocket.accept();
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
             while (!serverSocket.isClosed()) {
-                Socket clientSocket = serverSocket.accept();
                 System.out.println("New client connected, " + clientSocket);
-                Server server = new Server("data_Output");        
+                Server server = new Server("data_Output");
+                String response = inFromClient.readLine();
+                System.out.println(response);
                 ClientHandler clientHandler = new ClientHandler(clientSocket, database, server);
-                //threadPool.execute(clientHandler);
+                threadPool.execute(clientHandler);
                 clientHandler.start();
                 
             }
