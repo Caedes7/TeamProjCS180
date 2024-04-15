@@ -26,7 +26,7 @@ public class Database implements DbInterface, Serializable {
     public boolean createUser(String name, String username, int age, String password, String email) {
         NewUser user = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
-            if (existingUser.equals(user)) {
+            if (existingUser.isEqual(user)) {
                 return false; //user already exists, so return false
             }
         }
@@ -36,7 +36,7 @@ public class Database implements DbInterface, Serializable {
     public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
         NewUser user  = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
-            if (existingUser.equals(user)) {
+            if (existingUser.isEqual(user)) {
                 users.remove(user);
                 return true; //user was deleted, successfully
             }
@@ -54,7 +54,7 @@ public class Database implements DbInterface, Serializable {
 
             // Loop through each user again to collect and append message data
             for (NewUser recipient : users) {
-                if (!user.equals(recipient)) {
+                if (!user.isEqual(recipient)) {
                     List<Message> messages = user.getMessagesWithUser(recipient.getUsername());
                     if (messages != null) {
                         for (Message message : messages) {

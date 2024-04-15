@@ -83,15 +83,6 @@ public class RunLocalTestCase {
                 server.deleteUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com"));
     }
 
-    //Test
-    //public void testMessagingSystem() {
-    //    server.createUser("user1", "user1", 25, "user1pass", "user1@example.com");
-     //   server.createUser("user2", "user2", 25, "user2pass", "user2@example.com");
-
-        //server.sendMessage("user1", "user2", "Hello from user1!");
-        //assertFalse("Messages list should not be empty", server.getMessages("user2").isEmpty());
-   // }
-
     @Test
     public void testDatabaseOutput() {
         server.createUser("outputUser", "outputUser123", 30, "pass789", "output@user.com");
