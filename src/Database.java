@@ -105,7 +105,7 @@ public class Database implements DbInterface, Serializable {
             String line;
             while ((line = br.readLine()) != null) {
                 // Assume each user's data is separated by a special line or stored in a specific format
-                String[] userData = line.split(", "); // Example format: "Name, Username, Age, Password, Email"
+                String[] userData = line.split(","); // Example format: "Name, Username, Age, Password, Email"
                 if (userData.length >= 5) {
                     int age = Integer.parseInt(userData[2]);
                     NewUser user = new NewUser(userData[0], userData[1], age, userData[3], userData[4]);
