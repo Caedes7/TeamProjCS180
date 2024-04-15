@@ -60,7 +60,7 @@ public class Server extends Database implements ServerInterface, Runnable {
 
         // Search for the user using the username. Assuming that the password, age, email, blocked, and friends
         // are not relevant for the login search and can be passed as null or default values.
-        NewUser user = searchUsers(null, username, 0, password, null);
+        NewUser user = searchUsers(username);
 
         // Check if a user was found and the password matches the password of the found user
         if (user != null && user.getPassword().equals(password)) {
@@ -77,7 +77,7 @@ public class Server extends Database implements ServerInterface, Runnable {
         }
 
         // Search for the user by username. Assume that other details are not required for this search
-        NewUser user = searchUsers(null, username, 0, null, null);
+        NewUser user = searchUsers(username);
 
         // If the user is found, return their friends list
         if (user != null) {
@@ -91,7 +91,7 @@ public class Server extends Database implements ServerInterface, Runnable {
 
 
     public synchronized String getMessages(String username) {
-        NewUser user = searchUsers(null, username, 0, null, null);
+        NewUser user = searchUsers(username);
         if (user == null) {
             return "User not found";
         }
