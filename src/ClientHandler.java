@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler extends Thread implements Runnable  {
     private Socket clientSocket;
     private Database database;
     private Server server;
@@ -36,9 +36,9 @@ public class ClientHandler implements Runnable {
 
                     boolean success = database.createUser(name, username, age, password, email);
                     if (success) {
-                        out.println("User created successfully");
+                        out.write("User created successfully");
                     } else {
-                        out.println("Failed to create user");
+                        out.write("Failed to create user");
                     }
                 } else if (inputLine.startsWith("RE")) {
                     inputLine = inputLine.substring(2);
@@ -52,6 +52,7 @@ public class ClientHandler implements Runnable {
                     } else {
                         out.println("Failed to login user");
                     }
+                    out.flush();
                 }
                 
             }

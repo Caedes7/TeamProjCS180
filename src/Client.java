@@ -75,22 +75,72 @@ public class Client {
                     repeat = true;
                 }
             } while (repeat);
+            System.out.println("this works");
+            String response = reader.readLine();
+            System.out.println(response);
 
-                
+            if (response.startsWith("Success")) {
+                System.out.println("Welcome! Please select an option:");
+                System.out.println("1. Search user");
+                System.out.println("2. Block user");
+                System.out.println("3. Unblock user");
+                System.out.println("4. Add friend");
+                System.out.println("5. Remove a friend");
+                System.out.println("6. Message a friend");
+                System.out.println("0. Exit");
 
-                //add part if inputs are invalid after checking with db methods
+                int choice = -1;
+                while (choice != 0) {
+                    System.out.print("Enter your choice: ");
+                    choice = sc.nextInt();
+                    sc.nextLine(); 
 
-                
-
-                StringBuilder titlesBuild = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null && !line.equals("EOF")) {
-                    titlesBuild.append(line).append("\n");
+                    switch (choice) {
+                        case 1:
+                            System.out.println("Enter the username you want to search: ");
+                            String toSearch = sc.nextLine();
+                            writer.write("1" + toSearch);
+                            break;
+                        case 2:
+                            System.out.println("Enter the username you want to block: ");
+                            String toBlock = sc.nextLine();
+                            writer.write("2" + toBlock);
+                            break;
+                        case 3:
+                            System.out.println("Enter the username you want to unblock: ");
+                            String toUnblock = sc.nextLine();
+                            writer.write("3" + toUnblock);
+                            break;
+                        case 4:
+                            System.out.println("Enter the username you want to add as a friend: ");
+                            String toFriend = sc.nextLine();
+                            writer.write("4" + toFriend);
+                            break;
+                        case 5:
+                            System.out.println("Enter the username you want to unfriend: ");
+                            String toUnfriend = sc.nextLine();
+                            writer.write("5" + toUnfriend);
+                            break;
+                        case 6:
+                            System.out.println("Enter the username you want to message: ");
+                            String toMessage = sc.nextLine();
+                            writer.write("6" + toMessage);
+                            break;
+                        case 0:
+                            System.out.println("Exiting.");
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
                 }
+            } else {
+                System.out.println("Could not login or create new user.");
+            }
+
             } catch (IOException e) {
                 System.err.println("IO exception");
             }
-    }
+            } 
    public static void main(String[] args) {
     String clientName = "Client1"; 
     Client client = new Client(clientName);

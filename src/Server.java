@@ -34,7 +34,9 @@ public class Server extends Database implements ServerInterface, Runnable {
                 System.out.println("New client connected, " + clientSocket);
                 Server server = new Server("data_Output");        
                 ClientHandler clientHandler = new ClientHandler(clientSocket, database, server);
-                threadPool.execute(clientHandler);
+                //threadPool.execute(clientHandler);
+                clientHandler.start();
+                
             }
         } catch (IOException e) {
             e.printStackTrace();
