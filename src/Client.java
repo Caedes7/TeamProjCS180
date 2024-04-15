@@ -95,10 +95,8 @@ public class Client implements IClient {
             System.out.println("Welcome! Please select an option:");
             System.out.println("1. Search user");
             System.out.println("2. Block user");
-            System.out.println("3. Unblock user");
-            System.out.println("4. Add friend");
-            System.out.println("5. Remove a friend");
-            System.out.println("6. Message a friend");
+            System.out.println("3. Add friend");
+            System.out.println("4. Message a friend");
             System.out.println("0. Exit");
 
             int choice = -1;
@@ -119,24 +117,14 @@ public class Client implements IClient {
                         writer.println("2" + toBlock);
                         break;
                     case 3:
-                        System.out.println("Enter the username you want to unblock: ");
-                        String toUnblock = sc.nextLine();
-                        writer.println("3" + toUnblock);
-                        break;
-                    case 4:
                         System.out.println("Enter the username you want to add as a friend: ");
                         String toFriend = sc.nextLine();
-                        writer.println("4" + toFriend);
+                        writer.println("3" + toFriend);
                         break;
-                    case 5:
-                        System.out.println("Enter the username you want to unfriend: ");
-                        String toUnfriend = sc.nextLine();
-                        writer.println("5" + toUnfriend);
-                        break;
-                    case 6:
+                    case 4:
                         System.out.println("Enter the username you want to message: ");
                         String toMessage = sc.nextLine();
-                        writer.println("6" + toMessage);
+                        writer.println("4" + toMessage);
                         break;
                     case 0:
                         System.out.println("Exiting.");
@@ -144,6 +132,9 @@ public class Client implements IClient {
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
+
+                String response2 = reader.readLine();
+                System.out.println(response2);
             }
             } catch (IOException e) {
                 System.err.println("IO exception");

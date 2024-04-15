@@ -30,6 +30,10 @@ public class NewUser implements IUser {
         this.friends = new ArrayList<>();
     }
 
+    public NewUser(String username) {
+        username = null;
+    }
+
     public String getName() {
         return name;
     }
