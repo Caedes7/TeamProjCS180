@@ -3,20 +3,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.Scanner;
 
 
-public class Client {
+public class Client2 {
     private static final int PORT = 1112;
     private ExecutorService threadPool;
     Scanner sc = new Scanner(System.in);
     private String name;
 
-    public Client(String name) {
+    public Client2(String name) {
         this.threadPool = Executors.newCachedThreadPool();
         this.name = name;
     }
@@ -139,8 +137,8 @@ public class Client {
             }
     }
    public static void main(String[] args) {
-    String clientName = "Client1"; 
-    Client client = new Client(clientName);
+    String clientName = "Client2";
+    Client2 client = new Client2(clientName);
     client.runClient();
 
    }
