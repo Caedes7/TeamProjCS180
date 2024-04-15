@@ -77,7 +77,7 @@ public class Client {
             String response = reader.readLine();
             System.out.println(response);
 
-            if (response.startsWith("Success")) {
+            if (response.startsWith("User created successfully")) {
                 System.out.println("Welcome! Please select an option:");
                 System.out.println("1. Search user");
                 System.out.println("2. Block user");
