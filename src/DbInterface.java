@@ -14,4 +14,5 @@ public interface DbInterface {
     NewUser searchUsers(String username);
     void viewUsers();
     boolean blockUser(String usernameBlocker, String usernameBlocked);
+    boolean addFriend(String username, String friendUsername);
 }

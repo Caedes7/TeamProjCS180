@@ -18,18 +18,16 @@ public interface ServerInterface {
     List<NewUser> getFriendsList(String username);
 
     /**
-     * Blocks a specified user.
-     * @param username The username of the user performing the block.
-     * @param targetUsername The username of the user to be blocked.
-     * @return true if the user is successfully blocked, false otherwise.
+     * Retrieves the list of users blocked by a specified user.
+     * @param username The username whose blocked list is to be retrieved.
+     * @return A list of NewUser objects representing the blocked users.
      */
-    boolean blockUser(String username, String targetUsername);
+    List<NewUser> getBlockedUsersList(String username);
 
     /**
-     * Retrieves the last 100 messages of a specified user.
-     *
+     * Retrieves the formatted messages involving a specified user, showing the last 100 messages with each contact.
      * @param username The username whose messages are to be retrieved.
-     * @return A list of String objects representing the messages.
+     * @return A string representation of the messages.
      */
     String getMessages(String username);
 }
