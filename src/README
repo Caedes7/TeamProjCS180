@@ -14,93 +14,65 @@ Michael Joseph Vetter
 
 2. Submissions List
     - Phase 1: Jeeaan Ahmmed
-    - Phase 2:
+    - Phase 2: Michael Vetter
     - Phase 3:
 
 3. Detailed Description of Each Class
 
-Database:
-   createUser: Adds a new user to the database if the user does not already exist.
-   deleteUser: Removes a user from the database based on matching criteria.
-   outputDatabase: Writes the current state of the database, including user details and messages, to a specified output file.
-   validateCredentials: Verifies if the provided user credentials match any user in the database.
-   searchUsers: Searches for a user in the database using a combination of user details.
-   viewUsers: Displays a list of all users in the database.
+### Database:
+- `createUser`: Adds a new user to the database if the user does not already exist.
+- `deleteUser`: Removes a user from the database based on username.
+- `outputDatabase`: Writes the current state of the database, including user details and their relationships, to a specified output file.
+- `blockUser`: Blocks another user from being able to interact.
+- `searchUsers`: Searches for a user in the database using their username.
+- `addFriend`: Adds another user to the current user's friends list if not already added.
+- `viewUsers`: Displays a list of all users in the database for administrative purposes.
 
+### User Interface (`User`):
+Getters:
+- `getName`: Returns the name of the user.
+- `getUsername`: Returns the username of the user.
+- `getAge`: Returns the age of the user.
+- `getPassword`: Returns the user's password (security review needed).
+- `getEmail`: Returns the email of the user.
 
-User interface:
-   Getters:
-      String getName: returns the name of the user
-      String getUsername: returns the username of the user
-      int getAge: returns the age of the user
-      String getPassword: returns the password of the user
-      String getEmail: returns the email of the user
+Setters:
+- `setName`: Sets the name of the user.
+- `setUsername`: Sets the username of the user.
+- `setAge`: Sets the age of the user.
+- `setPassword`: Sets the password of the user.
+- `setEmail`: Sets the email of the user.
+- `setBlocked`: Updates the list of blocked users.
+- `setFriends`: Updates the list of friends.
 
-   Setters:
-      setName: sets the name of the user
-      setUsername: sets the username of the user
-      setAge: sets the age of the user
-      setPassword: sets the password of the user
-      setEmail: sets the email of the user
+### NewUser:
+Variables:
+- Name, Username, Age, Password, Email
 
+Constructor:
+- `NewUser(String name, String username, int age, String password, String email)`: Initializes a new user with the given parameters.
 
-NewUser:
-   Variables:
-   String name: name of the user
-   String username: username of the user
-   int age: age of the user
-   String password: password for the user
-   String email: email of the user
+Methods:
+- `isValidUsername`: Checks to see if the username is valid (only contains letters, digits, and '_').
+- `isValidEmail`: Checks if the email contains '@'.
+- `isEqual`: Checks if two users are the same based on their attributes.
 
-   Constructor:
-   public NewUser(String name, String username, int age, String password, String email): sets the values for the NewUser
+### runLocalTestCase:
+- This class tests the functionality of the user creation from a file called `input.txt`.
+- Provides methods to test user creation, login functionality, and the output of the user data to a system file.
 
-   Getters:
-   String getName: returns the name of the user
-   String getUsername: returns the username of the user
-   int getAge: returns the age of the user
-   String getPassword: returns the password of the user
-   String getEmail: returns the email of the user
+### ServerInterface:
+- `loginUser`: Verifies the username and password of a user to log them in.
+- `getFriendsList`: Retrieves a list of friends of the user.
+- `getBlockedUsersList`: Retrieves the list of users blocked by the user.
+- `getMessages`: Retrieves the last 100 messages of a user in a formatted string.
 
-   Setters:
-   setName: sets the name of the user
-   setUsername: sets the username of the user
-   setAge: sets the age of the user
-   setPassword: sets the password of the user
-   setEmail: sets the email of the user
+### Server:
+Variables:
+- `MAX_MESSAGES`: Maximum messages stored per user.
+- `executorService`: Handles client requests concurrently.
+- `PORT`: Port number of the server.
 
-   Other methods:
-   isValidUsername: checks to see if the username is valid (only contains letters and digits and '_')
-   isValidEmail: checks if the email is valid (contains '@')
-   isEqual: checks if two users have the same values in all fields
-
-runLocalTestCase:
-   Using the input.txt file, you are able to submit test user information. This class will take the input and create 
-a NewUser object. It will take the NewUser object and convert it into a string. It will compare this to a 
-string created from the information read from the input.txt file. If the strings match, then the NewUser was 
-successfully and correctly created.
-   This class contains a test that uses a file called input.txt to perform tests. To use, edit input.txt but ensure to 
-have a number just before the test value you would like to employ. Do not add a space before beginning to input the 
-values. 
-
-ServerInterface:
-    loginUser: verifies the username and password of a user match to log them in
-    getFriendsList: gets a list of friends of the user
-    getFollowingList: gets the following list of the user
-    blockUser: adds a user to the user's blocked list
-    getMessages: gets the last 100 messages of a user
-
-Server:
-    Variables:
-        int MAX_MESSAGES: the maximum messages stored for each user
-        ExecutorService executorService: the service that handles client requests concurrently
-        int PORT: port number of the server
-        Database database: makes a new database for the server
-        ExecutorService threadPool: makes a threadpool to run the server with multiple clients at the same time
-
-    Compiler:
-        Server: makes a new server with the last database used
-
-    run: makes the serversocket and connects to clients
-    main: makes a server that is used
-    
+Methods:
+- `run`: Maintains the server's operation, accepting client connections and processing requests.
+- `main`: Entry point to start the server.
