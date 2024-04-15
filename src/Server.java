@@ -88,7 +88,18 @@ public class Server extends Database implements ServerInterface, Runnable {
         return new ArrayList<>();
     }
 
+    public synchronized List<NewUser> getBlockedUsersList(String username) {
+        if (username == null || username.isEmpty()) {
+            return new ArrayList<>(); // Return an empty list if no valid username is provided
+        }
 
+        NewUser user = searchUsers(username);
+        if (user != null) {
+            return new ArrayList<>(user.getBlocked()); // Return a copy of the blocked list
+        }
+
+        return new ArrayList<>(); // Return an empty list if user is not found
+    }
 
     public synchronized String getMessages(String username) {
         NewUser user = searchUsers(username);

@@ -91,8 +91,7 @@ public class Database implements DbInterface, Serializable {
 
     public boolean validateCredentials(NewUser user) {
 
-        NewUser user1 = searchUsers(user.getName(), user.getUsername(), user.getAge(),
-                user.getPassword(), user.getEmail());
+        NewUser user1 = searchUsers(user.getUsername());
 
         return user1 == null;
     }
@@ -110,17 +109,4 @@ public class Database implements DbInterface, Serializable {
         }
     }
 
-    public String getUserDetailsForTesting() {
-        StringBuilder userDetails = new StringBuilder();
-        for (NewUser user : users) {
-            userDetails.append(user.getName()).append("\n")
-                    .append(user.getUsername()).append("\n")
-                    .append(user.getAge()).append("\n")
-                    .append(user.getPassword()).append("\n")
-                    .append(user.getEmail()).append("\n")
-                    .append(user.getBlocked().toString()).append("\n")
-                    .append(user.getFriends().toString()).append("\n");
-        }
-        return userDetails.toString();
-    }
 }
