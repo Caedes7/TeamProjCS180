@@ -18,13 +18,16 @@ public class ClientHandler extends Thread implements Runnable  {
 
     public void run() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-
-            
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
             String inputLine;
-            while ((inputLine = in.readLine()) != null) {
+            do {
+                System.out.println("Client connected");
+
+                inputLine = in.readLine();
+                System.out.println("Client connected1");
 
                 if (inputLine.startsWith("CREATE_USER")) {
+                    System.out.println("Client connected2");
 
                     inputLine = inputLine.substring(11);
                     String[] userDetails = inputLine.split(",");
@@ -36,11 +39,17 @@ public class ClientHandler extends Thread implements Runnable  {
 
                     boolean success = database.createUser(name, username, age, password, email);
                     if (success) {
-                        out.write("User created successfully");
+                        System.out.println("Client connected3");
+
+                        out.println("User created successfully");
                     } else {
-                        out.write("Failed to create user");
+                        out.println("Failed to create user");
+                        System.out.println("Client connected4");
+
                     }
                 } else if (inputLine.startsWith("RE")) {
+                    System.out.println("Client connected5");
+
                     inputLine = inputLine.substring(2);
                     String[] userDetails = inputLine.split(",");
                     String username = userDetails[0];
@@ -48,16 +57,20 @@ public class ClientHandler extends Thread implements Runnable  {
 
                     boolean success = server.loginUser(username, password);
                     if (success) {
+                        System.out.println("Client connected6");
+
                         out.println("User logged in successfully");
                     } else {
+                        System.out.println("Client connected7");
+
                         out.println("Failed to login user");
                     }
                     out.flush();
                 }
-                
-            }
+            }  while ((inputLine = in.readLine()) != null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
+
+    }

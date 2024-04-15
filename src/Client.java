@@ -27,14 +27,12 @@ public class Client {
         String hostname = "localhost";
         
         try (Socket socket = new Socket(hostname, PORT)) {
-                
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-
-                //login or create user     
-                boolean repeat = false;
-                do {
+            //login or create user
+            boolean repeat = false;
+            do {
 
                 System.out.println("Are you a new user or returning? Type either 'new' or 'returning': ");
                 String initResponse = sc.nextLine();
@@ -56,8 +54,8 @@ public class Client {
                 System.out.println("Enter in your email: ");
                 String email = sc.nextLine();
 
-                writer.write("CREATE_USER" + name + "," + username + "," + age + "," + pw + "," + email);
-                writer.flush();
+                writer.println("CREATE_USER" + name + "," + username + "," + age + "," + pw + "," + email);
+                //writer.flush();
 
                 } else if (initResponse.equalsIgnoreCase("returning")) {
 
@@ -140,7 +138,7 @@ public class Client {
             } catch (IOException e) {
                 System.err.println("IO exception");
             }
-            } 
+    }
    public static void main(String[] args) {
     String clientName = "Client1"; 
     Client client = new Client(clientName);

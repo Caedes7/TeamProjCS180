@@ -25,24 +25,16 @@ public class Server extends Database implements ServerInterface, Runnable {
         this.database = new Database("data_Output.txt");
         this.threadPool = Executors.newCachedThreadPool();
     }
-    
 
-     public void run() {
-        while (true) {
-        try (ServerSocket serverSocket = new ServerSocket(PORT);){
+
+    public void run() {
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server is listening on port " + PORT);
-            Socket clientSocket = serverSocket.accept();
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
-            while (!serverSocket.isClosed()) {
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
                 System.out.println("New client connected, " + clientSocket);
-                Server server = new Server("data_Output");
-                String response = inFromClient.readLine();
-                System.out.println(response);
-                ClientHandler clientHandler = new ClientHandler(clientSocket, database, server);
+                ClientHandler clientHandler = new ClientHandler(clientSocket, database, this);
                 threadPool.execute(clientHandler);
-                clientHandler.start();
-                
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,7 +44,7 @@ public class Server extends Database implements ServerInterface, Runnable {
             }
         }
     }
-    }
+
 
     public static void main(String[] args) {
         Server server = new Server("data_Output.txt");
