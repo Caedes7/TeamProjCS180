@@ -1,7 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +20,7 @@ public class Database implements IDatabase, Serializable {
     public Database(String databaseOutput) {
         this.databaseOutputFile = databaseOutput;
         this.users = new ArrayList<>();
+        loadDatabase();
     }
 
     public boolean createUser(String name, String username, int age, String password, String email) {
@@ -100,6 +98,26 @@ public class Database implements IDatabase, Serializable {
         for (NewUser user : users) {
             System.out.println(user.toString()); //replace with GUI alternative late
         }
+    }
+
+    public boolean loadDatabase() {
+        try (BufferedReader br = new BufferedReader(new FileReader(databaseOutputFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Assume each user's data is separated by a special line or stored in a specific format
+                String[] userData = line.split(", "); // Example format: "Name, Username, Age, Password, Email"
+                if (userData.length >= 5) {
+                    int age = Integer.parseInt(userData[2]);
+                    NewUser user = new NewUser(userData[0], userData[1], age, userData[3], userData[4]);
+                    this.users.add(user);
+                    // Handle loading friends and blocked users if they're also stored
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Failed to load database from file: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
 }
