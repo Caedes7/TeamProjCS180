@@ -89,13 +89,6 @@ public class Database implements DbInterface, Serializable {
         return false; // Block operation failed
     }
 
-    public boolean validateCredentials(NewUser user) {
-
-        NewUser user1 = searchUsers(user.getUsername());
-
-        return user1 == null;
-    }
-
     public NewUser searchUsers(String username) {
         return users.stream()
                 .filter(user -> user.getUsername().equalsIgnoreCase(username))
@@ -109,4 +102,17 @@ public class Database implements DbInterface, Serializable {
         }
     }
 
+    public String getUserDetailsForTesting() {
+        StringBuilder userDetails = new StringBuilder();
+        for (NewUser user : users) {
+            userDetails.append(user.getName()).append("\n")
+                    .append(user.getUsername()).append("\n")
+                    .append(user.getAge()).append("\n")
+                    .append(user.getPassword()).append("\n")
+                    .append(user.getEmail()).append("\n")
+                    .append(user.getBlocked().toString()).append("\n")
+                    .append(user.getFriends().toString()).append("\n");
+        }
+        return userDetails.toString();
+    }
 }
