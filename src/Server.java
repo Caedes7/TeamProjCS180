@@ -22,7 +22,7 @@ public class Server extends Database implements ServerInterface, Runnable {
     public Server(String databaseFile) {
         super(databaseFile);
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        this.database = new Database("data_Output.txt");
+        this.database = new Database("data_Output");
         this.threadPool = Executors.newCachedThreadPool();
     }
 
@@ -47,7 +47,7 @@ public class Server extends Database implements ServerInterface, Runnable {
 
 
     public static void main(String[] args) {
-        Server server = new Server("data_Output.txt");
+        Server server = new Server("data_Output");
         new Thread(server).start();
     }
     
@@ -88,55 +88,7 @@ public class Server extends Database implements ServerInterface, Runnable {
         return new ArrayList<>();
     }
 
-    public synchronized List<NewUser> getFollowingList(String username) {
-        // Validate the username input
-        if (username == null || username.isEmpty()) {
-            return new ArrayList<>(); // Return an empty list if the username is invalid
-        }
 
-        // Search for the user using the username
-        NewUser user = searchUsers(null, username, 0, null, null);
-
-        // If the user is found, return their following list
-        if (user != null) {
-            return user.getFollowing();
-        }
-
-        // If no user is found, return an empty list
-        return new ArrayList<>();
-    }
-
-    public synchronized boolean blockUser(String usernameBlocker, String usernameBlocked) {
-        if (usernameBlocker == null || usernameBlocked == null || usernameBlocker.isEmpty() || usernameBlocked.isEmpty()) {
-            return false; // Invalid input
-        }
-
-        // Ensure a user cannot block themselves
-        if (usernameBlocker.equalsIgnoreCase(usernameBlocked)) {
-            return false; // Cannot block oneself
-        }
-
-        // Find the user who wants to block another user
-        NewUser userBlocker = searchUsers(null, usernameBlocker, 0, null, null);
-        if (userBlocker == null) {
-            return false; // User who wants to block does not exist
-        }
-
-        // Find the user to be blocked
-        NewUser userBlocked = searchUsers(null, usernameBlocked, 0, null, null);
-        if (userBlocked == null) {
-            return false; // User to be blocked does not exist
-        }
-
-        // Check if the user is already blocked
-        if (userBlocker.getBlocked().contains(userBlocked)) {
-            return false; // User is already blocked
-        }
-
-        // Add the blocked user to the blocker's blocked list
-        userBlocker.getBlocked().add(userBlocked);
-        return true;
-    }
 
     public synchronized String getMessages(String username) {
         NewUser user = searchUsers(null, username, 0, null, null);

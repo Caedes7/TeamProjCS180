@@ -18,13 +18,6 @@ public interface ServerInterface {
     List<NewUser> getFriendsList(String username);
 
     /**
-     * Retrieves the following list of a specified user.
-     * @param username The username whose following list is to be retrieved.
-     * @return A list of NewUser objects representing the users being followed.
-     */
-    List<NewUser> getFollowingList(String username);
-
-    /**
      * Blocks a specified user.
      * @param username The username of the user performing the block.
      * @param targetUsername The username of the user to be blocked.
