@@ -12,6 +12,7 @@ public interface DbInterface {
     boolean deleteUser(String name, String username, int age, String password, String email);
     boolean outputDatabase();
     boolean validateCredentials(NewUser user);
-    NewUser searchUsers(String name, String username, int age, String password, String email);
+    NewUser searchUsers(String username);
     void viewUsers();
+    boolean blockUser(String usernameBlocker, String usernameBlocked);
 }

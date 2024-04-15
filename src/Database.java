@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.
  * This class is the database that will store information about all the NewUser objects created.
@@ -14,7 +16,7 @@ import java.util.List;
  */
 
 public class Database implements DbInterface, Serializable {
-    private static final long serialVersionUID = 1L; // Serialization UID
+    private static final long serialVersionUID = 1L;
     private ArrayList<NewUser> users;
     private String databaseOutputFile;
 
@@ -26,54 +28,65 @@ public class Database implements DbInterface, Serializable {
     public boolean createUser(String name, String username, int age, String password, String email) {
         NewUser user = new NewUser(name, username, age, password, email);
         for (NewUser existingUser : users) {
-            if (existingUser.isEqual(user)) {
-                return false; //user already exists, so return false
+            if (existingUser.getUsername().equalsIgnoreCase(username)) {
+                return false; // User already exists
             }
         }
-        users.add(user); //add user
-        return true;
+        users.add(user);
+        return outputDatabase(); // Save changes
     }
-    public boolean deleteUser(String name, String username, int age, String password, String email) { //to delete the account/user
-        NewUser user  = new NewUser(name, username, age, password, email);
-        for (NewUser existingUser : users) {
-            if (existingUser.isEqual(user)) {
-                users.remove(user);
-                return true; //user was deleted, successfully
-            }
+    public boolean deleteUser(String name, String username, int age, String password, String email) {
+        boolean removed = users.removeIf(user -> user.getUsername().equalsIgnoreCase(username));
+        if (removed) {
+            return outputDatabase(); // Save changes
         }
-        return false; //user wasn't deleted
+        return false;
     }
 
     public boolean outputDatabase() {
-        StringBuilder dataToWrite = new StringBuilder();
-
-        // Loop through each user and compile information
-        for (NewUser user : users) {
-            // Append basic user info
-            dataToWrite.append(user.toString()).append("\n");
-
-            // Loop through each user again to collect and append message data
-            for (NewUser recipient : users) {
-                if (!user.isEqual(recipient)) {
-                    List<Message> messages = user.getMessagesWithUser(recipient.getUsername());
-                    if (messages != null) {
-                        for (Message message : messages) {
-                            dataToWrite.append(message.toString()).append("\n");
-                        }
-                    }
-                }
-            }
-        }
-
-        // Attempt to write the compiled data to the file
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutputFile))) {
-            bw.write(dataToWrite.toString());
+            for (NewUser user : users) {
+                bw.write(user.toString() + System.lineSeparator());
+                bw.write("Friends: " + user.getFriends().stream().map(NewUser::getUsername).collect(Collectors.joining(", ")) + System.lineSeparator());
+                bw.write("Blocked: " + user.getBlocked().stream().map(NewUser::getUsername).collect(Collectors.joining(", ")) + System.lineSeparator());
+            }
+            bw.flush();
         } catch (IOException e) {
             System.err.println("Failed to write database to file: " + e.getMessage());
             return false;
         }
-
         return true;
+    }
+
+    public boolean addFriend(String username, String friendUsername) {
+        NewUser user = searchUsers(username);
+        NewUser friend = searchUsers(friendUsername);
+        if (user != null && friend != null && !user.getFriends().contains(friend)) {
+            user.getFriends().add(friend);
+            return outputDatabase();  // Save changes
+        }
+        return false;
+    }
+
+    public boolean blockUser(String usernameBlocker, String usernameBlocked) {
+        if (usernameBlocker == null || usernameBlocked == null || usernameBlocker.isEmpty() || usernameBlocked.isEmpty()) {
+            return false; // Invalid input
+        }
+
+        if (usernameBlocker.equalsIgnoreCase(usernameBlocked)) {
+            return false; // Cannot block oneself
+        }
+
+        NewUser userBlocker = searchUsers(usernameBlocker);
+        NewUser userBlocked = searchUsers(usernameBlocked);
+
+        if (userBlocker != null && userBlocked != null) {
+            if (!userBlocker.getBlocked().contains(userBlocked)) {
+                userBlocker.getBlocked().add(userBlocked);
+                return outputDatabase(); // Save changes
+            }
+        }
+        return false; // Block operation failed
     }
 
     public boolean validateCredentials(NewUser user) {
@@ -84,16 +97,11 @@ public class Database implements DbInterface, Serializable {
         return user1 == null;
     }
 
-    public NewUser searchUsers(String name, String username, int age, String password, String email) {
-        boolean found = false;
-        NewUser searchingUser = new NewUser(name, username, age, password, email);
-        for (NewUser lookingUser : users) {
-            if (searchingUser.getUsername().equalsIgnoreCase(lookingUser.getUsername())) {
-                found = true;
-                return lookingUser; //return the user if the username was found
-            }
-        }
-        return null;
+    public NewUser searchUsers(String username) {
+        return users.stream()
+                .filter(user -> user.getUsername().equalsIgnoreCase(username))
+                .findFirst()
+                .orElse(null);
     }
 
     public void viewUsers() {
