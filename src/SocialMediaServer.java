@@ -22,10 +22,16 @@ public class SocialMediaServer implements Runnable {
 
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New client connected");
+                System.out.println("New client connected, " + clientSocket);
+                
 
 
-                ClientHandler clientHandler = new ClientHandler(clientSocket, database);
+
+
+
+                //creates new user from client
+                Server server = new Server("data_Output");
+                ClientHandler clientHandler = new ClientHandler(clientSocket, database, server);
                 threadPool.execute(clientHandler);
             }
         } catch (IOException e) {

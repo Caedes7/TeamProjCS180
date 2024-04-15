@@ -32,6 +32,10 @@ public class Message implements Serializable {
         return timestamp;
     }
 
+    public void setContent(String content) {
+         this.content = content;
+    }
+
     public String toString() {
         return "From: " + sender + " To: " + receiver + " at " + new java.util.Date(timestamp) + ": " + content;
     }

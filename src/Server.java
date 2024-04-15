@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -5,14 +8,49 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class Server extends Database implements ServerInterface {
+public class Server extends Database implements ServerInterface, Runnable {
     private static final int MAX_MESSAGES = 100; // Store last 100 messages per user
     private ExecutorService executorService; // For handling client requests concurrently
+    private final int PORT  = 1112;
+    private Database database;
+    private ExecutorService threadPool;
+
 
     public Server(String databaseFile) {
         super(databaseFile);
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this.database = new Database("data_Output.txt");
+        this.threadPool = Executors.newCachedThreadPool();
     }
+    
+
+     public void run() {
+        while (true) {
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            System.out.println("Server is listening on port " + PORT);
+
+            while (!serverSocket.isClosed()) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("New client connected, " + clientSocket);
+                Server server = new Server("data_Output");        
+                ClientHandler clientHandler = new ClientHandler(clientSocket, database, server);
+                threadPool.execute(clientHandler);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (threadPool != null) {
+                threadPool.shutdown();
+            }
+        }
+    }
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server("data_Output");
+        new Thread(server).start();
+    }
+    
 
     public synchronized boolean loginUser(String username, String password) {
         // Check if the username or password is null to prevent unnecessary processing
