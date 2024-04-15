@@ -152,7 +152,7 @@ public class Server extends Database implements ServerInterface, Runnable {
             // Sort messages by timestamp in descending order
             messages.sort((m1, m2) -> Long.compare(m2.getTimestamp(), m1.getTimestamp()));
             // Limit the number of messages to the last 100
-            List<Message> recentMessages = messages.stream().limit(100).collect(Collectors.toList());
+            List<Message> recentMessages = messages.stream().limit(MAX_MESSAGES).collect(Collectors.toList());
             // Append user information and messages
             allMessages.append("Chat with ").append(otherUser).append(":\n");
             recentMessages.forEach(message -> allMessages.append(message.toString()).append("\n"));
