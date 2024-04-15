@@ -18,7 +18,6 @@ public class NewUser implements User {
     private String email;
     private ArrayList<NewUser> blocked;
     private ArrayList<NewUser> friends;
-    private ArrayList<NewUser> following;
     private Map<String, List<Message>> messages = new HashMap<>();
 
     public NewUser(String name, String username, int age, String password, String email) {
@@ -29,7 +28,6 @@ public class NewUser implements User {
         this.email = email;
         this.blocked = new ArrayList<>();
         this.friends = new ArrayList<>();
-        this.following = new ArrayList<>();
     }
 
     public String getName() {
@@ -56,9 +54,6 @@ public class NewUser implements User {
     }
     public ArrayList<NewUser> getFriends() {
         return friends;
-    }
-    public ArrayList<NewUser> getFollowing() {
-        return following;
     }
     public List<Message> getMessagesWithUser(String otherUser) {
         return messages.getOrDefault(otherUser, new ArrayList<>());
@@ -87,9 +82,6 @@ public class NewUser implements User {
     }
     public void setFriends(ArrayList<NewUser> friends) {
         this.friends = friends;
-    }
-    public void setFollowing(ArrayList<NewUser> following) {
-        this.following = following;
     }
     public void addMessage(Message message) {
         messages.computeIfAbsent(message.getReceiver(), k -> new ArrayList<>()).add(message);
@@ -150,20 +142,20 @@ public class NewUser implements User {
 
     public Map<String, List<Message>> getMessages() {
         // Create a new map to hold the processed messages
-        Map<String, List<Message>> last500MessagesMap = new HashMap<>();
+        Map<String, List<Message>> last100MessagesMap = new HashMap<>();
 
         messages.forEach((otherUsername, messageList) -> {
             // Sort messages by timestamp
             Collections.sort(messageList, Comparator.comparingLong(Message::getTimestamp));
 
             // Retrieve the last 500 messages or all messages if there are less than 500
-            List<Message> last500Messages = messageList.size() > 500 ? messageList.subList(messageList.size() - 500, messageList.size()) : new ArrayList<>(messageList);
+            List<Message> last500Messages = messageList.size() > 100 ? messageList.subList(messageList.size() - 100, messageList.size()) : new ArrayList<>(messageList);
 
             // Put the sorted list into the map
-            last500MessagesMap.put(otherUsername, last500Messages);
+            last100MessagesMap.put(otherUsername, last500Messages);
         });
 
-        return last500MessagesMap;
+        return last100MessagesMap;
     }
 
     public String toString() {

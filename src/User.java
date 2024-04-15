@@ -19,7 +19,6 @@ public interface User extends Serializable {
     String getEmail();
     ArrayList<NewUser> getBlocked();
     ArrayList<NewUser> getFriends();
-    ArrayList<NewUser> getFollowing();
     List<Message> getMessagesWithUser(String otherUser);
     Map<String, List<Message>> getMessages();
 
@@ -30,7 +29,6 @@ public interface User extends Serializable {
     void setEmail(String email);
     void setBlocked(ArrayList<NewUser> blocked);
     void setFriends(ArrayList<NewUser> friends);
-    void setFollowing(ArrayList<NewUser> following);
     void addMessage(Message message);
 
     boolean isValidUsername(String userName);
