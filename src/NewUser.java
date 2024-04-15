@@ -8,7 +8,7 @@ import java.util.*;
  * @version April 1, 2024
  *
  */
-public class NewUser implements IUser {
+public class NewUser implements INewUser {
     private static final long serialVersionUID = 1L; // Serialization UID
 
     private String name;

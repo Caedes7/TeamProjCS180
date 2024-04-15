@@ -101,20 +101,46 @@ public class Database implements IDatabase, Serializable {
     }
 
     public boolean loadDatabase() {
+        users.clear(); // Clear existing users in memory
         try (BufferedReader br = new BufferedReader(new FileReader(databaseOutputFile))) {
             String line;
+            NewUser user = null;
             while ((line = br.readLine()) != null) {
-                // Assume each user's data is separated by a special line or stored in a specific format
-                String[] userData = line.split(","); // Example format: "Name, Username, Age, Password, Email"
-                if (userData.length >= 5) {
-                    int age = Integer.parseInt(userData[2]);
-                    NewUser user = new NewUser(userData[0], userData[1], age, userData[3], userData[4]);
-                    this.users.add(user);
-                    // Handle loading friends and blocked users if they're also stored
+                if (line.startsWith("Name:")) {
+                    // Parse basic user details
+                    String[] parts = line.split(", ");
+                    String name = parts[0].split(": ")[1];
+                    String username = parts[1].split(": ")[1];
+                    int age = Integer.parseInt(parts[2].split(": ")[1]);
+                    String password = parts[3].split(": ")[1];
+                    String email = parts[4].split(": ")[1];
+                    user = new NewUser(name, username, age, password, email);
+                    users.add(user);
+                } else if (line.startsWith("Friends: ") && user != null) {
+                    // Assuming friends are listed by username and exist in the database at this point
+                    String[] friends = line.substring(9).split(", ");
+                    for (String friendUsername : friends) {
+                        NewUser friend = searchUsers(friendUsername.trim());
+                        if (friend != null) {
+                            user.getFriends().add(friend);
+                        }
+                    }
+                } else if (line.startsWith("Blocked: ") && user != null) {
+                    // Similarly handle blocked users
+                    String[] blocked = line.substring(9).split(", ");
+                    for (String blockedUsername : blocked) {
+                        NewUser block = searchUsers(blockedUsername.trim());
+                        if (block != null) {
+                            user.getBlocked().add(block);
+                        }
+                    }
                 }
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
             System.err.println("Failed to load database from file: " + e.getMessage());
+            return false;
+        } catch (NumberFormatException e) {
+            System.err.println("Failed to parse number: " + e.getMessage());
             return false;
         }
         return true;
