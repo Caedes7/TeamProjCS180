@@ -1,5 +1,15 @@
 import java.util.List;
-
+/**
+ * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ *
+ * Interface: ServerInterface
+ *
+ * Defines the methods for the server-side functionality, including user authentication,
+ * retrieving friends list, retrieving blocked users list, and retrieving messages.
+ *
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 15, 2024
+ */
 public interface ServerInterface {
 
     /**
