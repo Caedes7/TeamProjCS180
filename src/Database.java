@@ -24,36 +24,24 @@ public class Database implements IDatabase, Serializable {
     }
 
     public boolean createUser(String name, String username, int age, String password, String email) {
-        NewUser user = new NewUser(name, username, age, password, email);
-        for (NewUser existingUser : users) {
-            if (existingUser.getUsername().equalsIgnoreCase(username)) {
-                return false; // User already exists
-            }
+        if (searchUsers(username) != null) {
+            return false; // User already exists
         }
+        NewUser user = new NewUser(name, username, age, password, email);
         users.add(user);
         return outputDatabase(); // Save changes
     }
-    public boolean deleteUser(String name, String username, int age, String password, String email) {
+
+    public boolean deleteUser(String username) {
         boolean removed = users.removeIf(user -> user.getUsername().equalsIgnoreCase(username));
-        if (removed) {
-            return outputDatabase(); // Save changes
-        }
-        return false;
+        return removed && outputDatabase(); // Save changes if user is successfully removed
     }
 
-    public boolean outputDatabase() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(databaseOutputFile))) {
-            for (NewUser user : users) {
-                bw.write(user.toString() + System.lineSeparator());
-                bw.write("Friends: " + user.getFriends().stream().map(NewUser::getUsername).collect(Collectors.joining(", ")) + System.lineSeparator());
-                bw.write("Blocked: " + user.getBlocked().stream().map(NewUser::getUsername).collect(Collectors.joining(", ")) + System.lineSeparator());
-            }
-            bw.flush();
-        } catch (IOException e) {
-            System.err.println("Failed to write database to file: " + e.getMessage());
-            return false;
-        }
-        return true;
+    public NewUser searchUsers(String username) {
+        return users.stream()
+                .filter(user -> user.getUsername().equalsIgnoreCase(username))
+                .findFirst()
+                .orElse(null);
     }
 
     public boolean addFriend(String username, String friendUsername) {
@@ -67,83 +55,52 @@ public class Database implements IDatabase, Serializable {
     }
 
     public boolean blockUser(String usernameBlocker, String usernameBlocked) {
-        if (usernameBlocker == null || usernameBlocked == null || usernameBlocker.isEmpty() || usernameBlocked.isEmpty()) {
-            return false; // Invalid input
-        }
-
-        if (usernameBlocker.equalsIgnoreCase(usernameBlocked)) {
-            return false; // Cannot block oneself
-        }
-
         NewUser userBlocker = searchUsers(usernameBlocker);
         NewUser userBlocked = searchUsers(usernameBlocked);
-
-        if (userBlocker != null && userBlocked != null) {
-            if (!userBlocker.getBlocked().contains(userBlocked)) {
-                userBlocker.getBlocked().add(userBlocked);
-                return outputDatabase(); // Save changes
-            }
+        if (userBlocker != null && userBlocked != null && !userBlocker.getBlocked().contains(userBlocked)) {
+            userBlocker.getBlocked().add(userBlocked);
+            return outputDatabase(); // Save changes
         }
-        return false; // Block operation failed
-    }
-
-    public NewUser searchUsers(String username) {
-        return users.stream()
-                .filter(user -> user.getUsername().equalsIgnoreCase(username))
-                .findFirst()
-                .orElse(null);
+        return false;
     }
 
     public void viewUsers() {
-        for (NewUser user : users) {
-            System.out.println(user.toString()); //replace with GUI alternative late
-        }
+        users.forEach(user -> System.out.println(user));
     }
 
-    public boolean loadDatabase() {
-        users.clear(); // Clear existing users in memory
-        try (BufferedReader br = new BufferedReader(new FileReader(databaseOutputFile))) {
-            String line;
-            NewUser user = null;
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("Name:")) {
-                    // Parse basic user details
-                    String[] parts = line.split(", ");
-                    String name = parts[0].split(": ")[1];
-                    String username = parts[1].split(": ")[1];
-                    int age = Integer.parseInt(parts[2].split(": ")[1]);
-                    String password = parts[3].split(": ")[1];
-                    String email = parts[4].split(": ")[1];
-                    user = new NewUser(name, username, age, password, email);
-                    users.add(user);
-                } else if (line.startsWith("Friends: ") && user != null) {
-                    // Assuming friends are listed by username and exist in the database at this point
-                    String[] friends = line.substring(9).split(", ");
-                    for (String friendUsername : friends) {
-                        NewUser friend = searchUsers(friendUsername.trim());
-                        if (friend != null) {
-                            user.getFriends().add(friend);
-                        }
-                    }
-                } else if (line.startsWith("Blocked: ") && user != null) {
-                    // Similarly handle blocked users
-                    String[] blocked = line.substring(9).split(", ");
-                    for (String blockedUsername : blocked) {
-                        NewUser block = searchUsers(blockedUsername.trim());
-                        if (block != null) {
-                            user.getBlocked().add(block);
-                        }
-                    }
-                }
-            }
+    public boolean sendMessage(String senderUsername, String receiverUsername, String messageContent) {
+        NewUser sender = searchUsers(senderUsername);
+        NewUser receiver = searchUsers(receiverUsername);
+        if (sender != null && receiver != null) {
+            Message message = new Message(senderUsername, receiverUsername, messageContent, System.currentTimeMillis());
+            sender.getSentMessages().computeIfAbsent(receiverUsername, k -> new ArrayList<>()).add(message);
+            receiver.getReceivedMessages().computeIfAbsent(senderUsername, k -> new ArrayList<>()).add(message);
+            return outputDatabase(); // Save changes
+        }
+        return false;
+    }
+
+    public boolean outputDatabase() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
+            oos.writeObject(users);
         } catch (IOException e) {
-            System.err.println("Failed to load database from file: " + e.getMessage());
-            return false;
-        } catch (NumberFormatException e) {
-            System.err.println("Failed to parse number: " + e.getMessage());
+            System.err.println("Failed to write database to file: " + e.getMessage());
             return false;
         }
         return true;
     }
 
+    public boolean loadDatabase() {
+        File file = new File(databaseOutputFile);
+        if (!file.exists()) {
+            return false; // No database file to load from
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(databaseOutputFile))) {
+            users = (ArrayList<NewUser>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Failed to load database from file: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
 }

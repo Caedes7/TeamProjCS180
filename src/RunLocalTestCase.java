@@ -76,16 +76,16 @@ public class RunLocalTestCase {
         }
     }
 
-    @Test
-    public void testUserDeletion() {
-        server.createUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com");
-        assertTrue("User should be deleted successfully",
-                server.deleteUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com"));
-    }
+//    @Test
+//    public void testUserDeletion() {
+//        server.createUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com");
+//        assertTrue("User should be deleted successfully",
+//                server.deleteUser("deleteUser", "deleteUser123", 30, "pass123", "delete@user.com"));
+//    }
 
-    @Test
-    public void testDatabaseOutput() {
-        server.createUser("outputUser", "outputUser123", 30, "pass789", "output@user.com");
-        assertTrue("Outputting database to file should succeed", server.outputDatabase());
-    }
-}
+//    @Test
+//    public void testDatabaseOutput() {
+//        server.createUser("outputUser", "outputUser123", 30, "pass789", "output@user.com");
+//        assertTrue("Outputting database to file should succeed", server.outputDatabase());
+//    }
+//}

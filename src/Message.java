@@ -1,6 +1,7 @@
 import java.io.Serializable;
+import java.util.Date;
 
-public class Message implements Serializable, IMessage {
+public class Message implements Serializable {
     private static final long serialVersionUID = 1L; // Serialization UID
 
     private String sender;
@@ -8,6 +9,7 @@ public class Message implements Serializable, IMessage {
     private String content;
     private long timestamp;
 
+    // Constructor
     public Message(String sender, String receiver, String content, long timestamp) {
         this.sender = sender;
         this.receiver = receiver;
@@ -32,11 +34,26 @@ public class Message implements Serializable, IMessage {
         return timestamp;
     }
 
-    public void setContent(String content) {
-         this.content = content;
+    // Setters
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    // Useful for displaying message details in a readable format
+    @Override
     public String toString() {
-        return "From: " + sender + " To: " + receiver + " at " + new java.util.Date(timestamp) + ": " + content;
+        return "From: " + sender + " To: " + receiver + " at " + new Date(timestamp) + ": " + content;
     }
 }
