@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientHandler extends Thread {
-    private static final long serialVersionUID = 1L;
     private Socket clientSocket;
     private Database database;
     private Server server;

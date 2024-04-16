@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 
 public class Client implements IClient {
-    private static final long serialVersionUID = 1L;
     private static final int PORT = 1112;
     private ExecutorService threadPool;
     Scanner sc = new Scanner(System.in);

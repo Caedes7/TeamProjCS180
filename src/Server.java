@@ -8,7 +8,6 @@ public class Server implements Runnable {
     private static final int PORT = 1112;
     private ExecutorService threadPool; // For handling client requests concurrently
     private Database database;
-    private static final long serialVersionUID = 1L;
 
     public Server(String databaseFile) {
         this.database = new Database(databaseFile);
