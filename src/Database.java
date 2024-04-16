@@ -84,16 +84,13 @@ public class Database implements IDatabase, Serializable {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
             oos.writeObject(users);
             return true;
-        } catch (NotSerializableException e) {
-            System.err.println("Serialization error for NewUser: " + e.getMessage());
-            e.printStackTrace();
-            return false;
         } catch (IOException e) {
-            System.err.println("Failed to write database to file: " + e.getMessage());
+            System.err.println("Failed to write database to file: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
+
 
     public boolean loadDatabase() {
         File file = new File(databaseOutputFile);

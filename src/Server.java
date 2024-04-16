@@ -4,7 +4,18 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+/**
 
+ Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ Class: Server
+ Main server class that initializes the server on a specified port and listens for incoming connections.
+ Once a connection is made, it delegates handling of the client to a ClientHandler. This class also
+ manages user sessions and supports functionalities like login, retrieving friends, and messaging.
+ The server can handle multiple client connections concurrently using a thread pool.
+ *
+ @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ @version April 15, 2024
+ */
 public class Server implements Runnable, Serializable {
     private static final int PORT = 1112;
     private ExecutorService threadPool; // For handling client requests concurrently

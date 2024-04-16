@@ -3,7 +3,19 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Scanner;
+/**
 
+ Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ Class: Client
+ Manages the client-side functionality for a direct messaging application. This class is responsible for
+ establishing a connection to the server, handling user inputs, and processing server responses. It allows
+ users to create a new account or log into an existing one and perform various actions like searching for other
+ users, blocking/unblocking users, adding/removing friends, and sending messages. The Client class utilizes
+ a thread pool to manage its tasks and maintains an interactive command line interface for user interaction.
+ *
+ @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ @version April 15, 2024
+ */
 
 public class Client implements IClient, Serializable {
     private static final int PORT = 1112;
