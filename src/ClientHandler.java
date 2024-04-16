@@ -72,7 +72,7 @@ public class ClientHandler extends Thread {
     private void processChoice(String choiceString, PrintWriter out, NewUser user) {
         int choice = Integer.parseInt(choiceString.substring(0, 1));
         String optionData = choiceString.substring(1);
-        String message = choiceString.substring(1);
+        String message = choiceString.substring(choiceString.indexOf(" "));
 
         switch (choice) {
             case 1: // Search User
