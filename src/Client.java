@@ -1,14 +1,11 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Scanner;
 
 
-public class Client implements IClient {
+public class Client implements IClient, Serializable {
     private static final int PORT = 1112;
     private ExecutorService threadPool;
     Scanner sc = new Scanner(System.in);

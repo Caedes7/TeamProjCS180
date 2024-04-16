@@ -1,10 +1,11 @@
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server implements Runnable {
+public class Server implements Runnable, Serializable {
     private static final int PORT = 1112;
     private ExecutorService threadPool; // For handling client requests concurrently
     private Database database;

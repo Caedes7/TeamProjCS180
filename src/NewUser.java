@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
@@ -8,7 +9,7 @@ import java.util.*;
  * @version April 1, 2024
  *
  */
-public class NewUser implements INewUser {
+public class NewUser implements INewUser, Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
     private String username;
