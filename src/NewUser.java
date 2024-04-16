@@ -121,8 +121,4 @@ public class NewUser implements INewUser {
         return "Name: " + name + ", Username: " + username + ", Age: " + age + ", Password: " + password +
                 ", Email: " + email;
     }
-
-    public String toStringSearch() {
-        return "Name: " + name + ", Username: " + username;
-    }
 }
