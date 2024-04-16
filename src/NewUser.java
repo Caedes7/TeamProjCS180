@@ -9,7 +9,7 @@ import java.util.*;
  *
  */
 public class NewUser implements INewUser {
-    private static final long serialVersionUID = 1L; // Serialization UID
+    private static final long serialVersionUID = 1L;
     private String name;
     private String username;
     private int age;
