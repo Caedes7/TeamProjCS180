@@ -118,7 +118,9 @@ public class Client implements IClient {
                     case 4:
                         System.out.println("Enter the username you want to message: ");
                         String toMessage = sc.nextLine();
+                        String message = sc.nextLine();
                         writer.println("4" + toMessage);
+                        writer.println("4" + message);
                         break;
                     case 5:
                         writer.println("5");

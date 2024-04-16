@@ -65,7 +65,7 @@ public class NewUser implements INewUser {
         receivedMessages.computeIfAbsent(senderUsername, k -> new ArrayList<>()).add(message);
     }
 
-    public boolean isValidUsername(String userName) {
+    public static boolean isValidUsername(String userName) {
         if (userName == null || userName.isEmpty()) {
             return false;
         }
@@ -81,7 +81,7 @@ public class NewUser implements INewUser {
         return true;
     }
 
-    public boolean isValidEmail(String eMail) {
+    public static boolean isValidEmail(String eMail) {
         if (eMail == null) {
             return false;
         }
@@ -89,7 +89,7 @@ public class NewUser implements INewUser {
     }
 
 
-    public boolean isValidPassword(String passWord) {
+    public static boolean isValidPassword(String passWord) {
         if (passWord == null || passWord.isEmpty()) {
             return false;
         }
