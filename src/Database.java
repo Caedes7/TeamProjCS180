@@ -84,9 +84,13 @@ public class Database implements IDatabase, Serializable {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
             oos.writeObject(users);
             return true;
+        } catch (NotSerializableException e) {
+            System.err.println("Serialization error for NewUser: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         } catch (IOException e) {
             System.err.println("Failed to write database to file: " + e.getMessage());
-            e.printStackTrace();  // More detailed error print
+            e.printStackTrace();
             return false;
         }
     }
@@ -95,7 +99,19 @@ public class Database implements IDatabase, Serializable {
         File file = new File(databaseOutputFile);
         if (!file.exists()) {
             System.err.println("Database file not found, creating new one.");
-            return false; // Optionally create a new file here if that's desired behavior
+            try {
+                // Create a new file and write an empty ArrayList to it
+                file.createNewFile(); // This creates the new file
+                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
+                    oos.writeObject(new ArrayList<NewUser>()); // Writes an empty list to the file
+                }
+                System.out.println("New database file created successfully.");
+            } catch (IOException e) {
+                System.err.println("Failed to create new database file: " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
+            return true; // Return true as the file was created successfully, though it's empty
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(databaseOutputFile))) {
             users = (ArrayList<NewUser>) ois.readObject();
@@ -106,4 +122,5 @@ public class Database implements IDatabase, Serializable {
             return false;
         }
     }
+
 }
