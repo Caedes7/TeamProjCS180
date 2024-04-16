@@ -83,24 +83,27 @@ public class Database implements IDatabase, Serializable {
     public boolean outputDatabase() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
             oos.writeObject(users);
+            return true;
         } catch (IOException e) {
             System.err.println("Failed to write database to file: " + e.getMessage());
+            e.printStackTrace();  // More detailed error print
             return false;
         }
-        return true;
     }
 
     public boolean loadDatabase() {
         File file = new File(databaseOutputFile);
         if (!file.exists()) {
-            return false; // No database file to load from
+            System.err.println("Database file not found, creating new one.");
+            return false; // Optionally create a new file here if that's desired behavior
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(databaseOutputFile))) {
             users = (ArrayList<NewUser>) ois.readObject();
+            return true;
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Failed to load database from file: " + e.getMessage());
+            e.printStackTrace();  // More detailed error print
             return false;
         }
-        return true;
     }
 }

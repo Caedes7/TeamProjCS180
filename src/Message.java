@@ -3,7 +3,6 @@ import java.util.Date;
 
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L; // Serialization UID
-
     private String sender;
     private String receiver;
     private String content;
