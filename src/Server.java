@@ -51,7 +51,7 @@ public class Server implements Runnable, Serializable {
     }
 
     public static void main(String[] args) {
-        Server server = new Server("data_Output.ser"); // Adjust the filename as per your serialization file
+        Server server = new Server("data_Output.txt"); // Adjust the filename as per your serialization file
         new Thread(server).start();
     }
 }
