@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -10,6 +11,7 @@ import java.util.*;
  *
  */
 public class NewUser implements INewUser, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private String name;
     private String username;
