@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  */
 
 public class Database implements IDatabase, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private ArrayList<NewUser> users;
     private String databaseOutputFile;
@@ -99,9 +100,9 @@ public class Database implements IDatabase, Serializable {
             try {
                 // Create a new file and write an empty ArrayList to it
                 file.createNewFile(); // This creates the new file
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
+                /**try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
                     oos.writeObject(new ArrayList<NewUser>()); // Writes an empty list to the file
-                }
+                }**/
                 System.out.println("New database file created successfully.");
             } catch (IOException e) {
                 System.err.println("Failed to create new database file: " + e.getMessage());
@@ -109,14 +110,15 @@ public class Database implements IDatabase, Serializable {
                 return false;
             }
             return true; // Return true as the file was created successfully, though it's empty
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(databaseOutputFile))) {
-            users = (ArrayList<NewUser>) ois.readObject();
-            return true;
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Failed to load database from file: " + e.getMessage());
-            e.printStackTrace();  // More detailed error print
-            return false;
+        } else {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(databaseOutputFile))) {
+                users = (ArrayList<NewUser>) ois.readObject();
+                return true;
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Failed to load database from file: " + e.getMessage());
+                e.printStackTrace();  // More detailed error print
+                return false;
+            }
         }
     }
 
