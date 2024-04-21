@@ -139,7 +139,6 @@ public class Client implements IClient, Serializable {
                         writer.println("6");
                         break;
                     case 0:
-                        System.out.println("Exiting.");
                         writer.println("0");
                         break;
                     default:
