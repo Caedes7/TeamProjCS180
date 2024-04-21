@@ -57,6 +57,13 @@ public class Client implements IClient, Serializable {
 
                     System.out.println("Enter in your age: ");
                     String age = sc.nextLine();
+                    try {
+                        int ageNum = Integer.parseInt(age);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Age must be a number, try again. ");
+                        repeat = true;
+                        continue;
+                    }
 
                     System.out.println("Enter in your email: ");
                     String email = sc.nextLine();
