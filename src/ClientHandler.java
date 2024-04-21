@@ -83,7 +83,7 @@ public class ClientHandler extends Thread implements Serializable {
     private void processChoice(String choiceString, PrintWriter out, NewUser user) {
         int choice = Integer.parseInt(choiceString.substring(0, 1));
         String optionData = (choiceString.length() > 1) ? choiceString.substring(1) : null;
-        String message = (choiceString.contains(",")) ? choiceString.substring(choiceString.indexOf(",")) : null;
+        String message = (choiceString.contains("~")) ? choiceString.substring(choiceString.indexOf("~")) : null;
 
         switch (choice) {
             case 1: // Search User
@@ -114,7 +114,7 @@ public class ClientHandler extends Thread implements Serializable {
                 out.println(user.getSentMessages());
                 break;
             case 0: // Exit
-                System.out.println("Exiting.");
+                out.println("Exiting.");
                 break;
             default:
                 out.println("Invalid choice. Please try again.");
