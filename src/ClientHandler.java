@@ -83,7 +83,7 @@ public class ClientHandler extends Thread implements Serializable {
     private void processChoice(String choiceString, PrintWriter out, NewUser user) {
         int choice = Integer.parseInt(choiceString.substring(0, 1));
         String optionData = choiceString.substring(1);
-        String message = choiceString.substring(choiceString.indexOf(" "));
+        String message = (choiceString.contains(",")) ? choiceString.substring(choiceString.indexOf(",")) : null;
 
         switch (choice) {
             case 1: // Search User
