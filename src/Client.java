@@ -96,8 +96,9 @@ public class Client implements IClient, Serializable {
 
             } while (repeat);
 
-            int choice = -1;
+            
             do {
+                int choice = -1;
                 menu();
                 System.out.print("Enter your choice: ");
                 try {
