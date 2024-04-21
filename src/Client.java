@@ -83,13 +83,14 @@ public class Client implements IClient, Serializable {
                 System.out.println(response);
 
                 if (response.startsWith("User created successfully") || response.startsWith("User logged in successfully")) { //create/login successful
-                    repeat = false;
                     break;
-                } else if (response.startsWith("Failed to create")) { //create user failed
+                } else if (response.startsWith("Failed to create user")) { //create user failed
                     System.out.println("Could not Create the user.");
                     repeat = true;
-                } else if (response.startsWith("Failed to login")) {  //login failed
+                } else if (response.startsWith("User does not exist")) {  //login failed
                     System.out.println("Login failed.");
+                    repeat = true;
+                } else {
                     repeat = true;
                 }
 

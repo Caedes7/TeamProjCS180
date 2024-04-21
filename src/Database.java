@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  */
 
 public class Database implements IDatabase, Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
     private ArrayList<NewUser> users;
     private String databaseOutputFile;
@@ -38,9 +37,9 @@ public class Database implements IDatabase, Serializable {
         return removed && outputDatabase(); // Save changes if user is successfully removed
     }
 
-    public NewUser searchUsers(String username) {
+    public NewUser searchUsers(String user1) {
         return users.stream()
-                .filter(user -> user.getUsername().equalsIgnoreCase(username))
+                .filter(user -> user.getUsername().equals(user1))
                 .findFirst()
                 .orElse(null);
     }

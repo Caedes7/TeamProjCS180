@@ -1,4 +1,3 @@
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 /**
@@ -13,7 +12,6 @@ import java.util.Date;
  @version April 15, 2024
  */
 public class Message implements Serializable {
-    @Serial
     private static final long serialVersionUID = 1L; // Serialization UID
     private String sender;
     private String receiver;
