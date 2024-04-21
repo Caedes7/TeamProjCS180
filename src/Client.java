@@ -122,40 +122,43 @@ public class Client implements IClient, Serializable {
                         System.out.println("Enter the username you want to search: ");
                         String toSearch = sc.nextLine();
                         writer.println("1" + toSearch);
+                        System.out.println(reader.readLine());
                         break;
                     case 2:
                         System.out.println("Enter the username you want to block: ");
                         String toBlock = sc.nextLine();
                         writer.println("2" + toBlock);
+                        System.out.println(reader.readLine());
                         break;
                     case 3:
                         System.out.println("Enter the username you want to add as a friend: ");
                         String toFriend = sc.nextLine();
                         writer.println("3" + toFriend);
+                        System.out.println(reader.readLine());
                         break;
                     case 4:
                         System.out.println("Enter the username you want to message: ");
                         String toMessage = sc.nextLine();
                         String message = sc.nextLine();
-                        writer.println("4" + toMessage + " " + message);
+                        writer.println("4" + toMessage + "~" + message);
+                        System.out.println(reader.readLine());
                         break;
                     case 5:
                         writer.println("5");
+                        System.out.println(reader.readLine());
                         break;
                     case 6:
                         writer.println("6");
+                        System.out.println(reader.readLine());
                         break;
                     case 0:
                         writer.println("0");
+                        System.out.println(reader.readLine());
                         break;
                     default:
-                        System.out.println("Invalid choice. Please try again.");
+                        System.out.println(reader.readLine());
                 }
 
-                String response2 = reader.readLine();
-                if (response2 != null) {
-                    System.out.println(response2);
-                }
             } while (choice != 0);
         } catch (IOException e) {
             System.err.println("IO exception");
