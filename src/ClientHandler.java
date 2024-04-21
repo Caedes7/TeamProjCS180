@@ -69,7 +69,7 @@ public class ClientHandler extends Thread implements Serializable {
                     if (success) {
                         out.println("User logged in successfully");
                     } else {
-                        out.println("User does not exist");
+                        out.println("User/password combination does not exist.");
                     }
                 } else {
                     processChoice(inputLine, out, newSingleUser);
