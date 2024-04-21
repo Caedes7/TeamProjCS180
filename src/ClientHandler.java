@@ -89,7 +89,7 @@ public class ClientHandler extends Thread implements Serializable {
             case 1: // Search User
                 NewUser found = database.searchUsers(optionData);
                 if (found != null) {
-                    String output = found.toString() + "\nFurther implementation requires GUI";
+                    String output = found.toStringSearch() + "\nFurther implementation requires GUI";
                     out.println(output);
                 } else {
                     out.println("User not found");
