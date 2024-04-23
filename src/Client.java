@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
 
@@ -111,10 +112,12 @@ public class Client implements IClient, Serializable {
                 try {
                     choice = sc.nextInt();
                     sc.nextLine();
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Invalid input. Try again.");
+                    sc.nextLine();
                     choice = -1;
                     continue;
+                    
                 }
 
                 switch (choice) {
