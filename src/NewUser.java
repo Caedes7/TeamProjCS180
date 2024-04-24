@@ -76,6 +76,10 @@ public class NewUser implements INewUser, Serializable {
             if (!Character.isLetterOrDigit(ch) && ch != '_') {
                 return false;
             }
+
+            if (userName.contains(Character.toString('~'))) {
+                return false;
+            }
         }
 
         return true;

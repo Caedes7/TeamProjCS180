@@ -67,9 +67,12 @@ public class Database implements IDatabase, Serializable {
     public boolean blockUser(String usernameBlocker, String usernameBlocked) {
         NewUser userBlocker = searchUsers(usernameBlocker);
         NewUser userBlocked = searchUsers(usernameBlocked);
-        if (userBlocker != null && userBlocked != null && !userBlocker.getBlocked().contains(userBlocked)) {
+        if (userBlocker != null && userBlocked != null){
+            if(!userBlocker.getBlocked().contains(userBlocked))
+         {
             userBlocker.getBlocked().add(userBlocked);
             return outputDatabase(); // Save changes
+        }
         }
         return false;
     }

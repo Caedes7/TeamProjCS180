@@ -47,7 +47,8 @@ public class Client implements IClient, Serializable {
 
                 if (initResponse.equalsIgnoreCase("new")) {
 
-                    System.out.println("This is the new user page. Enter in your username: ");
+                    System.out.println("This is the new user page. Enter in your username, " +
+                            "it cannot contain the ~ character: ");
                     String username = sc.nextLine();
 
                     System.out.println("Enter in your password: ");
@@ -132,13 +133,15 @@ public class Client implements IClient, Serializable {
                         String toBlock = sc.nextLine();
                         writer.println("2" + toBlock);
                         String response2 = reader.readLine();
-                        System.out.println(response2);
+                        System.out.println(response2); //result of action
+                        System.out.println("Currently blocked users: " + reader.readLine()); //currently blocked
                         break;
                     case 3:
                         System.out.println("Enter the username you want to add as a friend: ");
                         String toFriend = sc.nextLine();
                         writer.println("3" + toFriend);
-                        System.out.println(reader.readLine());
+                        System.out.println(reader.readLine()); //result of action
+                        System.out.print("Currently friended users: " + reader.readLine()); //currently friended
                         break;
                     case 4:
                         System.out.println("Enter the username you want to message: ");
@@ -162,6 +165,19 @@ public class Client implements IClient, Serializable {
                         writer.println("6");
                         System.out.println(reader.readLine());
                         break;
+                    case 7:
+                        System.out.println("Enter in the username of the user you want to unblock: ");
+                        String toUnblock = sc.nextLine();
+                        writer.println("7" + toUnblock);
+                        String response3 = reader.readLine();
+                        System.out.println(response3);
+                        break;
+                    case 8:
+                        System.out.println("Enter the username you want to remove as a friend: ");
+                        String toUnfriend = sc.nextLine();
+                        writer.println("3" + toUnfriend);
+                        System.out.println(reader.readLine());
+                        break;
                     case 0:
                         writer.println("0");
                         System.out.println(reader.readLine());
@@ -177,13 +193,15 @@ public class Client implements IClient, Serializable {
     }
 
     public static void menu() {
-        System.out.println("Welcome! Please select an option:");
+        System.out.println("\nWelcome! Please select an option:");
         System.out.println("1. Search user");
         System.out.println("2. Block user");
         System.out.println("3. Add friend");
         System.out.println("4. Message a friend");
         System.out.println("5. View Received Messages");
         System.out.println("6. View Sent Messages");
+        System.out.println("7. Unblock user");
+        System.out.println("8. Remove friend");
         System.out.println("0. Exit");
     }
 

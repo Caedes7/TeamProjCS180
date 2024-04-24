@@ -83,7 +83,14 @@ public class ClientHandler extends Thread implements Serializable {
     private void processChoice(String choiceString, PrintWriter out, NewUser user) {
         int choice = Integer.parseInt(choiceString.substring(0, 1));
         String message = (choiceString.contains("~")) ? choiceString.substring(choiceString.indexOf("~")+1) : null;
-        String optionData = (choiceString.length() > 1) ? choiceString.substring(1,choiceString.indexOf("~")) : null;
+        String optionData = "";
+        if (message != null) {
+            optionData = (choiceString.length() > 1) ? choiceString.substring(1,choiceString.indexOf("~")) : null;
+        } else {
+            optionData = (choiceString.length() > 1) ? choiceString.substring(1) : null;
+        }
+
+
 
 
         switch (choice) {
@@ -99,10 +106,28 @@ public class ClientHandler extends Thread implements Serializable {
             case 2: // Block User
                 boolean blocked = database.blockUser(user.getUsername(), optionData);
                 out.println(blocked ? "User blocked!" : "Could not block user.");
+                StringBuilder blockedUsernames = new StringBuilder();
+                for (NewUser eachUser : user.getBlocked()) {
+                    if (!blockedUsernames.isEmpty()) {
+                        blockedUsernames.append(", ");
+                    }
+                    blockedUsernames.append(eachUser.getUsername());
+                }
+                String concatenatedUsernames = blockedUsernames.toString();
+                out.println(concatenatedUsernames);
                 break;
             case 3: // Add Friend
                 boolean friend = database.addFriend(user.getUsername(), optionData);
                 out.println(friend ? "User friended!" : "Could not add user as friend.");
+                StringBuilder friendUsernames = new StringBuilder();
+                for (NewUser eachUser : user.getFriends()) {
+                    if (!friendUsernames.isEmpty()) {
+                        friendUsernames.append("~");
+                    }
+                    friendUsernames.append(eachUser.getUsername());
+                }
+                String concatenatedUsernamesfriends = friendUsernames.toString();
+                out.println(concatenatedUsernamesfriends);
                 break;
             case 4: // Send Message
                 boolean sentMessage = database.sendMessage(user.getUsername(),optionData, message);
@@ -113,6 +138,15 @@ public class ClientHandler extends Thread implements Serializable {
                 break;
             case 6: // View Sent Messages
                 out.println(user.getSentMessages());
+                break;
+            case 7:
+                //out.println(user.getBlocked());
+                boolean unBlocked = database.unblockUser(user.getUsername(), optionData);
+                out.println(unBlocked ? "User unBlocked!" : "Could not unblock user.");
+                break;
+            case 8:
+                boolean removeFriend = database.removeFriend(user.getUsername(), optionData);
+                out.println(removeFriend ? "User unfriended!" : "Could not remove user as friend.");
                 break;
             case 0: // Exit
                 out.println("Exiting.");
