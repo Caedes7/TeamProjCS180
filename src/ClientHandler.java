@@ -137,7 +137,7 @@ public class ClientHandler extends Thread implements Serializable {
                 out.println(user.getReceivedMessages());
                 break;
             case 6: // View Sent Messages
-                out.println(user.getSentMessages());
+                handleViewSentMessages(out, user);
                 break;
             case 7:
                 //out.println(user.getBlocked());
@@ -157,4 +157,15 @@ public class ClientHandler extends Thread implements Serializable {
         }
         out.flush();
     }
+
+    public void handleViewSentMessages(PrintWriter out, NewUser user) {
+        if (user.getSentMessages().isEmpty()) {
+            out.println("No messages sent.");
+        } else {
+            user.getSentMessages().forEach((receiver, messages) -> {
+                messages.forEach(message -> out.println(message.toString()));
+            });
+        }
+    }
+
 }
