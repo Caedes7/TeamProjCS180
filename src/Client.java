@@ -143,9 +143,16 @@ public class Client implements IClient, Serializable {
                     case 4:
                         System.out.println("Enter the username you want to message: ");
                         String toMessage = sc.nextLine();
+                        boolean keepMessaging = false;
+                        do {
+                        System.out.println("Type your message: ");
                         String message = sc.nextLine();
                         writer.println("4" + toMessage + "~" + message);
                         System.out.println(reader.readLine());
+                        System.out.println("Do you want to send another message? y/n");
+                        String anotherMessage = sc.nextLine();
+                        keepMessaging = anotherMessage.equalsIgnoreCase("y");
+                        } while (keepMessaging);
                         break;
                     case 5:
                         writer.println("5");
