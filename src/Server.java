@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
  @version April 15, 2024
  */
 public class Server implements Runnable, Serializable {
-    private static final int PORT = 1112;
+    private static final int PORT = 1113;
     private ExecutorService threadPool; // For handling client requests concurrently
     private Database database;
 
@@ -45,9 +45,12 @@ public class Server implements Runnable, Serializable {
         }
     }
 
-    public boolean loginUser(String username, String password) {
+    public NewUser loginUser(String username, String password) {
         NewUser user = database.searchUsers(username);
-        return user != null && user.getPassword().equals(password);
+        if (user == null || !user.getPassword().equals(password)) {
+            user = null;
+        }
+        return user;
     }
 
     public static void main(String[] args) {

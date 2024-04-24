@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 
 public class Client implements IClient, Serializable {
-    private static final int PORT = 1112;
+    private static final int PORT = 1113;
     private ExecutorService threadPool;
     Scanner sc = new Scanner(System.in);
     private String name;
@@ -131,7 +131,8 @@ public class Client implements IClient, Serializable {
                         System.out.println("Enter the username you want to block: ");
                         String toBlock = sc.nextLine();
                         writer.println("2" + toBlock);
-                        System.out.println(reader.readLine());
+                        String response2 = reader.readLine();
+                        System.out.println(response2);
                         break;
                     case 3:
                         System.out.println("Enter the username you want to add as a friend: ");

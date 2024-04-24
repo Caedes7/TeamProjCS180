@@ -65,8 +65,8 @@ public class ClientHandler extends Thread implements Serializable {
                     String username = loginDetails[0];
                     String password = loginDetails[1];
 
-                    boolean success = server.loginUser(username, password);
-                    if (success) {
+                    newSingleUser = server.loginUser(username, password);
+                    if (newSingleUser != null) {
                         out.println("User logged in successfully");
                     } else {
                         out.println("User/password combination does not exist.");
