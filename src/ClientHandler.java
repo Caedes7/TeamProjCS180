@@ -97,32 +97,53 @@ public class ClientHandler extends Thread implements Serializable {
             case 1: // Search User
                 NewUser found = database.searchUsers(optionData);
                 if (found != null && found.getBlocked().stream().noneMatch(b -> b.getUsername().equals(user.getUsername()))) {
-                    out.println("Name: " + found.getName() + ", Username: " + found.getUsername());
+                    out.println(user.toStringSearch());
                 } else {
                     out.println("User not found");
                 }
                 break;
             case 2: // Block User
                 boolean blocked = database.blockUser(user.getUsername(), optionData);
-                out.println(blocked ? "User blocked!" : "Could not block user.");
+                if (blocked) {
+                    out.println("User blocked and removed from friends list if they were friends.");
+                } else {
+                    out.println("Could not block user.");
+                }
+
                 StringBuilder blockedUsernames = new StringBuilder();
-                for (NewUser eachUser : user.getBlocked()) {
-                    if (!blockedUsernames.equals("")) {
+                user.getBlocked().forEach(eachUser -> {
+                    if (blockedUsernames.length() > 0) {
                         blockedUsernames.append(", ");
                     }
                     blockedUsernames.append(eachUser.getUsername());
+                });
+
+                if (blockedUsernames.length() > 0) {
+                    out.println("Currently blocked users: " + blockedUsernames.toString());
+                } else {
+                    out.println("No users currently blocked.");
                 }
-                String concatenatedUsernames = blockedUsernames.toString();
-                out.println(concatenatedUsernames);
                 break;
             case 3: // Add Friend
                 NewUser potentialFriend = database.searchUsers(optionData);
-                if (potentialFriend != null && user.getBlocked().stream().noneMatch(b -> b.getUsername().equals(potentialFriend.getUsername())) && !user.getFriends().contains(potentialFriend)) {
+                if (potentialFriend != null && potentialFriend.getBlocked().stream().noneMatch(b -> b.getUsername().equals(user.getUsername()))) {
                     user.getFriends().add(potentialFriend);
                     database.outputDatabase();
                     out.println("User friended!");
                 } else {
                     out.println("Could not add user as friend.");
+                }
+                StringBuilder friendUsernames = new StringBuilder();
+                for (NewUser eachUser : user.getFriends()) {
+                    if (friendUsernames.length() > 1) {
+                        friendUsernames.append(", ");
+                    }
+                    friendUsernames.append(eachUser.getUsername());
+                }
+                if (friendUsernames.length() > 0) {
+                    out.println("Currently friended users: " + friendUsernames.toString());
+                } else {
+                    out.println("No users currently friended.");
                 }
                 break;
             case 4: // Send Message
@@ -136,9 +157,8 @@ public class ClientHandler extends Thread implements Serializable {
                 handleViewSentMessages(out, user);
                 break;
             case 7:
-                //out.println(user.getBlocked());
                 boolean unBlocked = database.unblockUser(user.getUsername(), optionData);
-                out.println(unBlocked ? "User unBlocked!" : "Could not unblock user.");
+                out.println(unBlocked ? "User unblocked!" : "Could not unblock user.");
                 break;
             case 8:
                 boolean removeFriend = database.removeFriend(user.getUsername(), optionData);

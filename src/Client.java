@@ -135,14 +135,14 @@ public class Client implements IClient, Serializable {
                         writer.println("2" + toBlock);
                         String response2 = reader.readLine();
                         System.out.println(response2); //result of action
-                        System.out.println("Currently blocked users: " + reader.readLine()); //currently blocked
+                        System.out.println(reader.readLine()); //currently blocked
                         break;
                     case 3:
                         System.out.println("Enter the username you want to add as a friend: ");
                         String toFriend = sc.nextLine();
                         writer.println("3" + toFriend);
                         System.out.println(reader.readLine()); //result of action
-                        System.out.print("Currently friended users: " + reader.readLine()); //currently friended
+                        System.out.print(reader.readLine()); //currently friended
                         break;
                     case 4:
                         System.out.println("Enter the username you want to message: ");

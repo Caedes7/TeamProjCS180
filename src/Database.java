@@ -46,10 +46,20 @@ public class Database implements IDatabase, Serializable {
 
     public boolean addFriend(String username, String friendUsername) {
         NewUser user = searchUsers(username);
-        NewUser friend = searchUsers(friendUsername);
-        if (user != null && friend != null && !user.getFriends().contains(friend)) {
-            user.getFriends().add(friend);
-            return outputDatabase();  // Save changes
+        NewUser potentialFriend = searchUsers(friendUsername);
+        if (user == null || potentialFriend == null) {
+            return false; // User or potential friend does not exist.
+        }
+
+        // Check if the potential friend has the user blocked.
+        if (potentialFriend.getBlocked().stream().anyMatch(b -> b.getUsername().equals(username))) {
+            return false; // Cannot add as friend because the potential friend has the user blocked.
+        }
+
+        // Check if they are already friends.
+        if (!user.getFriends().contains(potentialFriend)) {
+            user.getFriends().add(potentialFriend);
+            return outputDatabase(); // Save changes.
         }
         return false;
     }
@@ -71,11 +81,14 @@ public class Database implements IDatabase, Serializable {
             if (!userBlocker.getBlocked().contains(userBlocked)) {
                 userBlocker.getBlocked().add(userBlocked);
 
-                // Check if they are friends and remove from friends list if they are
-                userBlocker.getFriends().removeIf(friend -> friend.getUsername().equals(usernameBlocked));
-                userBlocked.getFriends().removeIf(friend -> friend.getUsername().equals(usernameBlocker));
+                // Remove each other from friends lists if they were friends
+                boolean removedFromBlocker = userBlocker.getFriends().removeIf(friend -> friend.getUsername().equals(usernameBlocked));
+                boolean removedFromBlocked = userBlocked.getFriends().removeIf(friend -> friend.getUsername().equals(usernameBlocker));
 
-                return outputDatabase(); // Save changes
+                // Indicate whether changes were made and save to database
+                if (removedFromBlocker || removedFromBlocked) {
+                    return outputDatabase(); // Only save if changes occurred
+                }
             }
         }
         return false;
@@ -147,8 +160,4 @@ public class Database implements IDatabase, Serializable {
             }
         }
     }
-
-
-
-
 }
