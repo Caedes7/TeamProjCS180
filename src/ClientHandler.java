@@ -96,9 +96,8 @@ public class ClientHandler extends Thread implements Serializable {
         switch (choice) {
             case 1: // Search User
                 NewUser found = database.searchUsers(optionData);
-                if (found != null) {
-                    String output = found.toStringSearch();
-                    out.println(output);
+                if (found != null && found.getBlocked().stream().noneMatch(b -> b.getUsername().equals(user.getUsername()))) {
+                    out.println("Name: " + found.getName() + ", Username: " + found.getUsername());
                 } else {
                     out.println("User not found");
                 }
@@ -117,17 +116,14 @@ public class ClientHandler extends Thread implements Serializable {
                 out.println(concatenatedUsernames);
                 break;
             case 3: // Add Friend
-                boolean friend = database.addFriend(user.getUsername(), optionData);
-                out.println(friend ? "User friended!" : "Could not add user as friend.");
-                StringBuilder friendUsernames = new StringBuilder();
-                for (NewUser eachUser : user.getFriends()) {
-                    if (!friendUsernames.equals("")) {
-                        friendUsernames.append("~");
-                    }
-                    friendUsernames.append(eachUser.getUsername());
+                NewUser potentialFriend = database.searchUsers(optionData);
+                if (potentialFriend != null && user.getBlocked().stream().noneMatch(b -> b.getUsername().equals(potentialFriend.getUsername())) && !user.getFriends().contains(potentialFriend)) {
+                    user.getFriends().add(potentialFriend);
+                    database.outputDatabase();
+                    out.println("User friended!");
+                } else {
+                    out.println("Could not add user as friend.");
                 }
-                String concatenatedUsernamesfriends = friendUsernames.toString();
-                out.println(concatenatedUsernamesfriends);
                 break;
             case 4: // Send Message
                 boolean sentMessage = database.sendMessage(user.getUsername(),optionData, message);

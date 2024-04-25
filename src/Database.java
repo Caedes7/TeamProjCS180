@@ -67,12 +67,16 @@ public class Database implements IDatabase, Serializable {
     public boolean blockUser(String usernameBlocker, String usernameBlocked) {
         NewUser userBlocker = searchUsers(usernameBlocker);
         NewUser userBlocked = searchUsers(usernameBlocked);
-        if (userBlocker != null && userBlocked != null){
-            if(!userBlocker.getBlocked().contains(userBlocked))
-         {
-            userBlocker.getBlocked().add(userBlocked);
-            return outputDatabase(); // Save changes
-        }
+        if (userBlocker != null && userBlocked != null) {
+            if (!userBlocker.getBlocked().contains(userBlocked)) {
+                userBlocker.getBlocked().add(userBlocked);
+
+                // Check if they are friends and remove from friends list if they are
+                userBlocker.getFriends().removeIf(friend -> friend.getUsername().equals(usernameBlocked));
+                userBlocked.getFriends().removeIf(friend -> friend.getUsername().equals(usernameBlocker));
+
+                return outputDatabase(); // Save changes
+            }
         }
         return false;
     }
