@@ -108,7 +108,7 @@ public class ClientHandler extends Thread implements Serializable {
                 out.println(blocked ? "User blocked!" : "Could not block user.");
                 StringBuilder blockedUsernames = new StringBuilder();
                 for (NewUser eachUser : user.getBlocked()) {
-                    if (!blockedUsernames.isEmpty()) {
+                    if (!blockedUsernames.equals("")) {
                         blockedUsernames.append(", ");
                     }
                     blockedUsernames.append(eachUser.getUsername());
@@ -121,7 +121,7 @@ public class ClientHandler extends Thread implements Serializable {
                 out.println(friend ? "User friended!" : "Could not add user as friend.");
                 StringBuilder friendUsernames = new StringBuilder();
                 for (NewUser eachUser : user.getFriends()) {
-                    if (!friendUsernames.isEmpty()) {
+                    if (!friendUsernames.equals("")) {
                         friendUsernames.append("~");
                     }
                     friendUsernames.append(eachUser.getUsername());
@@ -138,6 +138,7 @@ public class ClientHandler extends Thread implements Serializable {
                 break;
             case 6: // View Sent Messages
                 handleViewSentMessages(out, user);
+                out.println("eof");
                 break;
             case 7:
                 //out.println(user.getBlocked());

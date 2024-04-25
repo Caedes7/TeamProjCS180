@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
@@ -159,11 +160,16 @@ public class Client implements IClient, Serializable {
                         break;
                     case 5:
                         writer.println("5");
-                        System.out.println(reader.readLine());
+                        while(!Objects.equals(reader.readLine(), "eof")) {
+                            System.out.println(reader.readLine());
+                        }
                         break;
                     case 6:
                         writer.println("6");
-                        System.out.println(reader.readLine());
+                        while(!Objects.equals(reader.readLine(), "eof")) {
+                            System.out.println(reader.readLine());
+                        }
+                        reader.readLine();
                         break;
                     case 7:
                         System.out.println("Enter in the username of the user you want to unblock: ");
