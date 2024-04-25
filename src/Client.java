@@ -160,16 +160,17 @@ public class Client implements IClient, Serializable {
                         break;
                     case 5:
                         writer.println("5");
-                        while(!Objects.equals(reader.readLine(), "eof")) {
-                            System.out.println(reader.readLine());
+                        String line;
+                        while (!(line = reader.readLine()).equals("eof")) {
+                            System.out.println(line);
                         }
                         break;
                     case 6:
                         writer.println("6");
-                        while(!Objects.equals(reader.readLine(), "eof")) {
-                            System.out.println(reader.readLine());
+                        String line2;
+                        while (!(line2 = reader.readLine()).equals("eof")) {
+                            System.out.println(line2);
                         }
-                        reader.readLine();
                         break;
                     case 7:
                         System.out.println("Enter in the username of the user you want to unblock: ");

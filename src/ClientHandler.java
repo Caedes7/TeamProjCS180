@@ -134,11 +134,10 @@ public class ClientHandler extends Thread implements Serializable {
                 out.println(sentMessage ? "Message Sent!" : "Could not send message.");
                 break;
             case 5: // View Received Messages
-                out.println(user.getReceivedMessages());
+                handleViewReceivedMessages(out, user);
                 break;
             case 6: // View Sent Messages
                 handleViewSentMessages(out, user);
-                out.println("eof");
                 break;
             case 7:
                 //out.println(user.getBlocked());
@@ -167,6 +166,20 @@ public class ClientHandler extends Thread implements Serializable {
                 messages.forEach(message -> out.println(message.toString()));
             });
         }
+        out.println("eof"); // Signal end of messages
     }
 
+    public void handleViewReceivedMessages(PrintWriter out, NewUser user) {
+        if (user.getReceivedMessages().isEmpty()) {
+            out.println("No messages received.");
+        } else {
+            user.getReceivedMessages().forEach((sender, messages) -> {
+                // Check if the sender is in the user's friends list before printing
+                if (user.getFriends().stream().anyMatch(friend -> friend.getUsername().equals(sender))) {
+                    messages.forEach(message -> out.println(message.toString()));
+                }
+            });
+        }
+        out.println("eof"); // Signal end of messages
+    }
 }
