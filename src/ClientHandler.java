@@ -3,6 +3,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
 
  Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
@@ -97,7 +99,7 @@ public class ClientHandler extends Thread implements Serializable {
             case 1: // Search User
                 NewUser found = database.searchUsers(optionData);
                 if (found != null && found.getBlocked().stream().noneMatch(b -> b.getUsername().equals(user.getUsername()))) {
-                    out.println(user.toStringSearch());
+                    out.println(found.toStringSearch());
                 } else {
                     out.println("User not found");
                 }
@@ -186,6 +188,7 @@ public class ClientHandler extends Thread implements Serializable {
     }
 
     public void handleViewReceivedMessages(PrintWriter out, NewUser user) {
+        AtomicBoolean messagePrinted = new AtomicBoolean(false);
         if (user.getReceivedMessages().isEmpty()) {
             out.println("No messages received.");
         } else {
@@ -193,8 +196,12 @@ public class ClientHandler extends Thread implements Serializable {
                 // Check if the sender is in the user's friends list before printing
                 if (user.getFriends().stream().anyMatch(friend -> friend.getUsername().equals(sender))) {
                     messages.forEach(message -> out.println(message.toString()));
+                    messagePrinted.set(true);
                 }
             });
+            if (!messagePrinted.get()) {
+                out.println("No messages received.");
+            }
         }
         out.println("eof"); // Signal end of messages
     }
