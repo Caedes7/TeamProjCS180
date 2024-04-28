@@ -5,6 +5,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 /**
 
  Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
@@ -24,13 +28,23 @@ public class Client implements IClient, Serializable {
     private ExecutorService threadPool;
     Scanner sc = new Scanner(System.in);
     private String name;
+    private JFrame loginFrame;
+    private JFrame openFrame;
+    private JFrame mainFrame;
+    private JFrame newUserFrame;
+    private JTabbedPane tabbedPane;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JTextField emailField;
+    private JTextField ageField;
+    private JTextField nameField;
+
+
 
     public Client(String name) {
         this.threadPool = Executors.newCachedThreadPool();
         this.name = name;
     }
-
-
 
     public void runClient() {
         String hostname = "localhost";
@@ -38,16 +52,48 @@ public class Client implements IClient, Serializable {
         try (Socket socket = new Socket(hostname, PORT)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-
             //login or create user
             boolean repeat = false;
             do {
-
-                System.out.println("Are you a new user or returning? Type either 'new' or 'returning': ");
-                String initResponse = sc.nextLine();
+                openFrame = new JFrame("Welcome!");
+                String initResponse = JOptionPane.showInputDialog("Are you a new user or returning? " +
+                        "Type either 'new' or 'returning': ");
 
                 if (initResponse.equalsIgnoreCase("new")) {
 
+                    newUserFrame = new JFrame("New User Frame");
+                    JPanel panel = new JPanel(new GridLayout(3, 2));
+                    usernameField = new JTextField(15);
+                    passwordField = new JTextField(15);
+                    nameField = new JTextField(15);
+                    emailField = new JTextField(20);
+                    ageField = new JTextField(15);
+                    panel.add(new JLabel("Username:"));
+                    panel.add(usernameField);
+                    panel.add(new JLabel("Password:"));
+                    panel.add(passwordField);
+                    panel.add(new JLabel("Name:"));
+                    panel.add(nameField);
+                    panel.add(new JLabel("Email:"));
+                    panel.add(emailField);
+                    panel.add(new JLabel("Age:"));
+                    panel.add(ageField);
+                    JButton createButton = new JButton("Create User");
+                    JButton cancelButton = new JButton("Cancel");
+
+                    createButton.addActionListener(e -> writer.println("CREATE_USER" + name +
+                            "," + usernameField.getText() + "," +
+                            ageField.getText() + "," + passwordField.getText() + "," + emailField.getText()));
+                    cancelButton.addActionListener(e -> newUserFrame.dispose());
+
+                    panel.add(createButton);
+                    panel.add(cancelButton);
+
+                    loginFrame.add(panel);
+                    loginFrame.pack();
+                    loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    loginFrame.setVisible(true);
+/*
                     System.out.println("This is the new user page. Enter in your username, " +
                             "it cannot contain the ~ character: ");
                     String username = sc.nextLine();
@@ -59,36 +105,81 @@ public class Client implements IClient, Serializable {
                     String name = sc.nextLine();
 
                     System.out.println("Enter in your age: ");
-                    String age = sc.nextLine();
+                    String age = sc.nextLine(); */
                     try {
-                        int ageNum = Integer.parseInt(age);
+                        int ageNum = Integer.parseInt(ageField.getText());
                     } catch (NumberFormatException e) {
                         System.out.println("Age must be a number, try again. ");
                         repeat = true;
                         continue;
                     }
 
-                    System.out.println("Enter in your email: ");
-                    String email = sc.nextLine();
-
-                    writer.println("CREATE_USER" + name + "," + username + "," + age + "," + pw + "," + email);
+                    //System.out.println("Enter in your email: ");
+                    //String email = sc.nextLine();
 
                 } else if (initResponse.equalsIgnoreCase("returning")) {
 
-                    System.out.println("This is the login page. Enter in your username: ");
+                    loginFrame = new JFrame("Login");
+                    JPanel panel = new JPanel(new GridLayout(3, 2));
+                    usernameField = new JTextField(15);
+                    passwordField = new JPasswordField(15);
+                    panel.add(new JLabel("Username:"));
+                    panel.add(usernameField);
+                    panel.add(new JLabel("Password:"));
+                    panel.add(passwordField);
+                    JButton loginButton = new JButton("Login");
+                    JButton cancelButton = new JButton("Cancel");
+
+                    loginButton.addActionListener(e -> writer.println("RE" + usernameField.getText() +
+                            "," + passwordField.getText()));
+                    cancelButton.addActionListener(e -> loginFrame.dispose());
+
+                    panel.add(loginButton);
+                    panel.add(cancelButton);
+
+                    loginFrame.add(panel);
+                    loginFrame.pack();
+                    loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    loginFrame.setVisible(true);
+
+                    /*System.out.println("This is the login page. Enter in your username: ");
                     String username = sc.nextLine();
 
                     System.out.println("Enter in your password: ");
-                    String pw = sc.nextLine();
-
-                    writer.println("RE" + username + "," + pw);
+                    String pw = sc.nextLine(); */
 
                 } else {
-                    System.out.println("Invalid! Enter either new or returning: ");
+                    //System.out.println("Invalid! Enter either new or returning: ");
+                    JOptionPane.showMessageDialog(openFrame, "Invalid! Enter either new or returning: ");
                     repeat = true;
                     continue;
                 }
+    /*
+                loginFrame = new JFrame("Login");
+                JPanel panel = new JPanel(new GridLayout(3, 2));
+                usernameField = new JTextField(15);
+                passwordField = new JPasswordField(15);
+                panel.add(new JLabel("Username:"));
+                panel.add(usernameField);
+                panel.add(new JLabel("Password:"));
+                panel.add(passwordField);
+                JButton loginButton = new JButton("Login");
+                JButton cancelButton = new JButton("Cancel");
 
+                loginButton.addActionListener(e -> authenticateUser());
+                cancelButton.addActionListener(e -> loginFrame.dispose());
+
+                panel.add(loginButton);
+                panel.add(cancelButton);
+
+                loginFrame.add(panel);
+                loginFrame.pack();
+                loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                loginFrame.setVisible(true);
+
+                //System.out.println("Are you a new user or returning? Type either 'new' or 'returning': ");
+                //String initResponse = sc.nextLine();
+*/
                 String response = reader.readLine();
                 System.out.println(response);
 

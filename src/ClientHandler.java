@@ -93,8 +93,6 @@ public class ClientHandler extends Thread implements Serializable {
         }
 
 
-
-
         switch (choice) {
             case 1: // Search User
                 NewUser found = database.searchUsers(optionData);

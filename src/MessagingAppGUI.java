@@ -33,7 +33,7 @@ public class MessagingAppGUI {
 
         loginFrame.add(panel);
         loginFrame.pack();
-        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginFrame.setVisible(true);
     }
 
