@@ -182,7 +182,7 @@ public class Client implements IClient, Serializable {
                     case 8:
                         System.out.println("Enter the username you want to remove as a friend: ");
                         String toUnfriend = sc.nextLine();
-                        writer.println("3" + toUnfriend);
+                        writer.println("8" + toUnfriend);
                         System.out.println(reader.readLine());
                         break;
                     case 0:
