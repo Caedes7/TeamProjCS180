@@ -10,7 +10,7 @@ import java.util.Date;
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
  * @version April 29, 2024
  */
-public class Message implements Serializable {
+public class Message implements Serializable, IMessage {
     private static final long serialVersionUID = 1L; // Serialization UID
     private String sender;
     private String receiver;

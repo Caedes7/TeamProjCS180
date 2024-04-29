@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 
 @SuppressWarnings("FieldMayBeFinal")
-public class Client extends Thread implements Serializable {
+public class Client extends Thread implements Serializable, IClient {
     @SuppressWarnings("FieldMayBeFinal")
     private static final int PORT = 1113;
     private static final String END_OF_TRANSMISSION = "EOT";
@@ -46,7 +46,7 @@ public class Client extends Thread implements Serializable {
         runClient();
     }
 
-    private void runClient() {
+    public void runClient() {
         String hostname = "localhost";
         try {
             socket = new Socket(hostname, PORT);
@@ -65,7 +65,7 @@ public class Client extends Thread implements Serializable {
         }
     }
 
-    private void createInitialFrame() {
+    public void createInitialFrame() {
         openFrame = new JFrame("Welcome!");
         loginButton = new JButton("Login");
         createUserButton = new JButton("Create New User");
@@ -88,7 +88,7 @@ public class Client extends Thread implements Serializable {
         openFrame.setVisible(true);
     }
 
-    private void createLoginFrame() {
+    public void createLoginFrame() {
         loginFrame = new JFrame("Login");
         JPanel panel = new JPanel(new GridLayout(3, 2));
         loginFrame.setSize(1000, 800);
@@ -135,7 +135,7 @@ public class Client extends Thread implements Serializable {
         loginFrame.setVisible(true);
     }
 
-    private void createNewUserFrame() {
+    public void createNewUserFrame() {
         newUserFrame = new JFrame("New User Frame");
         JPanel panel = new JPanel(new GridLayout(3, 2));
         newUserFrame.setSize(1000, 800);
@@ -189,7 +189,7 @@ public class Client extends Thread implements Serializable {
         newUserFrame.setVisible(true);
     }
 
-    private void createMainGUI() {
+    public void createMainGUI() {
         mainFrame = new JFrame("Client Operations");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(400, 600);
@@ -211,7 +211,7 @@ public class Client extends Thread implements Serializable {
         mainFrame.setVisible(true);
     }
 
-    private void performAction(String action) {
+    public void performAction(String action) {
         switch (action) {
             case "Search user":
                 promptAndSend("Enter the username you want to search:", "1");
@@ -268,7 +268,7 @@ public class Client extends Thread implements Serializable {
         }
     }
 
-    private void cleanupAndExit() {
+    public void cleanupAndExit() {
         threadPool.shutdown();
         threadPool.shutdownNow();
         try {
@@ -289,14 +289,14 @@ public class Client extends Thread implements Serializable {
     }
 
 
-    private void promptAndSend(String prompt, String commandPrefix) {
+    public void promptAndSend(String prompt, String commandPrefix) {
         String input = JOptionPane.showInputDialog(mainFrame, prompt);
         if (input != null && !input.isEmpty()) {
             sendCommand(commandPrefix + input);
         }
     }
 
-    private void sendCommand(String command) {
+    public void sendCommand(String command) {
         threadPool.execute(() -> {
             try {
                 writer.println(command);

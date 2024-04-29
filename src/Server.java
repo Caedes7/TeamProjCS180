@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
  * @version April 29, 2024
  */
 @SuppressWarnings("FieldMayBeFinal")
-public class Server implements Runnable, Serializable {
+public class Server implements Runnable, Serializable, IServer {
     private static final int PORT = 1113;
     private ExecutorService threadPool; // For handling client requests concurrently
     private Database database;

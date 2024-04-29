@@ -19,3 +19,4 @@ public interface IClient {
     void promptAndSend(String prompt, String commandPrefix);
     void sendCommand(String command);
 }
+
