@@ -10,6 +10,25 @@ import java.io.StringReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+/**
+ * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * Class: RunLocalTestCase
+ * Manages the execution of unit tests for the Direct Messaging application. This class is responsible for
+ * initializing the testing environment, including setting up a database and a server instance, and executing
+ * various test scenarios such as user creation, login, and messaging functionalities.
+ * Each test ensures that the application logic is correctly managing user data and interactions.
+ * Tests include:
+ * - User creation via client handler
+ * - User login via client handler
+ * - Message creation and formatting
+ * - Validation of user input (username, email, and password)
+ * - Handling of sent and received messages between users
+ * This class uses JUnit for managing test lifecycles and assertions, ensuring that each component functions
+ * as expected in isolation.
+ *
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 29, 2024
+ */
 
 public class RunLocalTestCase {
 

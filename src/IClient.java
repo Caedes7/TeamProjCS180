@@ -1,6 +1,6 @@
 /**
  * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
- * Interface: IClient
+ * Interface: Client
  * Defines the methods for the client-server communication, including user registration, login,
  * user search and management, friend management, and messaging.
  *

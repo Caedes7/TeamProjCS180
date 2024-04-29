@@ -6,7 +6,7 @@ import java.util.*;
  * This class creates NewUser objects and contains methods for acquiring information about the user.
  *
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
- * @version April 1, 2024
+ * @version April 29, 2024
  *
  */
 public class NewUser implements INewUser, Serializable {

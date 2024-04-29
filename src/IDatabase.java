@@ -1,5 +1,11 @@
-import java.util.List;
-
+/**
+ * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * Interface: Database
+ * This handles storing and writing information in the database and does some basic processing regarding users.
+ *
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 29, 2024
+ */
 public interface IDatabase {
     boolean createUser(String name, String username, int age, String password, String email);
     boolean deleteUser(String username);

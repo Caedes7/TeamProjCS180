@@ -1,7 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /** Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
  * This is a program that will allow direct messaging, simultaneously, between several users.

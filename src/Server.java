@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
  * The server can handle multiple client connections concurrently using a thread pool.
  *
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
- * @version April 15, 2024
+ * @version April 29, 2024
  */
 @SuppressWarnings("FieldMayBeFinal")
 public class Server implements Runnable, Serializable {
