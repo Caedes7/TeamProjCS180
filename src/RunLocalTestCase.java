@@ -30,7 +30,7 @@ import java.util.Date;
  * @version April 29, 2024
  */
 
-public class RunLocalTestCase {
+public class RunLocalTestCase implements IRunLocalTestCase {
 
     private static StringWriter stringWriter;
     private static PrintWriter printWriter;
@@ -58,14 +58,14 @@ public class RunLocalTestCase {
     }
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         stringWriter = new StringWriter();
         printWriter = new PrintWriter(stringWriter);
     }
 
     @Test
     @DisplayName("Test user creation via client handler")
-    void testUserCreationViaClientHandler() throws Exception {
+    public void testUserCreationViaClientHandler() throws Exception {
         String input = "CREATE_USER John Doe, johnDoe, 25, securePass123, john.doe@example.com";
         bufferedReader = new BufferedReader(new StringReader(input));
         ClientHandler createHandler = new ClientHandler(null, databaseCreate, serverCreate) {
@@ -97,7 +97,7 @@ public class RunLocalTestCase {
 
     @Test
     @DisplayName("Test user login via client handler")
-    void testUserLoginViaClientHandler() throws Exception {
+    public void testUserLoginViaClientHandler() throws Exception {
         String loginInput = "LOGIN test, test";
         bufferedReader = new BufferedReader(new StringReader(loginInput));
         ClientHandler loginHandler = new ClientHandler(null, databaseLogin, serverLogin) {
@@ -127,7 +127,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testMessageCreation() {
+    public void testMessageCreation() {
         long timestamp = System.currentTimeMillis();
         Message message = new Message("sender", "receiver", "Hello!", timestamp);
         assertEquals("sender", message.getSender());
@@ -138,7 +138,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testMessageToString() {
+    public void testMessageToString() {
         long timestamp = 1609459200000L; // Example timestamp for January 1, 2021
         Message message = new Message("sender", "receiver", "Happy New Year!", timestamp);
         String expected = "From: sender To: receiver at " + new Date(timestamp) + ": Happy New Year!";
@@ -147,7 +147,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testNewUserCreation() {
+    public void testNewUserCreation() {
         NewUser user = new NewUser("John Doe", "johndoe", 30,
                 "securePass123", "john.doe@example.com");
         assertEquals("John Doe", user.getName());
@@ -159,7 +159,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testValidUsername() {
+    public void testValidUsername() {
         assertTrue(NewUser.isValidUsername("johndoe_123"));
         assertFalse(NewUser.isValidUsername("john~doe"));
         assertFalse(NewUser.isValidUsername(null));
@@ -168,7 +168,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testValidEmail() {
+    public void testValidEmail() {
         assertTrue(NewUser.isValidEmail("john.doe@example.com"));
         assertFalse(NewUser.isValidEmail("john.doe"));
         assertFalse(NewUser.isValidEmail(null));
@@ -176,7 +176,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testValidPassword() {
+    public void testValidPassword() {
         assertTrue(NewUser.isValidPassword("mypassword123"));
         assertFalse(NewUser.isValidPassword(" "));
         assertFalse(NewUser.isValidPassword(null));
@@ -184,7 +184,7 @@ public class RunLocalTestCase {
     }
 
     @Test
-    void testMessageHandling() {
+    public void testMessageHandling() {
         NewUser user = new NewUser("John Doe", "johndoe",
                 30, "securePass123", "john.doe@example.com");
         Message sentMessage = new Message("johndoe", "janedoe",
