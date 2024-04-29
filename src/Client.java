@@ -19,45 +19,69 @@ import java.awt.*;
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
  * @version April 29, 2024
  */
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@SuppressWarnings("FieldMayBeFinal")
 public class Client extends Thread implements Serializable {
+    @SuppressWarnings("FieldMayBeFinal")
     private static final int PORT = 1113;
     private ExecutorService threadPool;
-    private Scanner sc = new Scanner(System.in);
     private String name;
-    private JFrame loginFrame, openFrame, newUserFrame;
-    private JTextField usernameField, passwordField, emailField, ageField, nameField;
+    private JFrame loginFrame, openFrame, newUserFrame, mainFrame;
+    private JTextField usernameField, emailField, ageField, nameField;
     private JButton loginButton, createUserButton;
+    private Socket socket;
+    private PrintWriter writer;
+    private BufferedReader reader;
+    private JPasswordField passwordField;
 
     public Client(String name) {
         this.threadPool = Executors.newCachedThreadPool();
         this.name = name;
     }
 
-    public void runClient() {
+    @Override
+    public void run() {
+        runClient();
+    }
+
+    private void runClient() {
         String hostname = "localhost";
         try {
-            Socket socket = new Socket(hostname, PORT);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            SwingUtilities.invokeLater(() -> createInitialFrame(writer, reader));
+            socket = new Socket(hostname, PORT);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream(), true);
+            SwingUtilities.invokeLater(this::createInitialFrame);
         } catch (IOException e) {
             System.err.println("IO exception: " + e.getMessage());
+            if (!socket.isClosed()) {
+                try {
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
-    private void createInitialFrame(PrintWriter writer, BufferedReader reader) {
+    private void createInitialFrame() {
         openFrame = new JFrame("Welcome!");
         loginButton = new JButton("Login");
         createUserButton = new JButton("Create New User");
 
         loginButton.addActionListener(e -> {
             openFrame.dispose();
-            createLoginFrame(writer, reader);
+            createLoginFrame();
         });
 
         createUserButton.addActionListener(e -> {
             openFrame.dispose();
-            createNewUserFrame(writer, reader);
+            createNewUserFrame();
         });
 
         openFrame.setLayout(new FlowLayout());
@@ -68,7 +92,7 @@ public class Client extends Thread implements Serializable {
         openFrame.setVisible(true);
     }
 
-    private void createLoginFrame(PrintWriter writer, BufferedReader reader) {
+    private void createLoginFrame() {
         loginFrame = new JFrame("Login");
         JPanel panel = new JPanel(new GridLayout(3, 2));
         loginFrame.setSize(1000, 800);
@@ -82,14 +106,17 @@ public class Client extends Thread implements Serializable {
         JButton cancelButton = new JButton("Cancel");
 
         loginButton.addActionListener(e -> {
-            threadPool.execute(() -> { // Execute network operations on a separate thread
+            threadPool.execute(() -> {
                 try {
-                    String message = "RE" + usernameField.getText() + "," + new String(((JPasswordField) passwordField).getPassword());
+                    String message = "RE" + usernameField.getText() + "," + new String(passwordField.getPassword());
                     writer.println(message);
                     String response = reader.readLine();
-                    SwingUtilities.invokeLater(() -> { // Ensure GUI updates are on the EDT
+                    SwingUtilities.invokeLater(() -> {
                         JOptionPane.showMessageDialog(loginFrame, response);
                         loginFrame.dispose();
+                        if (response.startsWith("User logged in successfully")) {
+                            createMainGUI();
+                        }
                     });
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -109,12 +136,12 @@ public class Client extends Thread implements Serializable {
         loginFrame.setVisible(true);
     }
 
-    private void createNewUserFrame(PrintWriter writer, BufferedReader reader) {
+    private void createNewUserFrame() {
         newUserFrame = new JFrame("New User Frame");
         JPanel panel = new JPanel(new GridLayout(3, 2));
         newUserFrame.setSize(1000, 800);
         usernameField = new JTextField(15);
-        passwordField = new JTextField(15);
+        passwordField = new JPasswordField(15);
         nameField = new JTextField(15);
         emailField = new JTextField(20);
         ageField = new JTextField(15);
@@ -140,12 +167,16 @@ public class Client extends Thread implements Serializable {
             writer.println(message);
             try {
                 String response = reader.readLine();
-                System.out.println(response); // Output server response
-                System.out.println("Create user not working"); //delete later
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(newUserFrame, response);
+                    newUserFrame.dispose();
+                    if (response.startsWith("User created successfully")) {
+                        createMainGUI();
+                    }
+                });
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            newUserFrame.dispose();
         });
 
         cancelButton.addActionListener(e -> newUserFrame.dispose());
@@ -159,9 +190,90 @@ public class Client extends Thread implements Serializable {
         newUserFrame.setVisible(true);
     }
 
+    private void createMainGUI() {
+        mainFrame = new JFrame("Client Operations");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(400, 600); // Adjust the size as needed
+        mainFrame.setLayout(new GridLayout(9, 1)); // 9 options including exit
+
+        // Create buttons for each operation
+        String[] options = {
+                "Search user", "Block user", "Add friend", "Message a friend",
+                "View Received Messages", "View Sent Messages", "Unblock user",
+                "Remove friend", "Exit"
+        };
+
+        for (String option : options) {
+            JButton button = new JButton(option);
+            button.addActionListener(e -> performAction(option));
+            mainFrame.add(button);
+        }
+
+        mainFrame.setVisible(true);
+    }
+
+    private void performAction(String action) {
+        // This would open dialogues or perform actions based on the button clicked
+        switch (action) {
+            case "Search user":
+                promptAndSend("Enter the username you want to search:", "1");
+                break;
+            case "Block user":
+                promptAndSend("Enter the username you want to block:", "2");
+                break;
+            case "Add friend":
+                promptAndSend("Enter the username you want to add as a friend:", "3");
+                break;
+            case "Message a friend":
+                String username = JOptionPane.showInputDialog(mainFrame, "Enter the friend's username:");
+                if (username != null && !username.isEmpty()) {
+                    promptAndSend("Type your message for " + username + ":", "4" + username + "~");
+                }
+                break;
+            case "View Received Messages":
+                sendCommand("5");
+                break;
+            case "View Sent Messages":
+                sendCommand("6");
+                break;
+            case "Unblock user":
+                promptAndSend("Enter the username of the user you want to unblock:", "7");
+                break;
+            case "Remove friend":
+                promptAndSend("Enter the username you want to remove as a friend:", "8");
+                break;
+            case "Exit":
+                sendCommand("0");
+                System.exit(0);
+                break;
+            default:
+                JOptionPane.showMessageDialog(mainFrame, "Invalid option selected.");
+                break;
+        }
+    }
+
+    private void promptAndSend(String prompt, String commandPrefix) {
+        String input = JOptionPane.showInputDialog(mainFrame, prompt);
+        if (input != null && !input.isEmpty()) {
+            sendCommand(commandPrefix + input);
+        }
+    }
+
+    private void sendCommand(String command) {
+        threadPool.execute(() -> {
+            try {
+                writer.println(command);
+                String response = reader.readLine();
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, response));
+            } catch (IOException ex) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, "Network error: " + ex.getMessage()));
+            }
+        });
+    }
+
     public static void main(String[] args) {
         String clientName = "Client1";
         Client client = new Client(clientName);
-        client.runClient();
+        client.start();
     }
 }
