@@ -21,6 +21,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -293,23 +294,26 @@ public class Client extends Thread implements Serializable {
         threadPool.execute(() -> {
             try {
                 writer.println(command);
-                StringBuilder fullResponse = new StringBuilder();
                 String response;
-                while ((response = reader.readLine()) != null) {
-                    if (response.equals(END_OF_TRANSMISSION)) {
-                        break;  // Stop reading if the delimiter is received
+                while (true) {
+                    response = reader.readLine();
+                    if (response == null || response.trim().isEmpty()) {
+                        break;  // Break if the end signal (an empty line) is received
                     }
-                    fullResponse.append(response).append("\n");
-                }
-                // Display the accumulated message
-                if (fullResponse.length() > 0) {
-                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, fullResponse.toString()));
+                    String finalResponse = response; // Final variable for use in lambda
+                    if (!finalResponse.equals(END_OF_TRANSMISSION)) {
+                        SwingUtilities.invokeAndWait(() -> JOptionPane.showMessageDialog(mainFrame, finalResponse));
+                    }
                 }
             } catch (IOException ex) {
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, "Network error: " + ex.getMessage()));
+                String errorMsg = "Network error: " + ex.getMessage();
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, errorMsg));
+            } catch (InvocationTargetException | InterruptedException e) {
+                e.printStackTrace();  // Handle exceptions thrown by invokeAndWait
             }
         });
     }
+
 
     public static void main(String[] args) {
         String clientName = "Client1";
