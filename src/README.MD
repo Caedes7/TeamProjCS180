@@ -11,21 +11,24 @@ TEAM MEMBERS:
 
 1. How to Compile and Run the Project
 
-This program currently can only compile through the runLocalTestCase.java class. Further instructions are located below
-in the detailed description of the runLocalTestCase.java class.
+To run the program, run Server first. Then, Client can be run. Client2, which is an exact clone of Client1,
+is also included to run multiple configurations for testing of multiple logins as well. Also, To test the
+program, you can compile it through the runLocalTestCase.java class.
+
 2. Submissions List
 
     Phase 1: Jeeaan Ahmmed
     Phase 2: Michael Vetter
-    Phase 3: [To be updated]
+    Phase 3: Ishaan Agrawal
 
 3. Detailed Description of Each Class
+
 Database
 
     createUser: Adds a new user to the database if the user does not already exist.
     deleteUser: Removes a user from the database based on username.
-    outputDatabase: Writes the current state of the database, including user details and their relationships, to a
-    specified output file.
+    outputDatabase: Writes the current state of the database, including user details and their relationships,
+    to a specified output file.
     blockUser: Blocks another user from being able to interact.
     searchUsers: Searches for a user in the database using their username.
     addFriend: Adds another user to the current user's friends list if not already added.
@@ -47,8 +50,9 @@ runLocalTestCase
 
 Server
 
+    Handles initial client request and starts the Client Handler, which handles the processing of the clients.
+
     Variables:
-        MAX_MESSAGES: Maximum messages stored per user.
         executorService: Handles client requests concurrently.
         PORT: Port number of the server.
     Methods:
@@ -64,7 +68,7 @@ Message
 Client
 
     Manages the client-side functionality for a direct messaging application. This class is responsible for establishing
-     a connection to the server, handling user inputs, and processing server responses. It allows users to create a new
+     a connection to the server, handling user inputs, through a full GUI, and processing server responses. It allows users to create a new
      account or log into an existing one and perform various actions like searching for other users, blocking/unblocking
       users, adding/removing friends, and sending messages. The Client class utilizes a thread pool to manage its tasks
       and maintains an interactive command line interface for user interaction.
