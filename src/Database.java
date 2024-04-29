@@ -144,8 +144,7 @@ public class Database implements IDatabase, Serializable {
                 }**/
                 System.out.println("New database file created successfully.");
             } catch (IOException e) {
-                System.err.println("Failed to create new database file: " + e.getMessage());
-                e.printStackTrace();
+                //System.err.println("Failed to create new database file: " + e.getMessage());
                 return false;
             }
             return true; // Return true as the file was created successfully, though it's empty
@@ -154,8 +153,7 @@ public class Database implements IDatabase, Serializable {
                 users = (ArrayList<NewUser>) ois.readObject();
                 return true;
             } catch (IOException | ClassNotFoundException e) {
-                System.err.println("Failed to load database from file: " + e.getMessage());
-                e.printStackTrace();  // More detailed error print
+                //System.err.println("Failed to load database from file: " + e.getMessage());
                 return false;
             }
         }

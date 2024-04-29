@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 class ClientHandlerTest {
 
@@ -71,10 +72,11 @@ class ClientHandlerTest {
         printWriter.flush();
         String result = stringWriter.toString();
         assertEquals("User created successfully", result.trim());
+        System.out.println("Test checks the creation of a user and has passed correctly.");
     }
 
     @Test
-    @DisplayName("Test user login via client handler using a different database")
+    @DisplayName("Test user login via client handler")
     void testUserLoginViaClientHandler() throws Exception {
         String loginInput = "LOGIN test, test";
         bufferedReader = new BufferedReader(new StringReader(loginInput));
@@ -101,5 +103,78 @@ class ClientHandlerTest {
         printWriter.flush();
         String result = stringWriter.toString();
         assertEquals("Login failed. User/password combination does not exist.", result.trim());
+        System.out.println("Test checks user login and has passed correctly.");
+    }
+
+    @Test
+    void testMessageCreation() {
+        long timestamp = System.currentTimeMillis();
+        Message message = new Message("sender", "receiver", "Hello!", timestamp);
+        assertEquals("sender", message.getSender());
+        assertEquals("receiver", message.getReceiver());
+        assertEquals("Hello!", message.getContent());
+        assertEquals(timestamp, message.getTimestamp());
+        System.out.println("Test checks message creation and has passed correctly.");
+    }
+
+    @Test
+    void testMessageToString() {
+        long timestamp = 1609459200000L; // Example timestamp for January 1, 2021
+        Message message = new Message("sender", "receiver", "Happy New Year!", timestamp);
+        String expected = "From: sender To: receiver at " + new Date(timestamp) + ": Happy New Year!";
+        assertEquals(expected, message.toString());
+        System.out.println("Test checks the toString output of a message and has passed correctly.");
+    }
+
+    @Test
+    void testNewUserCreation() {
+        NewUser user = new NewUser("John Doe", "johndoe", 30, "securePass123", "john.doe@example.com");
+        assertEquals("John Doe", user.getName());
+        assertEquals("johndoe", user.getUsername());
+        assertEquals(30, user.getAge());
+        assertEquals("securePass123", user.getPassword());
+        assertEquals("john.doe@example.com", user.getEmail());
+        System.out.println("Test checks NewUser creation and has passed correctly.");
+    }
+
+    @Test
+    void testValidUsername() {
+        assertTrue(NewUser.isValidUsername("johndoe_123"));
+        assertFalse(NewUser.isValidUsername("john~doe"));
+        assertFalse(NewUser.isValidUsername(null));
+        assertFalse(NewUser.isValidUsername(""));
+        System.out.println("Test checks username validation and has passed correctly.");
+    }
+
+    @Test
+    void testValidEmail() {
+        assertTrue(NewUser.isValidEmail("john.doe@example.com"));
+        assertFalse(NewUser.isValidEmail("john.doe"));
+        assertFalse(NewUser.isValidEmail(null));
+        System.out.println("Test checks email validation and has passed correctly.");
+    }
+
+    @Test
+    void testValidPassword() {
+        assertTrue(NewUser.isValidPassword("mypassword123"));
+        assertFalse(NewUser.isValidPassword(" "));
+        assertFalse(NewUser.isValidPassword(null));
+        System.out.println("Test checks password validation and has passed correctly.");
+    }
+
+    @Test
+    void testMessageHandling() {
+        NewUser user = new NewUser("John Doe", "johndoe", 30, "securePass123", "john.doe@example.com");
+        Message sentMessage = new Message("johndoe", "janedoe", "Hello, Jane!", System.currentTimeMillis());
+        Message receivedMessage = new Message("janedoe", "johndoe", "Hi, John!", System.currentTimeMillis());
+
+        user.addSentMessage("janedoe", sentMessage);
+        user.addReceivedMessage("janedoe", receivedMessage);
+
+        assertEquals(1, user.getSentMessages().get("janedoe").size());
+        assertEquals(sentMessage, user.getSentMessages().get("janedoe").get(0));
+        assertEquals(1, user.getReceivedMessages().get("janedoe").size());
+        assertEquals(receivedMessage, user.getReceivedMessages().get("janedoe").get(0));
+        System.out.println("Test checks handling of messages (sent and received) and has passed correctly.");
     }
 }
