@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
 public class Client extends Thread implements Serializable {
     @SuppressWarnings("FieldMayBeFinal")
     private static final int PORT = 1113;
+    private static final String END_OF_TRANSMISSION = "EOT";
     private ExecutorService threadPool;
     private String name;
     private JFrame loginFrame, openFrame, newUserFrame, mainFrame;
@@ -292,8 +293,18 @@ public class Client extends Thread implements Serializable {
         threadPool.execute(() -> {
             try {
                 writer.println(command);
-                String response = reader.readLine();
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, response));
+                StringBuilder fullResponse = new StringBuilder();
+                String response;
+                while ((response = reader.readLine()) != null) {
+                    if (response.equals(END_OF_TRANSMISSION)) {
+                        break;  // Stop reading if the delimiter is received
+                    }
+                    fullResponse.append(response).append("\n");
+                }
+                // Display the accumulated message
+                if (fullResponse.length() > 0) {
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, fullResponse.toString()));
+                }
             } catch (IOException ex) {
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, "Network error: " + ex.getMessage()));
             }

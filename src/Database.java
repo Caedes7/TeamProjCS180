@@ -23,7 +23,7 @@ public class Database implements IDatabase, Serializable {
         loadDatabase();
     }
 
-    public boolean createUser(String name, String username, int age, String password, String email) {
+    public synchronized boolean createUser(String name, String username, int age, String password, String email) {
         if (searchUsers(username) != null) {
             return false; // User already exists
         }
@@ -32,19 +32,19 @@ public class Database implements IDatabase, Serializable {
         return outputDatabase(); // Save changes
     }
 
-    public boolean deleteUser(String username) {
+    public synchronized boolean deleteUser(String username) {
         boolean removed = users.removeIf(user -> user.getUsername().equalsIgnoreCase(username));
         return removed && outputDatabase(); // Save changes if user is successfully removed
     }
 
-    public NewUser searchUsers(String user1) {
+    public synchronized NewUser searchUsers(String user1) {
         return users.stream()
                 .filter(user -> user.getUsername().equals(user1))
                 .findFirst()
                 .orElse(null);
     }
 
-    public boolean addFriend(String username, String friendUsername) {
+    public synchronized boolean addFriend(String username, String friendUsername) {
         NewUser user = searchUsers(username);
         NewUser potentialFriend = searchUsers(friendUsername);
         if (user == null || potentialFriend == null) {
@@ -64,7 +64,7 @@ public class Database implements IDatabase, Serializable {
         return false;
     }
 
-    public boolean removeFriend(String username, String friendUsername) {
+    public synchronized boolean removeFriend(String username, String friendUsername) {
         NewUser user = searchUsers(username);
         NewUser friend = searchUsers(friendUsername);
         if (user != null && friend != null && user.getFriends().contains(friend)) {
@@ -74,7 +74,7 @@ public class Database implements IDatabase, Serializable {
         return false;
     }
 
-    public boolean blockUser(String usernameBlocker, String usernameBlocked) {
+    public synchronized boolean blockUser(String usernameBlocker, String usernameBlocked) {
         NewUser userBlocker = searchUsers(usernameBlocker);
         NewUser userBlocked = searchUsers(usernameBlocked);
         if (userBlocker != null && userBlocked != null) {
@@ -94,7 +94,7 @@ public class Database implements IDatabase, Serializable {
         return false;
     }
 
-    public boolean unblockUser(String usernameBlocker, String usernameBlocked) {
+    public synchronized boolean unblockUser(String usernameBlocker, String usernameBlocked) {
         NewUser userBlocker = searchUsers(usernameBlocker);
         NewUser userBlocked = searchUsers(usernameBlocked);
         if (userBlocker != null && userBlocked != null && userBlocker.getBlocked().contains(userBlocked)) {
@@ -104,11 +104,11 @@ public class Database implements IDatabase, Serializable {
         return false;
     }
 
-    public void viewUsers() {
+    public synchronized void viewUsers() {
         users.forEach(user -> System.out.println(user));
     }
 
-    public boolean sendMessage(String senderUsername, String receiverUsername, String messageContent) {
+    public synchronized boolean sendMessage(String senderUsername, String receiverUsername, String messageContent) {
         NewUser sender = searchUsers(senderUsername);
         NewUser receiver = searchUsers(receiverUsername);
         if (sender != null && receiver != null) {
@@ -120,7 +120,7 @@ public class Database implements IDatabase, Serializable {
         return false;
     }
 
-    public boolean outputDatabase() {
+    public synchronized boolean outputDatabase() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(databaseOutputFile))) {
             oos.writeObject(users);
             return true;
@@ -132,7 +132,7 @@ public class Database implements IDatabase, Serializable {
     }
 
 
-    public boolean loadDatabase() {
+    public synchronized boolean loadDatabase() {
         File file = new File(databaseOutputFile);
         if (!file.exists()) {
             System.err.println("Database file not found, creating new one.");
