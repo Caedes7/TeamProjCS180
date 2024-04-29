@@ -89,10 +89,10 @@ public class Client implements IClient, Serializable {
                     panel.add(createButton);
                     panel.add(cancelButton);
 
-                    loginFrame.add(panel);
-                    loginFrame.pack();
-                    loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    loginFrame.setVisible(true);
+                    newUserFrame.add(panel);
+                    newUserFrame.pack();
+                    newUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    newUserFrame.setVisible(true);
 /*
                     System.out.println("This is the new user page. Enter in your username, " +
                             "it cannot contain the ~ character: ");
@@ -107,6 +107,7 @@ public class Client implements IClient, Serializable {
                     System.out.println("Enter in your age: ");
                     String age = sc.nextLine(); */
                     try {
+                        System.out.println(ageField.getText());
                         int ageNum = Integer.parseInt(ageField.getText());
                     } catch (NumberFormatException e) {
                         System.out.println("Age must be a number, try again. ");
@@ -114,8 +115,6 @@ public class Client implements IClient, Serializable {
                         continue;
                     }
 
-                    //System.out.println("Enter in your email: ");
-                    //String email = sc.nextLine();
 
                 } else if (initResponse.equalsIgnoreCase("returning")) {
 
@@ -154,32 +153,7 @@ public class Client implements IClient, Serializable {
                     repeat = true;
                     continue;
                 }
-    /*
-                loginFrame = new JFrame("Login");
-                JPanel panel = new JPanel(new GridLayout(3, 2));
-                usernameField = new JTextField(15);
-                passwordField = new JPasswordField(15);
-                panel.add(new JLabel("Username:"));
-                panel.add(usernameField);
-                panel.add(new JLabel("Password:"));
-                panel.add(passwordField);
-                JButton loginButton = new JButton("Login");
-                JButton cancelButton = new JButton("Cancel");
 
-                loginButton.addActionListener(e -> authenticateUser());
-                cancelButton.addActionListener(e -> loginFrame.dispose());
-
-                panel.add(loginButton);
-                panel.add(cancelButton);
-
-                loginFrame.add(panel);
-                loginFrame.pack();
-                loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                loginFrame.setVisible(true);
-
-                //System.out.println("Are you a new user or returning? Type either 'new' or 'returning': ");
-                //String initResponse = sc.nextLine();
-*/
                 String response = reader.readLine();
                 System.out.println(response);
 
