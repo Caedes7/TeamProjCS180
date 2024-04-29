@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import javax.swing.*;
@@ -22,6 +21,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,6 +30,7 @@ import java.util.concurrent.Executors;
 public class Client2 extends Thread implements Serializable {
     @SuppressWarnings("FieldMayBeFinal")
     private static final int PORT = 1113;
+    private static final String END_OF_TRANSMISSION = "EOT";
     private ExecutorService threadPool;
     private String name;
     private JFrame loginFrame, openFrame, newUserFrame, mainFrame;
@@ -116,6 +117,9 @@ public class Client2 extends Thread implements Serializable {
                         loginFrame.dispose();
                         if (response.startsWith("User logged in successfully")) {
                             createMainGUI();
+                        } else {
+                            JOptionPane.showMessageDialog(loginFrame, "Invalid username or password");
+                            createLoginFrame();
                         }
                     });
                 } catch (IOException ex) {
@@ -131,7 +135,7 @@ public class Client2 extends Thread implements Serializable {
         panel.add(cancelButton);
 
         loginFrame.add(panel);
-        loginFrame.pack();
+        //loginFrame.pack();
         loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginFrame.setVisible(true);
     }
@@ -192,15 +196,15 @@ public class Client2 extends Thread implements Serializable {
 
     private void createMainGUI() {
         mainFrame = new JFrame("Client Operations");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(400, 600); // Adjust the size as needed
-        mainFrame.setLayout(new GridLayout(9, 1)); // 9 options including exit
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mainFrame.setSize(400, 600);
+        mainFrame.setLayout(new GridLayout(10, 1));
 
         // Create buttons for each operation
         String[] options = {
                 "Search user", "Block user", "Add friend", "Message a friend",
                 "View Received Messages", "View Sent Messages", "Unblock user",
-                "Remove friend", "Exit"
+                "Remove friend", "Make Account Public/Private", "Exit"
         };
 
         for (String option : options) {
@@ -213,7 +217,6 @@ public class Client2 extends Thread implements Serializable {
     }
 
     private void performAction(String action) {
-        // This would open dialogues or perform actions based on the button clicked
         switch (action) {
             case "Search user":
                 promptAndSend("Enter the username you want to search:", "1");
@@ -242,15 +245,54 @@ public class Client2 extends Thread implements Serializable {
             case "Remove friend":
                 promptAndSend("Enter the username you want to remove as a friend:", "8");
                 break;
+            case "Make Account Public/Private":
+                JOptionPane.showMessageDialog(null, "Changed Account Status!");
+                break;
             case "Exit":
                 sendCommand("0");
-                System.exit(0);
+                mainFrame.dispose();
+                try {
+                    openFrame.dispose();
+                    loginFrame.dispose();
+                    newUserFrame.dispose();
+
+                } catch (NullPointerException e) {
+                    cleanupAndExit();
+                }
+                try {
+                    reader.close();
+                    writer.close();
+                } catch (IOException e) {
+                    cleanupAndExit();
+                }
+                cleanupAndExit();
                 break;
             default:
                 JOptionPane.showMessageDialog(mainFrame, "Invalid option selected.");
                 break;
         }
     }
+
+    private void cleanupAndExit() {
+        threadPool.shutdown();
+        threadPool.shutdownNow();
+        try {
+            if (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
+                threadPool.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            threadPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException ex) {
+            System.err.println("Error closing network socket: " + ex.getMessage());
+        }
+    }
+
 
     private void promptAndSend(String prompt, String commandPrefix) {
         String input = JOptionPane.showInputDialog(mainFrame, prompt);
@@ -263,13 +305,26 @@ public class Client2 extends Thread implements Serializable {
         threadPool.execute(() -> {
             try {
                 writer.println(command);
-                String response = reader.readLine();
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, response));
+                String response;
+                while (true) {
+                    response = reader.readLine();
+                    if (response == null || response.trim().isEmpty()) {
+                        break;  // Break if the end signal (an empty line) is received
+                    }
+                    String finalResponse = response; // Final variable for use in lambda
+                    if (!finalResponse.equals(END_OF_TRANSMISSION)) {
+                        SwingUtilities.invokeAndWait(() -> JOptionPane.showMessageDialog(mainFrame, finalResponse));
+                    }
+                }
             } catch (IOException ex) {
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, "Network error: " + ex.getMessage()));
+                String errorMsg = "Network error: " + ex.getMessage();
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, errorMsg));
+            } catch (InvocationTargetException | InterruptedException e) {
+                e.printStackTrace();  // Handle exceptions thrown by invokeAndWait
             }
         });
     }
+
 
     public static void main(String[] args) {
         String clientName = "Client2";

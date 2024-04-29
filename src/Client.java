@@ -198,13 +198,13 @@ public class Client extends Thread implements Serializable {
         mainFrame = new JFrame("Client Operations");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(400, 600);
-        mainFrame.setLayout(new GridLayout(8, 1));
+        mainFrame.setLayout(new GridLayout(10, 1));
 
         // Create buttons for each operation
         String[] options = {
                 "Search user", "Block user", "Add friend", "Message a friend",
                 "View Received Messages", "View Sent Messages", "Unblock user",
-                "Remove friend"
+                "Remove friend", "Make Account Public/Private", "Exit"
         };
 
         for (String option : options) {
@@ -244,6 +244,9 @@ public class Client extends Thread implements Serializable {
                 break;
             case "Remove friend":
                 promptAndSend("Enter the username you want to remove as a friend:", "8");
+                break;
+            case "Make Account Public/Private":
+                JOptionPane.showMessageDialog(null, "Changed Account Status!");
                 break;
             case "Exit":
                 sendCommand("0");
