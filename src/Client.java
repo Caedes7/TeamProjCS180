@@ -131,7 +131,7 @@ public class Client extends Thread implements Serializable {
         panel.add(cancelButton);
 
         loginFrame.add(panel);
-        loginFrame.pack();
+        //loginFrame.pack();
         loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginFrame.setVisible(true);
     }
@@ -192,7 +192,7 @@ public class Client extends Thread implements Serializable {
 
     private void createMainGUI() {
         mainFrame = new JFrame("Client Operations");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(400, 600); // Adjust the size as needed
         mainFrame.setLayout(new GridLayout(9, 1)); // 9 options including exit
 
@@ -244,7 +244,7 @@ public class Client extends Thread implements Serializable {
                 break;
             case "Exit":
                 sendCommand("0");
-                System.exit(0);
+                mainFrame.dispose();
                 break;
             default:
                 JOptionPane.showMessageDialog(mainFrame, "Invalid option selected.");

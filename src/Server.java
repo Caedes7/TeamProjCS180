@@ -24,7 +24,7 @@ public class Server implements Runnable, Serializable {
 
     public Server(String databaseFile) {
         this.database = new Database(databaseFile);
-        this.threadPool = Executors.newCachedThreadPool(); // Adjust based on your expected server load
+        this.threadPool = Executors.newCachedThreadPool();
     }
 
     public void run() {
