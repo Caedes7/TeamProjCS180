@@ -1,13 +1,11 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 /**
 
@@ -22,24 +20,14 @@ import java.awt.event.*;
  @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
  @version April 15, 2024
  */
-
-public class Client implements IClient, Serializable {
+public class Client extends Thread implements Serializable {
     private static final int PORT = 1113;
     private ExecutorService threadPool;
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
     private String name;
-    private JFrame loginFrame;
-    private JFrame openFrame;
-    private JFrame mainFrame;
-    private JFrame newUserFrame;
-    private JTabbedPane tabbedPane;
-    private JTextField usernameField;
-    private JTextField passwordField;
-    private JTextField emailField;
-    private JTextField ageField;
-    private JTextField nameField;
-
-
+    private JFrame loginFrame, openFrame, newUserFrame;
+    private JTextField usernameField, passwordField, emailField, ageField, nameField;
+    private JButton loginButton, createUserButton;
 
     public Client(String name) {
         this.threadPool = Executors.newCachedThreadPool();
@@ -48,239 +36,133 @@ public class Client implements IClient, Serializable {
 
     public void runClient() {
         String hostname = "localhost";
-
-        try (Socket socket = new Socket(hostname, PORT)) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            //login or create user
-            boolean repeat = false;
-            do {
-                openFrame = new JFrame("Welcome!");
-                String initResponse = JOptionPane.showInputDialog("Are you a new user or returning? " +
-                        "Type either 'new' or 'returning': ");
-
-                if (initResponse.equalsIgnoreCase("new")) {
-
-                    newUserFrame = new JFrame("New User Frame");
-                    JPanel panel = new JPanel(new GridLayout(3, 2));
-                    usernameField = new JTextField(15);
-                    passwordField = new JTextField(15);
-                    nameField = new JTextField(15);
-                    emailField = new JTextField(20);
-                    ageField = new JTextField(15);
-                    panel.add(new JLabel("Username:"));
-                    panel.add(usernameField);
-                    panel.add(new JLabel("Password:"));
-                    panel.add(passwordField);
-                    panel.add(new JLabel("Name:"));
-                    panel.add(nameField);
-                    panel.add(new JLabel("Email:"));
-                    panel.add(emailField);
-                    panel.add(new JLabel("Age:"));
-                    panel.add(ageField);
-                    JButton createButton = new JButton("Create User");
-                    JButton cancelButton = new JButton("Cancel");
-
-                    createButton.addActionListener(e -> writer.println("CREATE_USER" + name +
-                            "," + usernameField.getText() + "," +
-                            ageField.getText() + "," + passwordField.getText() + "," + emailField.getText()));
-                    cancelButton.addActionListener(e -> newUserFrame.dispose());
-
-                    panel.add(createButton);
-                    panel.add(cancelButton);
-
-                    newUserFrame.add(panel);
-                    newUserFrame.pack();
-                    newUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    newUserFrame.setVisible(true);
-/*
-                    System.out.println("This is the new user page. Enter in your username, " +
-                            "it cannot contain the ~ character: ");
-                    String username = sc.nextLine();
-
-                    System.out.println("Enter in your password: ");
-                    String pw = sc.nextLine();
-
-                    System.out.println("Enter in your name: ");
-                    String name = sc.nextLine();
-
-                    System.out.println("Enter in your age: ");
-                    String age = sc.nextLine(); */
-                    try {
-                        System.out.println(ageField.getText());
-                        int ageNum = Integer.parseInt(ageField.getText());
-                    } catch (NumberFormatException e) {
-                        System.out.println("Age must be a number, try again. ");
-                        repeat = true;
-                        continue;
-                    }
-
-
-                } else if (initResponse.equalsIgnoreCase("returning")) {
-
-                    loginFrame = new JFrame("Login");
-                    JPanel panel = new JPanel(new GridLayout(3, 2));
-                    usernameField = new JTextField(15);
-                    passwordField = new JPasswordField(15);
-                    panel.add(new JLabel("Username:"));
-                    panel.add(usernameField);
-                    panel.add(new JLabel("Password:"));
-                    panel.add(passwordField);
-                    JButton loginButton = new JButton("Login");
-                    JButton cancelButton = new JButton("Cancel");
-
-                    loginButton.addActionListener(e -> writer.println("RE" + usernameField.getText() +
-                            "," + passwordField.getText()));
-                    cancelButton.addActionListener(e -> loginFrame.dispose());
-
-                    panel.add(loginButton);
-                    panel.add(cancelButton);
-
-                    loginFrame.add(panel);
-                    loginFrame.pack();
-                    loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    loginFrame.setVisible(true);
-
-                    /*System.out.println("This is the login page. Enter in your username: ");
-                    String username = sc.nextLine();
-
-                    System.out.println("Enter in your password: ");
-                    String pw = sc.nextLine(); */
-
-                } else {
-                    //System.out.println("Invalid! Enter either new or returning: ");
-                    JOptionPane.showMessageDialog(openFrame, "Invalid! Enter either new or returning: ");
-                    repeat = true;
-                    continue;
-                }
-
-                String response = reader.readLine();
-                System.out.println(response);
-
-                if (response.startsWith("User created successfully") || response.startsWith("User logged in successfully")) { //create/login successful
-                    break;
-                } else if (response.startsWith("Failed to create user")) { //create user failed
-                    System.out.println("Could not Create the user.");
-                    repeat = true;
-                } else if (response.startsWith("User does not exist")) {  //login failed
-                    System.out.println("Login failed.");
-                    repeat = true;
-                } else {
-                    repeat = true;
-                }
-
-            } while (repeat);
-
-            int choice;
-            do {
-                choice = -1;
-                menu();
-                System.out.print("Enter your choice: ");
-                try {
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                } catch (NumberFormatException | InputMismatchException e) {
-                    System.out.println("Invalid input. Try again.");
-                    sc.nextLine();
-                    choice = -1;
-                    continue;
-                    
-                }
-
-                switch (choice) {
-                    case 1:
-                        System.out.println("Enter the username you want to search: ");
-                        String toSearch = sc.nextLine();
-                        writer.println("1" + toSearch);
-                        System.out.println(reader.readLine());
-                        break;
-                    case 2:
-                        System.out.println("Enter the username you want to block: ");
-                        String toBlock = sc.nextLine();
-                        writer.println("2" + toBlock);
-                        String response2 = reader.readLine();
-                        System.out.println(response2); //result of action
-                        System.out.println(reader.readLine()); //currently blocked
-                        break;
-                    case 3:
-                        System.out.println("Enter the username you want to add as a friend: ");
-                        String toFriend = sc.nextLine();
-                        writer.println("3" + toFriend);
-                        System.out.println(reader.readLine()); //result of action
-                        System.out.print(reader.readLine()); //currently friended
-                        break;
-                    case 4:
-                        System.out.println("Enter the username you want to message: ");
-                        String toMessage = sc.nextLine();
-                        boolean keepMessaging = false;
-                        do {
-                        System.out.println("Type your message: ");
-                        String message = sc.nextLine();
-                        writer.println("4" + toMessage + "~" + message);
-                        System.out.println(reader.readLine());
-                        System.out.println("Do you want to send another message? y/n");
-                        String anotherMessage = sc.nextLine();
-                        keepMessaging = anotherMessage.equalsIgnoreCase("y");
-                        } while (keepMessaging);
-                        break;
-                    case 5:
-                        writer.println("5");
-                        String line;
-                        while (!(line = reader.readLine()).equals("eof")) {
-                            System.out.println(line);
-                        }
-                        break;
-                    case 6:
-                        writer.println("6");
-                        String line2;
-                        while (!(line2 = reader.readLine()).equals("eof")) {
-                            System.out.println(line2);
-                        }
-                        break;
-                    case 7:
-                        System.out.println("Enter in the username of the user you want to unblock: ");
-                        String toUnblock = sc.nextLine();
-                        writer.println("7" + toUnblock);
-                        String response3 = reader.readLine();
-                        System.out.println(response3);
-                        break;
-                    case 8:
-                        System.out.println("Enter the username you want to remove as a friend: ");
-                        String toUnfriend = sc.nextLine();
-                        writer.println("8" + toUnfriend);
-                        System.out.println(reader.readLine());
-                        break;
-                    case 0:
-                        writer.println("0");
-                        System.out.println(reader.readLine());
-                        break;
-                    default:
-                        System.out.println(reader.readLine());
-                }
-
-            } while (choice != 0);
+        try {
+            Socket socket = new Socket(hostname, PORT);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            SwingUtilities.invokeLater(() -> createInitialFrame(writer, reader));
         } catch (IOException e) {
-            System.err.println("IO exception");
+            System.err.println("IO exception: " + e.getMessage());
         }
     }
 
-    public static void menu() {
-        System.out.println("\nWelcome! Please select an option:");
-        System.out.println("1. Search user");
-        System.out.println("2. Block user");
-        System.out.println("3. Add friend");
-        System.out.println("4. Message a friend");
-        System.out.println("5. View Received Messages");
-        System.out.println("6. View Sent Messages");
-        System.out.println("7. Unblock user");
-        System.out.println("8. Remove friend");
-        System.out.println("0. Exit");
+    private void createInitialFrame(PrintWriter writer, BufferedReader reader) {
+        openFrame = new JFrame("Welcome!");
+        loginButton = new JButton("Login");
+        createUserButton = new JButton("Create New User");
+
+        loginButton.addActionListener(e -> {
+            openFrame.dispose();
+            createLoginFrame(writer, reader);
+        });
+
+        createUserButton.addActionListener(e -> {
+            openFrame.dispose();
+            createNewUserFrame(writer, reader);
+        });
+
+        openFrame.setLayout(new FlowLayout());
+        openFrame.add(loginButton);
+        openFrame.add(createUserButton);
+        openFrame.setSize(1000, 800);
+        openFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        openFrame.setVisible(true);
+    }
+
+    private void createLoginFrame(PrintWriter writer, BufferedReader reader) {
+        loginFrame = new JFrame("Login");
+        JPanel panel = new JPanel(new GridLayout(3, 2));
+        loginFrame.setSize(1000, 800);
+        usernameField = new JTextField(15);
+        passwordField = new JPasswordField(15);
+        panel.add(new JLabel("Username:"));
+        panel.add(usernameField);
+        panel.add(new JLabel("Password:"));
+        panel.add(passwordField);
+        JButton loginButton = new JButton("Login");
+        JButton cancelButton = new JButton("Cancel");
+
+        loginButton.addActionListener(e -> {
+            threadPool.execute(() -> { // Execute network operations on a separate thread
+                try {
+                    String message = "LOGIN," + usernameField.getText() + "," + new String(((JPasswordField) passwordField).getPassword());
+                    writer.println(message);
+                    String response = reader.readLine();
+                    SwingUtilities.invokeLater(() -> { // Ensure GUI updates are on the EDT
+                        JOptionPane.showMessageDialog(loginFrame, response);
+                        loginFrame.dispose();
+                    });
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(loginFrame, "Error communicating with the server."));
+                }
+            });
+        });
+
+        cancelButton.addActionListener(e -> loginFrame.dispose());
+
+        panel.add(loginButton);
+        panel.add(cancelButton);
+
+        loginFrame.add(panel);
+        loginFrame.pack();
+        loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        loginFrame.setVisible(true);
+    }
+
+    private void createNewUserFrame(PrintWriter writer, BufferedReader reader) {
+        newUserFrame = new JFrame("New User Frame");
+        JPanel panel = new JPanel(new GridLayout(3, 2));
+        newUserFrame.setSize(1000, 800);
+        usernameField = new JTextField(15);
+        passwordField = new JTextField(15);
+        nameField = new JTextField(15);
+        emailField = new JTextField(20);
+        ageField = new JTextField(15);
+        panel.add(new JLabel("Username:"));
+        panel.add(usernameField);
+        panel.add(new JLabel("Password:"));
+        panel.add(passwordField);
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+        panel.add(new JLabel("Age:"));
+        panel.add(ageField);
+        JButton createButton = new JButton("Create User");
+        JButton cancelButton = new JButton("Cancel");
+
+        createButton.addActionListener(e -> {
+            String message = "CREATE_USER," + nameField.getText() + "," +
+                    usernameField.getText() + "," +
+                    ageField.getText() + "," +
+                    passwordField.getText() + "," +
+                    emailField.getText();
+            writer.println(message);
+            try {
+                String response = reader.readLine();
+                System.out.println(response); // Output server response
+                System.out.println("Create user not working"); //delete later
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            newUserFrame.dispose();
+        });
+
+        cancelButton.addActionListener(e -> newUserFrame.dispose());
+
+        panel.add(createButton);
+        panel.add(cancelButton);
+
+        newUserFrame.add(panel);
+        newUserFrame.pack();
+        newUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        newUserFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
         String clientName = "Client1";
         Client client = new Client(clientName);
         client.runClient();
-
     }
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
  @version April 15, 2024
  */
-public class ClientHandler extends Thread implements Serializable {
+public class ClientHandler extends Thread implements Serializable, Runnable {
     private Socket clientSocket;
     private Database database;
     private Server server;
