@@ -86,7 +86,6 @@ class ClientHandlerTest {
                     String inputLine = bufferedReader.readLine();
                     if (inputLine != null) {
                         String[] loginDetails = inputLine.substring(5).split(",");
-                        System.out.println(loginDetails[0]);
                         NewUser user = server.loginUser(loginDetails[0], loginDetails[1]);
                         if (user != null) {
                             printWriter.println("User logged in successfully");
