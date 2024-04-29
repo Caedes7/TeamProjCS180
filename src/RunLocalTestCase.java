@@ -34,7 +34,7 @@ class ClientHandlerTest {
 
     private static void clearDatabaseFile(String path) throws IOException {
         try (FileWriter fw = new FileWriter(path, false)) {
-            fw.write(""); // Clear the file content
+            fw.write(""); // Clear the file content for future tests (necessary to run this file correctly)
         }
     }
 
@@ -56,7 +56,8 @@ class ClientHandlerTest {
                     String inputLine = bufferedReader.readLine();
                     if (inputLine != null) {
                         String[] userDetails = inputLine.substring(11).split(", ");
-                        boolean success = databaseCreate.createUser(userDetails[0], userDetails[1], Integer.parseInt(userDetails[2]), userDetails[3], userDetails[4]);
+                        boolean success = databaseCreate.createUser(userDetails[0], userDetails[1],
+                                Integer.parseInt(userDetails[2]), userDetails[3], userDetails[4]);
                         if (success) {
                             printWriter.print("User created successfully");
                         } else {
@@ -128,7 +129,8 @@ class ClientHandlerTest {
 
     @Test
     void testNewUserCreation() {
-        NewUser user = new NewUser("John Doe", "johndoe", 30, "securePass123", "john.doe@example.com");
+        NewUser user = new NewUser("John Doe", "johndoe", 30,
+                "securePass123", "john.doe@example.com");
         assertEquals("John Doe", user.getName());
         assertEquals("johndoe", user.getUsername());
         assertEquals(30, user.getAge());
@@ -164,9 +166,12 @@ class ClientHandlerTest {
 
     @Test
     void testMessageHandling() {
-        NewUser user = new NewUser("John Doe", "johndoe", 30, "securePass123", "john.doe@example.com");
-        Message sentMessage = new Message("johndoe", "janedoe", "Hello, Jane!", System.currentTimeMillis());
-        Message receivedMessage = new Message("janedoe", "johndoe", "Hi, John!", System.currentTimeMillis());
+        NewUser user = new NewUser("John Doe", "johndoe",
+                30, "securePass123", "john.doe@example.com");
+        Message sentMessage = new Message("johndoe", "janedoe",
+                "Hello, Jane!", System.currentTimeMillis());
+        Message receivedMessage = new Message("janedoe", "johndoe",
+                "Hi, John!", System.currentTimeMillis());
 
         user.addSentMessage("janedoe", sentMessage);
         user.addReceivedMessage("janedoe", receivedMessage);

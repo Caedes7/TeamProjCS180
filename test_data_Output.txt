@@ -1,3 +1,0 @@
-Name: testUser, Username: testLogin, Age: 25, Password: 123456, Email: test@login.com
-Friends: 
-Blocked: 
