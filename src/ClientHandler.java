@@ -6,15 +6,14 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
-
- Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
- Class: ClientHandler
- Handles incoming client requests by reading commands from the client and processing them accordingly.
- It can create new user profiles, log users in, and perform other actions based on client commands.
- This class is designed to run on a separate thread for each client connection to ensure concurrent handling.
+ * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * Class: ClientHandler
+ * Handles incoming client requests by reading commands from the client and processing them accordingly.
+ * It can create new user profiles, log users in, and perform other actions based on client commands.
+ * This class is designed to run on a separate thread for each client connection to ensure concurrent handling.
  *
- @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
- @version April 15, 2024
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 29, 2024
  */
 public class ClientHandler extends Thread implements Serializable, Runnable {
     private Socket clientSocket;

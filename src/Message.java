@@ -1,15 +1,14 @@
 import java.io.Serializable;
 import java.util.Date;
 /**
-
- Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
- Class: Message
- Represents a message sent between users. It contains sender and receiver information, the message content,
- and the timestamp when the message was sent. This class is part of the data structure that handles messaging
- in the direct messaging application.
+ * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
+ * Class: Message
+ * Represents a message sent between users. It contains sender and receiver information, the message content,
+ * and the timestamp when the message was sent. This class is part of the data structure that handles messaging
+ * in the direct messaging application.
  *
- @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
- @version April 15, 2024
+ * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
+ * @version April 29, 2024
  */
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L; // Serialization UID

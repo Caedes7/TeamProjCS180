@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * This class is the database that will store information about all the NewUser objects created.
  *
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
- * @version April 1, 2024
+ * @version April 29, 2024
  *
  */
 
