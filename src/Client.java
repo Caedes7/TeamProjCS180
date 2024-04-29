@@ -246,9 +246,14 @@ public class Client extends Thread implements Serializable {
             case "Exit":
                 sendCommand("0");
                 mainFrame.dispose();
-                openFrame.dispose();
-                loginFrame.dispose();
-                //newUserFrame.dispose();
+                try {
+                    openFrame.dispose();
+                    loginFrame.dispose();
+                    newUserFrame.dispose();
+
+                } catch (NullPointerException e) {
+                    cleanupAndExit();
+                }
                 try {
                     reader.close();
                     writer.close();
@@ -265,8 +270,9 @@ public class Client extends Thread implements Serializable {
 
     private void cleanupAndExit() {
         threadPool.shutdown();
+        threadPool.shutdownNow();
         try {
-            if (!threadPool.awaitTermination(5, TimeUnit.SECONDS)) {
+            if (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
                 threadPool.shutdownNow();
             }
         } catch (InterruptedException ex) {
