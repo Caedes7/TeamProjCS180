@@ -117,6 +117,9 @@ public class Client extends Thread implements Serializable {
                         loginFrame.dispose();
                         if (response.startsWith("User logged in successfully")) {
                             createMainGUI();
+                        } else {
+                            JOptionPane.showMessageDialog(loginFrame, "Invalid username or password");
+                            createLoginFrame();
                         }
                     });
                 } catch (IOException ex) {
