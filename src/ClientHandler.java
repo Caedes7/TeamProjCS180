@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
  * @version April 29, 2024
  */
-public class ClientHandler extends Thread implements Serializable, Runnable {
+public class ClientHandler extends Thread implements Serializable, Runnable, IClientHandler {
     private Socket clientSocket;
     private Database database;
     private Server server;
@@ -84,7 +84,7 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
         }
     }
 
-    private void processChoice(String choiceString, PrintWriter out, NewUser user) {
+    public void processChoice(String choiceString, PrintWriter out, NewUser user) {
         int choice = Integer.parseInt(choiceString.substring(0, 1));
         String message = (choiceString.contains("~")) ? choiceString.substring(choiceString.indexOf("~")+1) : null;
         String optionData = "";
