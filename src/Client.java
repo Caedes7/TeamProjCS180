@@ -197,14 +197,14 @@ public class Client extends Thread implements Serializable {
     private void createMainGUI() {
         mainFrame = new JFrame("Client Operations");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainFrame.setSize(400, 600);
-        mainFrame.setLayout(new GridLayout(8, 1));
+        mainFrame.setSize(400, 600); // Adjust the size as needed
+        mainFrame.setLayout(new GridLayout(9, 1)); // 9 options including exit
 
         // Create buttons for each operation
         String[] options = {
                 "Search user", "Block user", "Add friend", "Message a friend",
                 "View Received Messages", "View Sent Messages", "Unblock user",
-                "Remove friend"
+                "Remove friend", "Exit"
         };
 
         for (String option : options) {
@@ -217,6 +217,7 @@ public class Client extends Thread implements Serializable {
     }
 
     private void performAction(String action) {
+        // This would open dialogues or perform actions based on the button clicked
         switch (action) {
             case "Search user":
                 promptAndSend("Enter the username you want to search:", "1");
