@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import javax.swing.*;
@@ -30,6 +29,7 @@ import java.util.concurrent.Executors;
 public class Client extends Thread implements Serializable {
     @SuppressWarnings("FieldMayBeFinal")
     private static final int PORT = 1113;
+    private static final String END_OF_TRANSMISSION = "EOT";
     private ExecutorService threadPool;
     private String name;
     private JFrame loginFrame, openFrame, newUserFrame, mainFrame;
@@ -245,12 +245,42 @@ public class Client extends Thread implements Serializable {
             case "Exit":
                 sendCommand("0");
                 mainFrame.dispose();
+                openFrame.dispose();
+                loginFrame.dispose();
+                //newUserFrame.dispose();
+                try {
+                    reader.close();
+                    writer.close();
+                } catch (IOException e) {
+                    cleanupAndExit();
+                }
+                cleanupAndExit();
                 break;
             default:
                 JOptionPane.showMessageDialog(mainFrame, "Invalid option selected.");
                 break;
         }
     }
+
+    private void cleanupAndExit() {
+        threadPool.shutdown();
+        try {
+            if (!threadPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                threadPool.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            threadPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException ex) {
+            System.err.println("Error closing network socket: " + ex.getMessage());
+        }
+    }
+
 
     private void promptAndSend(String prompt, String commandPrefix) {
         String input = JOptionPane.showInputDialog(mainFrame, prompt);
@@ -263,8 +293,18 @@ public class Client extends Thread implements Serializable {
         threadPool.execute(() -> {
             try {
                 writer.println(command);
-                String response = reader.readLine();
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, response));
+                StringBuilder fullResponse = new StringBuilder();
+                String response;
+                while ((response = reader.readLine()) != null) {
+                    if (response.equals(END_OF_TRANSMISSION)) {
+                        break;  // Stop reading if the delimiter is received
+                    }
+                    fullResponse.append(response).append("\n");
+                }
+                // Display the accumulated message
+                if (fullResponse.length() > 0) {
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, fullResponse.toString()));
+                }
             } catch (IOException ex) {
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, "Network error: " + ex.getMessage()));
             }

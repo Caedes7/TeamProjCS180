@@ -19,6 +19,7 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
     private Socket clientSocket;
     private Database database;
     private Server server;
+    private static final String END_OF_TRANSMISSION = "EOT";
 
     public ClientHandler(Socket socket, Database database, Server server) {
         this.clientSocket = socket;
@@ -61,6 +62,7 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
                     } else {
                         out.println("Failed to create user");
                     }
+                    out.println(END_OF_TRANSMISSION);
                 } else if (inputLine.startsWith("RE")) {
                     String[] loginDetails = inputLine.substring(2).split(",");
                     String username = loginDetails[0];
@@ -72,6 +74,7 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
                     } else {
                         out.println("User/password combination does not exist.");
                     }
+                    out.println(END_OF_TRANSMISSION);
                 } else {
                     processChoice(inputLine, out, newSingleUser);
                 }
@@ -170,6 +173,7 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
                 out.println("Invalid choice. Please try again.");
                 break;
         }
+        out.println(END_OF_TRANSMISSION);
         out.flush();
     }
 
@@ -181,7 +185,6 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
                 messages.forEach(message -> out.println(message.toString()));
             });
         }
-        out.println("eof"); // Signal end of messages
     }
 
     public void handleViewReceivedMessages(PrintWriter out, NewUser user) {
@@ -200,6 +203,5 @@ public class ClientHandler extends Thread implements Serializable, Runnable {
                 out.println("No messages received.");
             }
         }
-        out.println("eof"); // Signal end of messages
     }
 }
