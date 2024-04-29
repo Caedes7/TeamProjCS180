@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import javax.swing.*;
@@ -245,12 +244,42 @@ public class Client extends Thread implements Serializable {
             case "Exit":
                 sendCommand("0");
                 mainFrame.dispose();
+                openFrame.dispose();
+                loginFrame.dispose();
+                //newUserFrame.dispose();
+                try {
+                    reader.close();
+                    writer.close();
+                } catch (IOException e) {
+                    cleanupAndExit();
+                }
+                cleanupAndExit();
                 break;
             default:
                 JOptionPane.showMessageDialog(mainFrame, "Invalid option selected.");
                 break;
         }
     }
+
+    private void cleanupAndExit() {
+        threadPool.shutdown();
+        try {
+            if (!threadPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                threadPool.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            threadPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException ex) {
+            System.err.println("Error closing network socket: " + ex.getMessage());
+        }
+    }
+
 
     private void promptAndSend(String prompt, String commandPrefix) {
         String input = JOptionPane.showInputDialog(mainFrame, prompt);
