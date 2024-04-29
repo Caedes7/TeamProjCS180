@@ -1,10 +1,11 @@
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.*;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Purdue University -- CS18000 -- Spring 2024 -- Team Project 1 -- Direct Messaging
@@ -18,13 +19,7 @@ import java.awt.*;
  * @author Jeeaan Ahmmed, Ishaan Krishna Agrawal, Pranav Yerram, Michael Joseph Vetter
  * @version April 29, 2024
  */
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 @SuppressWarnings("FieldMayBeFinal")
 public class Client2 extends Thread implements Serializable {
