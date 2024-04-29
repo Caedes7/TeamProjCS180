@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-class ClientHandlerTest {
+public class RunLocalTestCase {
 
     private static StringWriter stringWriter;
     private static PrintWriter printWriter;
