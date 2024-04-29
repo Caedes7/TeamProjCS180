@@ -84,7 +84,7 @@ public class Client extends Thread implements Serializable {
         loginButton.addActionListener(e -> {
             threadPool.execute(() -> { // Execute network operations on a separate thread
                 try {
-                    String message = "LOGIN," + usernameField.getText() + "," + new String(((JPasswordField) passwordField).getPassword());
+                    String message = "RE" + usernameField.getText() + "," + new String(((JPasswordField) passwordField).getPassword());
                     writer.println(message);
                     String response = reader.readLine();
                     SwingUtilities.invokeLater(() -> { // Ensure GUI updates are on the EDT
@@ -132,7 +132,7 @@ public class Client extends Thread implements Serializable {
         JButton cancelButton = new JButton("Cancel");
 
         createButton.addActionListener(e -> {
-            String message = "CREATE_USER," + nameField.getText() + "," +
+            String message = "CREATE_USER" + nameField.getText() + "," +
                     usernameField.getText() + "," +
                     ageField.getText() + "," +
                     passwordField.getText() + "," +
